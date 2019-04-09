@@ -3,4 +3,6 @@ sudo: required
 jdk:
   - oraclejdk8
 install:
-  - cd dapp-grupoB-2019S1 && mvn clean install -Dmaven.compiler.target=1.8 -Dmaven.compiler.source=1.8
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+before_install:
+  - chmod +x mvnw
