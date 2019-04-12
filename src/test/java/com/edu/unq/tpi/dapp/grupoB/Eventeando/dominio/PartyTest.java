@@ -6,8 +6,7 @@ import org.junit.Test;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class PartyTest {
 
@@ -50,9 +49,24 @@ public class PartyTest {
 
     }
 
+    private void assertarQueElPrecioDeLosInsumosDeUnaFiestaEsDe(int i, Fiesta fiesta) {
+        assertEquals(i, fiesta.precioTotalDeLosInsumos(), 0);
+    }
+
     @Test
     public void testUnaFiestaSinInsumosSuPrecioDeInsumosEsDe0() {
-        assertEquals(0, fiestaConInvitados().precioTotalDeLosInsumos(), 0);
+        assertarQueElPrecioDeLosInsumosDeUnaFiestaEsDe(0, fiestaConInvitados());
+    }
+
+   @Test
+    public void testNoSePuedeAgregarUnInsumoCuyoCosteSeaNegativo() {
+       Fiesta unaFiestaSinInsumos = fiestaConInvitados();
+       try {
+           unaFiestaSinInsumos.agregarInsumo("Coca de 1 litro", -1.00);
+           fail();
+       } catch (RuntimeException e) {
+           assertarQueElPrecioDeLosInsumosDeUnaFiestaEsDe(0, fiestaConInvitados());
+       }
     }
 
     @Test
@@ -62,6 +76,6 @@ public class PartyTest {
         fiestaDePepito.agregarInsumo("Coca de 1 litro", 100.00);
         fiestaDePepito.agregarInsumo("Sanguches de Miga x 24", 200.00);
 
-        assertEquals(300, fiestaDePepito.precioTotalDeLosInsumos(), 0);
+        assertarQueElPrecioDeLosInsumosDeUnaFiestaEsDe(300, fiestaDePepito);
     }
 }

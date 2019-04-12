@@ -7,6 +7,7 @@ import java.util.stream.DoubleStream;
 public class Fiesta {
 
     public static final String ERROR_NO_SE_PUEDE_CREAR_SIN_INVITADOS = "ERROR_NO_SE_PUEDE_CREAR_SIN_INVITADOS";
+    private static final String ERROR_NO_SE_PUEDE_CREAR_AGREGAR_UN_INSUMO_CUYO_PRECIO_ES_NEGATIVO = "ERROR_NO_SE_PUEDE_CREAR_AGREGAR_UN_INSUMO_CUYO_PRECIO_ES_NEGATIVO";
     private String organizador;
     private HashMap<String, String> invitados;
     private LocalDateTime fechaLimiteDeInvitacion;
@@ -36,6 +37,9 @@ public class Fiesta {
     }
 
     public void agregarInsumo(String nombreDelInsumo, Double precioDelInsumo) {
+        if (precioDelInsumo < 0) {
+            throw new RuntimeException(ERROR_NO_SE_PUEDE_CREAR_AGREGAR_UN_INSUMO_CUYO_PRECIO_ES_NEGATIVO);
+        }
         insumos.put(nombreDelInsumo, precioDelInsumo);
     }
 
