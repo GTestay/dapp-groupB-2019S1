@@ -22,13 +22,22 @@ public class PartyTest {
 
     @Test
     public void testSePuedeCrearUnaFiestaEstaTieneOrganizadorUnaListaDeInvitadosYUnaFechaLimiteDeAceptacionDeLaInvitacion() {
-        HashMap<String, String> invitados = new HashMap<>();
-        invitados.put("email@gmail.com", "Juan");
-        Fiesta fiestaDePepito = new Fiesta(organizador, invitados, fechaLimiteDeInvitacion);
+        Fiesta fiestaDePepito = fiestaConInvitados();
 
         assertEquals(organizador, fiestaDePepito.organizador());
         assertFalse(fiestaDePepito.invitados().isEmpty());
         assertEquals(fechaLimiteDeInvitacion, fiestaDePepito.fechaLimiteDeInvitacion());
+    }
+
+    private HashMap<String, String> invitados() {
+        HashMap<String, String> invitados = new HashMap<>();
+        invitados.put("email@gmail.com", "Juan");
+        invitados.put("pepita@gmail.com", "Pepita");
+        return invitados;
+    }
+
+    private Fiesta fiestaConInvitados() {
+        return new Fiesta(organizador, invitados(), fechaLimiteDeInvitacion);
     }
 
     @Test
@@ -41,4 +50,18 @@ public class PartyTest {
 
     }
 
+    @Test
+    public void testUnaFiestaSinInsumosSuPrecioDeInsumosEsDe0() {
+        assertEquals(0, fiestaConInvitados().precioTotalDeLosInsumos(), 0);
+    }
+
+    @Test
+    public void testAUnaFiestaSeLeAgreganInsumos() {
+        Fiesta fiestaDePepito = fiestaConInvitados();
+
+        fiestaDePepito.agregarInsumo("Coca de 1 litro", 100.00);
+        fiestaDePepito.agregarInsumo("Sanguches de Miga x 24", 200.00);
+
+        assertEquals(300, fiestaDePepito.precioTotalDeLosInsumos(), 0);
+    }
 }
