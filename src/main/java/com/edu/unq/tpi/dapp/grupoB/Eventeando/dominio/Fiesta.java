@@ -2,6 +2,7 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.stream.DoubleStream;
 
 public class Fiesta {
 
@@ -9,6 +10,7 @@ public class Fiesta {
     private String organizador;
     private HashMap<String, String> invitados;
     private LocalDateTime fechaLimiteDeInvitacion;
+    private HashMap<String, Double> insumos;
 
     public Fiesta(String pepito, HashMap<String, String> invitados, LocalDateTime fechaLimiteDeInvitacion) {
         this.fechaLimiteDeInvitacion = fechaLimiteDeInvitacion;
@@ -17,6 +19,7 @@ public class Fiesta {
         }
         organizador = pepito;
         this.invitados = invitados;
+        insumos = new HashMap<>();
     }
 
 
@@ -30,5 +33,17 @@ public class Fiesta {
 
     public LocalDateTime fechaLimiteDeInvitacion() {
         return fechaLimiteDeInvitacion;
+    }
+
+    public void agregarInsumo(String nombreDelInsumo, Double precioDelInsumo) {
+        insumos.put(nombreDelInsumo, precioDelInsumo);
+    }
+
+    public Double precioTotalDeLosInsumos() {
+        return preciosDeLosInsumos().sum();
+    }
+
+    private DoubleStream preciosDeLosInsumos() {
+        return insumos.values().stream().mapToDouble(precio -> precio);
     }
 }
