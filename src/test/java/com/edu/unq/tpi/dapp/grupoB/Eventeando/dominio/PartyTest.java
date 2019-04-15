@@ -12,11 +12,13 @@ public class PartyTest {
 
     private String organizador;
     private LocalDateTime fechaLimiteDeInvitacion;
+    private double precioPorAsistente;
 
     @Before
     public void setUp() {
         organizador = "Pepito";
         fechaLimiteDeInvitacion = LocalDateTime.now();
+        precioPorAsistente = 100.0;
     }
 
     @Test
@@ -36,13 +38,13 @@ public class PartyTest {
     }
 
     private Fiesta fiestaConInvitados() {
-        return new Fiesta(organizador, invitados(), fechaLimiteDeInvitacion);
+        return new Fiesta(organizador, invitados(), fechaLimiteDeInvitacion, 0.0);
     }
 
     @Test
     public void testNoSePuedeCrearUnaFiestaSinInvitados() {
         try {
-            new Fiesta(organizador, new HashMap<>(), fechaLimiteDeInvitacion);
+            new Fiesta(organizador, new HashMap<>(), fechaLimiteDeInvitacion, 0.0);
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), Fiesta.ERROR_NO_SE_PUEDE_CREAR_SIN_INVITADOS);
         }
@@ -58,15 +60,15 @@ public class PartyTest {
         assertarQueElPrecioDeLosInsumosDeUnaFiestaEsDe(0, fiestaConInvitados());
     }
 
-   @Test
+    @Test
     public void testNoSePuedeAgregarUnInsumoCuyoCosteSeaNegativo() {
-       Fiesta unaFiestaSinInsumos = fiestaConInvitados();
-       try {
-           unaFiestaSinInsumos.agregarInsumo("Coca de 1 litro", -1.00);
-           fail();
-       } catch (RuntimeException e) {
-           assertarQueElPrecioDeLosInsumosDeUnaFiestaEsDe(0, fiestaConInvitados());
-       }
+        Fiesta unaFiestaSinInsumos = fiestaConInvitados();
+        try {
+            unaFiestaSinInsumos.agregarInsumo("Coca de 1 litro", -1.00);
+            fail();
+        } catch (RuntimeException e) {
+            assertarQueElPrecioDeLosInsumosDeUnaFiestaEsDe(0, fiestaConInvitados());
+        }
     }
 
     @Test
@@ -77,5 +79,63 @@ public class PartyTest {
         fiestaDePepito.agregarInsumo("Sanguches de Miga x 24", 200.00);
 
         assertarQueElPrecioDeLosInsumosDeUnaFiestaEsDe(300, fiestaDePepito);
+    }
+
+    @Test
+    public void testElCostoDeUnaFiestaSinConfirmacionesDeAsistenciaYSinInsumosEsDeCeroPesos() {
+        asertarQueElCostoDeLaFiestaEsDe(fiestaConInvitados(), 0);
+    }
+
+    @Test
+    public void testElCostoDeUnaFiestaSinInsumosPeroConConfirmacionesSeBasaEnElCostoPorInvitacion() {
+        Fiesta unaFiestaConUnaConfirmacion = fiestaConInvitadosYElCostePorAsistente(precioPorAsistente);
+
+        unaFiestaConUnaConfirmacion.confirmarAsistenciaDe("email@gmail.com");
+
+        asertarQueElCostoDeLaFiestaEsDe(unaFiestaConUnaConfirmacion, precioPorAsistente);
+    }
+
+    @Test
+    public void testElCostoDeUnaFiestaSinConfirmacionesDeAsistenciaYConInsumosEsDeCeroPesos() {
+        Fiesta unaFiestaConInsumos = fiestaConInvitados();
+
+        unaFiestaConInsumos.agregarInsumo("Coca de 1 litro", 100.00);
+
+        asertarQueElCostoDeLaFiestaEsDe(unaFiestaConInsumos, 0);
+    }
+
+    @Test
+    public void testUnUsuarioQueNoEstaInvitadoNoPuedeConfimarEnLaFiesta() {
+        Fiesta fiesta = fiestaConInvitados();
+        try {
+            fiesta.confirmarAsistenciaDe("unEmailQueNoEstaInvitado@gmail.com");
+            fail();
+        } catch (RuntimeException e) {
+            assertEquals(e.getMessage(), Fiesta.ERROR_EL_USUARIO_NO_FUE_INVITADO_A_LA_FIESTA);
+            asertarQueElCostoDeLaFiestaEsDe(fiesta, 0);
+        }
+    }
+
+    @Test
+    public void testSeCalculaElCostDeUnaFiestaConConfirmacionesEInsumos() {
+        Fiesta fiesta = fiestaConInvitadosYElCostePorAsistente(precioPorAsistente);
+        fiesta.agregarInsumo("Coca de 1 litro", 100.00);
+        fiesta.agregarInsumo("Pizza", 100.00);
+        fiesta.confirmarAsistenciaDe("email@gmail.com");
+        fiesta.confirmarAsistenciaDe("pepita@gmail.com");
+
+        asertarQueElCostoDeLaFiestaEsDe(fiesta, 600.00);
+    }
+
+    private Fiesta fiestaConInvitadosYElCostePorAsistente(Double precioPorAsistente) {
+        return crearFiesta(invitados(), precioPorAsistente);
+    }
+
+    private Fiesta crearFiesta(HashMap<String, String> invitados, Double precioPorAsistente) {
+        return new Fiesta(organizador, invitados, fechaLimiteDeInvitacion, precioPorAsistente);
+    }
+
+    private void asertarQueElCostoDeLaFiestaEsDe(Fiesta fiesta, double costoTotalDeLaFiesta) {
+        assertEquals(costoTotalDeLaFiesta, fiesta.costeTotal(), 0);
     }
 }
