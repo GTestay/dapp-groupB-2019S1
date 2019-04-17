@@ -24,62 +24,27 @@ public class UserTest {
 
     @Test
     public void userValidations(){
+        nameValidations();
+
+        lastnameValidations();
+
+        emailValidations();
+
+        passwordValidations();
+
+        birthdayValidations();
+    }
+
+    private void birthdayValidations() {
         try {
-            User.create(null, "Cossetti", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
+            User.create("Maximo", "Cossetti", "eravenna@gmail.com", "S1M6L4R", null);
             fail();
         } catch (UserException error) {
-            assertEquals(error.getMessage(), UserValidator.USER_IS_INVALID_WITHOUT_NAME);
+            assertEquals(error.getMessage(), UserValidator.USER_IS_INVALID_WITHOUT_BIRTHDAY);
         }
+    }
 
-        try {
-            User.create("UnNombreDemasiadoLargoComoParaSerReal", "Cossetti", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
-            fail();
-        } catch (UserException error) {
-            assertEquals(error.getMessage(), UserValidator.USER_NAME_IS_INVALID);
-        }
-
-        try {
-            User.create("", "Cossetti", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
-            fail();
-        } catch (UserException error) {
-            assertEquals(error.getMessage(), UserValidator.USER_NAME_IS_INVALID);
-        }
-
-        try {
-            User.create("Maximo", null, "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
-            fail();
-        } catch (UserException error) {
-            assertEquals(error.getMessage(), UserValidator.USER_IS_INVALID_WITHOUT_LASTNAME);
-        }
-
-        try {
-            User.create("Maximo", "UnApellidoDemasiadoLargoComoParaSerReal", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
-            fail();
-        } catch (UserException error) {
-            assertEquals(error.getMessage(), UserValidator.USER_LASTNAME_IS_INVALID);
-        }
-
-        try {
-            User.create("Maximo", "", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
-            fail();
-        } catch (UserException error) {
-            assertEquals(error.getMessage(), UserValidator.USER_LASTNAME_IS_INVALID);
-        }
-
-        try {
-            User.create("Maximo", "Cossetti", null, "S1M6L4R", LocalDate.of(2002, 3, 21));
-            fail();
-        } catch (UserException error) {
-            assertEquals(error.getMessage(), UserValidator.USER_IS_INVALID_WITHOUT_EMAIL);
-        }
-
-        try {
-            User.create("Maximo", "Cossetti", "eravennagmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
-            fail();
-        } catch (UserException error) {
-            assertEquals(error.getMessage(), UserValidator.USER_EMAIL_IS_INVALID);
-        }
-
+    private void passwordValidations() {
         try {
             User.create("Maximo", "Cossetti", "eravenna@gmail.com", null, LocalDate.of(2002, 3, 21));
             fail();
@@ -100,12 +65,67 @@ public class UserTest {
         } catch (UserException error) {
             assertEquals(error.getMessage(), UserValidator.USER_PASSWORD_IS_INVALID);
         }
+    }
 
+    private void emailValidations() {
         try {
-            User.create("Maximo", "Cossetti", "eravenna@gmail.com", "S1M6L4R", null);
+            User.create("Maximo", "Cossetti", null, "S1M6L4R", LocalDate.of(2002, 3, 21));
             fail();
         } catch (UserException error) {
-            assertEquals(error.getMessage(), UserValidator.USER_IS_INVALID_WITHOUT_BIRTHDAY);
+            assertEquals(error.getMessage(), UserValidator.USER_IS_INVALID_WITHOUT_EMAIL);
+        }
+
+        try {
+            User.create("Maximo", "Cossetti", "eravennagmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
+            fail();
+        } catch (UserException error) {
+            assertEquals(error.getMessage(), UserValidator.USER_EMAIL_IS_INVALID + ": Missing final '@domain'");
+        }
+    }
+
+    private void lastnameValidations() {
+        try {
+            User.create("Maximo", null, "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
+            fail();
+        } catch (UserException error) {
+            assertEquals(error.getMessage(), UserValidator.USER_IS_INVALID_WITHOUT_LASTNAME);
+        }
+
+        try {
+            User.create("Maximo", "UnApellidoDemasiadoLargoComoParaSerReal", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
+            fail();
+        } catch (UserException error) {
+            assertEquals(error.getMessage(), UserValidator.USER_LASTNAME_IS_INVALID);
+        }
+
+        try {
+            User.create("Maximo", "", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
+            fail();
+        } catch (UserException error) {
+            assertEquals(error.getMessage(), UserValidator.USER_LASTNAME_IS_INVALID);
+        }
+    }
+
+    private void nameValidations() {
+        try {
+            User.create(null, "Cossetti", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
+            fail();
+        } catch (UserException error) {
+            assertEquals(error.getMessage(), UserValidator.USER_IS_INVALID_WITHOUT_NAME);
+        }
+
+        try {
+            User.create("UnNombreDemasiadoLargoComoParaSerReal", "Cossetti", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
+            fail();
+        } catch (UserException error) {
+            assertEquals(error.getMessage(), UserValidator.USER_NAME_IS_INVALID);
+        }
+
+        try {
+            User.create("", "Cossetti", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
+            fail();
+        } catch (UserException error) {
+            assertEquals(error.getMessage(), UserValidator.USER_NAME_IS_INVALID);
         }
     }
 }
