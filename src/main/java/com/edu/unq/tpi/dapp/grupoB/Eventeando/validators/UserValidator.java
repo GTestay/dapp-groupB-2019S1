@@ -19,49 +19,51 @@ public class UserValidator {
     public static final String USER_PASSWORD_IS_INVALID = "The Password Has An Invalid Format";
 
     public String validateName(String name) {
-        if (name == null) { throw new UserException(USER_IS_INVALID_WITHOUT_NAME); }
-
-        int nameLength = name.length();
-        if (nameLength > 30 || nameLength < 1) { throw new UserException(USER_NAME_IS_INVALID); }
+        validateNullityOf(name, new UserException(USER_IS_INVALID_WITHOUT_NAME));
+        validateLenghtBetween(name, 1, 30, new UserException(USER_NAME_IS_INVALID));
 
         return name;
     }
 
     public String validateLastname(String lastname) {
-        if (lastname == null) { throw new UserException(USER_IS_INVALID_WITHOUT_LASTNAME); }
-
-        int lastnameLength = lastname.length();
-        if (lastnameLength > 30 || lastnameLength < 1) { throw new UserException(USER_LASTNAME_IS_INVALID); }
+        validateNullityOf(lastname, new UserException(USER_IS_INVALID_WITHOUT_LASTNAME));
+        validateLenghtBetween(lastname, 1, 30, new UserException(USER_LASTNAME_IS_INVALID));
 
         return lastname;
     }
 
     public String validateEmail(String email) {
-        if (email == null) { throw new UserException(USER_IS_INVALID_WITHOUT_EMAIL); }
+        validateNullityOf(email, new UserException(USER_IS_INVALID_WITHOUT_EMAIL));
 
         try {
             InternetAddress emailAddr = new InternetAddress(email);
             emailAddr.validate();
         } catch (AddressException error) {
-            throw new UserException(USER_EMAIL_IS_INVALID);
+            throw new UserException(USER_EMAIL_IS_INVALID + ": " + error.getMessage());
         }
 
         return email;
     }
 
     public String validatePassword(String password) {
-        if (password == null) { throw new UserException(USER_IS_INVALID_WITHOUT_PASSWORD); }
-
-        int passwordLength = password.length();
-        if (passwordLength < 4 || passwordLength > 10) { throw new UserException(USER_PASSWORD_IS_INVALID); }
+        validateNullityOf(password, new UserException(USER_IS_INVALID_WITHOUT_PASSWORD));
+        validateLenghtBetween(password, 4, 10, new UserException(USER_PASSWORD_IS_INVALID));
 
         return password;
     }
 
     public LocalDate validateBirthday(LocalDate birthday) {
-        if (birthday == null) { throw new UserException(USER_IS_INVALID_WITHOUT_BIRTHDAY); }
+        validateNullityOf(birthday, new UserException(USER_IS_INVALID_WITHOUT_BIRTHDAY));
 
         return birthday;
+    }
+
+    private void validateNullityOf(Object field, UserException exception) { if (field == null) { throw exception; } }
+
+    private void validateLenghtBetween(String field, int lowerLimmit, int upperLimmit, UserException exception) {
+        int fieldLenght = field.length();
+
+        if ( fieldLenght < lowerLimmit || fieldLenght > upperLimmit ) { throw exception; }
     }
 }
 
