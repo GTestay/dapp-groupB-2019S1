@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.BaquitaEventException;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.BaquitaEventValidator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,15 +33,15 @@ public class BaquitaEventTest {
         try {
             BaquitaEvent.create(newOrganizer(), description, twoExpenses(), null);
             fail();
-        } catch (BaquitaEventException error) {
-            assertEquals(error.getMessage(), BaquitaEventValidator.BAQUITA_EVENT_IS_INVALID_WITHOUT_ASSISTANTS);
+        } catch (EventException error) {
+            assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_ASSISTANTS);
         }
 
         try {
             BaquitaEvent.create(newOrganizer(), description, twoExpenses(), new ArrayList<>());
             fail();
-        } catch (BaquitaEventException error) {
-            assertEquals(error.getMessage(), BaquitaEventValidator.BAQUITA_EVENT_IS_INVALID_WITHOUT_ASSISTANTS);
+        } catch (EventException error) {
+            assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_ASSISTANTS);
         }
     }
 
@@ -49,8 +49,8 @@ public class BaquitaEventTest {
         try {
             BaquitaEvent.create(null, description, twoExpenses(), oneAssistant());
             fail();
-        } catch (BaquitaEventException error) {
-            assertEquals(error.getMessage(), BaquitaEventValidator.BAQUITA_EVENT_IS_INVALID_WITHOUT_ORGANIZER);
+        } catch (EventException error) {
+            assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_ORGANIZER);
         }
     }
 
