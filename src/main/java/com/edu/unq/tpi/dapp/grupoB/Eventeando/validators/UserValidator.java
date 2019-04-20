@@ -6,7 +6,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.time.LocalDate;
 
-public class UserValidator {
+public class UserValidator extends Validator {
 
     public static final String USER_IS_INVALID_WITHOUT_NAME = "User Is Invalid Without Name";
     public static final String USER_IS_INVALID_WITHOUT_LASTNAME = "User Is Invalid Without LastName";
@@ -20,50 +20,36 @@ public class UserValidator {
 
     public String validateName(String name) {
         validateNullityOf(name, new UserException(USER_IS_INVALID_WITHOUT_NAME));
-        validateLenghtBetween(name, 1, 30, new UserException(USER_NAME_IS_INVALID));
-
-        return name;
+        return validateLenghtBetween(name, 1, 30, new UserException(USER_NAME_IS_INVALID));
     }
 
     public String validateLastname(String lastname) {
         validateNullityOf(lastname, new UserException(USER_IS_INVALID_WITHOUT_LASTNAME));
-        validateLenghtBetween(lastname, 1, 30, new UserException(USER_LASTNAME_IS_INVALID));
-
-        return lastname;
+        return validateLenghtBetween(lastname, 1, 30, new UserException(USER_LASTNAME_IS_INVALID));
     }
 
     public String validateEmail(String email) {
         validateNullityOf(email, new UserException(USER_IS_INVALID_WITHOUT_EMAIL));
+        return validateThatEmailIsCorrect(email);
+    }
 
+    private String validateThatEmailIsCorrect(String email) {
         try {
             InternetAddress emailAddr = new InternetAddress(email);
             emailAddr.validate();
         } catch (AddressException error) {
             throw new UserException(USER_EMAIL_IS_INVALID + ": " + error.getMessage());
         }
-
         return email;
     }
 
     public String validatePassword(String password) {
         validateNullityOf(password, new UserException(USER_IS_INVALID_WITHOUT_PASSWORD));
-        validateLenghtBetween(password, 4, 10, new UserException(USER_PASSWORD_IS_INVALID));
-
-        return password;
+        return validateLenghtBetween(password, 4, 10, new UserException(USER_PASSWORD_IS_INVALID));
     }
 
     public LocalDate validateBirthday(LocalDate birthday) {
-        validateNullityOf(birthday, new UserException(USER_IS_INVALID_WITHOUT_BIRTHDAY));
-
-        return birthday;
-    }
-
-    private void validateNullityOf(Object field, UserException exception) { if (field == null) { throw exception; } }
-
-    private void validateLenghtBetween(String field, int lowerLimmit, int upperLimmit, UserException exception) {
-        int fieldLenght = field.length();
-
-        if ( fieldLenght < lowerLimmit || fieldLenght > upperLimmit ) { throw exception; }
+        return validateNullityOf(birthday, new UserException(USER_IS_INVALID_WITHOUT_BIRTHDAY));
     }
 }
 

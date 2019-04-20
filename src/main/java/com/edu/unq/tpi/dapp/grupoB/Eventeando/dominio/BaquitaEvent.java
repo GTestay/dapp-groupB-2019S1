@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.BaquitaEventValidator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 
 import java.util.List;
 import java.util.Map;
@@ -14,13 +14,13 @@ public class BaquitaEvent {
 
 
     public static BaquitaEvent create(User organizer, String description, Map<String, Double> expenses, List<User> assistants) {
-        BaquitaEventValidator baquitaEventValidator = new BaquitaEventValidator();
+        EventValidator eventValidator = new EventValidator();
         BaquitaEvent instance = new BaquitaEvent();
 
-        instance.organizer = baquitaEventValidator.validateOrganizer(organizer);
+        instance.organizer = eventValidator.validateOrganizer(organizer);
         instance.description = description;
         instance.expenses = expenses;
-        instance.assistants = baquitaEventValidator.validateAssistants(assistants);
+        instance.assistants = eventValidator.validateAssistants(assistants);
 
         return instance;
     }
