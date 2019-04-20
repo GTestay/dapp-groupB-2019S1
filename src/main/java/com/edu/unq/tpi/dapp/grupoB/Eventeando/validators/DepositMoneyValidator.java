@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.validators;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.DepositMoneyException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.DepositMoneyException;
 
 import java.time.LocalDate;
 

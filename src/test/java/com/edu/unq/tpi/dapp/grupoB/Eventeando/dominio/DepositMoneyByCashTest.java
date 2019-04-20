@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.DepositMoneyException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.DepositMoneyException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.DepositMoneyValidator;
 import org.junit.Test;
