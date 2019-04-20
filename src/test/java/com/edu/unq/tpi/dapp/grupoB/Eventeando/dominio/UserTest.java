@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.UserException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
 import org.junit.Test;
 
