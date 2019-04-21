@@ -41,9 +41,9 @@ public class AccountManager {
 
     public double statement(User user) { return transactions(user).stream().mapToDouble(MoneyTransaction::transactionalValue).sum(); }
 
-    public void cashDeposit(User user, double amount) { makeDeposit(user, DepositMoneyByCash.create(user, LocalDate.now(), amount)); }
+    public void cashDeposit(User user, double amount) { makeDeposit(user, DepositByCash.create(user, LocalDate.now(), amount)); }
 
-    public void creditDeposit(User user, double amount) { makeDeposit(user, DepositMoneyByCreditCard.create(user, LocalDate.now(), amount)); }
+    public void creditDeposit(User user, double amount) { makeDeposit(user, DepositByCreditCard.create(user, LocalDate.now(), amount)); }
 
-    private void makeDeposit(User user, DepositMoney deposit) { transactions(user).add(deposit); }
+    private void makeDeposit(User user, Deposit deposit) { transactions(user).add(deposit); }
 }
