@@ -1,6 +1,8 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyAccountException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.UserException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
 import org.junit.Test;
 
@@ -126,6 +128,59 @@ public class UserTest {
             fail();
         } catch (UserException error) {
             assertEquals(error.getMessage(), UserValidator.USER_NAME_IS_INVALID);
+        }
+    }
+
+    @Test
+    public void userMakesACashDeposit() {
+        User user = UserFactory.user();
+
+        user.cashDeposit(100.00);
+
+        assertEquals(100.00, user.statement(), 0);
+    }
+
+    @Test
+    public void userMakesACreditDeposit() {
+        User user = UserFactory.user();
+
+        user.creditDeposit(100.00);
+
+        assertEquals(100.00, user.statement(), 0);
+    }
+
+    @Test
+    public void userTakesSomeCashOut() {
+        User user = UserFactory.userWithCash(100.00);
+
+        user.takeCash(50.00);
+        assertEquals(50.00, user.statement(), 0);
+    }
+
+    @Test
+    public void userRequireSomeCredit() {
+        User user = UserFactory.userWithCash(100.00);
+
+        user.requireCredit(50.00);
+        assertEquals(50.00, user.statement(), 0);
+    }
+
+    @Test
+    public void userCannotTakeCashOrRequiereCreditWithoutFounds() {
+        User user = UserFactory.user();
+
+        try {
+            user.requireCredit(50.00);
+            fail();
+        } catch (MoneyAccountException error) {
+            assertEquals(error.getMessage(), AccountManager.USER_LOW_BALANCE);
+        }
+
+        try {
+            user.takeCash(50.00);
+            fail();
+        } catch (MoneyAccountException error) {
+            assertEquals(error.getMessage(), AccountManager.USER_LOW_BALANCE);
         }
     }
 }
