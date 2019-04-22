@@ -4,28 +4,29 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyTransactionExcepti
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.MoneyTransactionValidator;
 import org.junit.Test;
+
 import java.time.LocalDate;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
-public class DepositByCashTest {
+public class ExtractionTest {
 
     private User user = UserFactory.user();
     private LocalDate date = LocalDate.now();
     private double amount = 1000.00;
 
     @Test
-    public void creationOfANewDepositMoneyByCash() {
-        DepositByCash depositByCash = DepositByCash.create(user, date, amount);
+    public void creationOfANewExtraction() {
+        Extraction extraction = Extraction.create(user, date, amount);
 
-        assertEquals(user, depositByCash.user());
-        assertEquals(date, depositByCash.date());
-        assertEquals(amount, depositByCash.amount(), 0);
+        assertEquals(user, extraction.user());
+        assertEquals(date, extraction.date());
+        assertEquals(amount, extraction.amount(), 0);
     }
 
     @Test
-    public void depositMoneyByCashValidations() {
+    public void extractionValidations() {
         userValidations();
 
         dateValidations();
@@ -35,7 +36,7 @@ public class DepositByCashTest {
 
     private void amoutValidations() {
         try {
-            DepositByCash.create(user, date, -200.00);
+            Extraction.create(user, date, -200.00);
             fail();
         } catch (MoneyTransactionException error) {
             assertEquals(error.getMessage(), MoneyTransactionValidator.AMOUNT_HAS_NEGATIVE_VALUE);
@@ -44,7 +45,7 @@ public class DepositByCashTest {
 
     private void dateValidations() {
         try {
-            DepositByCash.create(user, null, amount);
+            Extraction.create(user, null, amount);
             fail();
         } catch (MoneyTransactionException error) {
             assertEquals(error.getMessage(), MoneyTransactionValidator.MONEY_TRANSACTION_IS_INVALID_WITHOUT_DATE);
@@ -53,7 +54,7 @@ public class DepositByCashTest {
 
     private void userValidations() {
         try {
-            DepositByCash.create(null, date, amount);
+            Extraction.create(null, date, amount);
             fail();
         } catch (MoneyTransactionException error) {
             assertEquals(error.getMessage(), MoneyTransactionValidator.MONEY_TRANSACTION_IS_INVALID_WITHOUT_USER);
