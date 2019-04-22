@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.DepositMoneyValidator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.MoneyTransactionValidator;
 
 import java.time.LocalDate;
 
@@ -10,7 +10,7 @@ public abstract class MoneyTransaction {
     protected double amount;
 
     protected static void madeValidations(User user, LocalDate date, double amount, MoneyTransaction instance) {
-        DepositMoneyValidator validator = new DepositMoneyValidator();
+        MoneyTransactionValidator validator = new MoneyTransactionValidator();
 
         instance.user = validator.validateUser(user);
         instance.date = validator.validateDate(date);
