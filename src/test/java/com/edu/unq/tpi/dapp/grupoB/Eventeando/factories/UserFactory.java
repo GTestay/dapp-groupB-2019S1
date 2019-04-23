@@ -1,5 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.factories;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 
 import java.time.LocalDate;
@@ -25,7 +27,15 @@ public class UserFactory {
     public User userWithCash(double cash) {
         User user = user();
 
-        user.cashDeposit(100.00);
+        user.cashDeposit(cash);
+
+        return user;
+    }
+
+    public static User userIndebt() {
+        User user = user();
+
+        Moneylender.get(user).indebt(user);
 
         return user;
     }

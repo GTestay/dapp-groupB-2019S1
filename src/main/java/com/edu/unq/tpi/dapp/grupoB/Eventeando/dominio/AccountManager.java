@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AccountManager {
-    public static final String USER_LOW_BALANCE = "El Usuario No Tiene Saldo Suficiente Para Realizar La Operacion";
+    public static final String USER_LOW_BALANCE = "Not Enough Money For This Transaction";
 
     private static AccountManager instance;
 
@@ -21,6 +21,8 @@ public class AccountManager {
 
         return instance;
     }
+
+    public void giveLoan(User user) { transactions(user).add(Loan.create(user)); }
 
     private ArrayList<MoneyTransaction> transactions(User user) { return accounts.get(user); }
 
@@ -37,13 +39,17 @@ public class AccountManager {
         transactions(user).add(Extraction.create(user, LocalDate.now(), amount));
     }
 
-    private boolean validateBalance(User user, double amount) { return statement(user) < amount; }
+    private boolean validateBalance(User user, double amount) { return balance(user) < amount; }
 
-    public double statement(User user) { return transactions(user).stream().mapToDouble(MoneyTransaction::transactionalValue).sum(); }
+    public double balance(User user) { return transactions(user).stream().mapToDouble(MoneyTransaction::transactionalValue).sum(); }
 
     public void cashDeposit(User user, double amount) { makeDeposit(user, DepositByCash.create(user, LocalDate.now(), amount)); }
 
     public void creditDeposit(User user, double amount) { makeDeposit(user, DepositByCreditCard.create(user, LocalDate.now(), amount)); }
 
     private void makeDeposit(User user, Deposit deposit) { transactions(user).add(deposit); }
+
+    public boolean isDefaulter(User user) { return indebted.contains(user); }
+
+    public void indebt(User user) { indebted.add(user); }
 }
