@@ -9,5 +9,6 @@ public class Extraction extends MoneyTransaction {
         return (Extraction) validateInstance(user, date, amount, instance);
     }
 
+    @Override
     public double transactionalValue() { return -amount; }
 }

@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyAccountException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneylenderException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.UserException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
@@ -147,7 +148,7 @@ public class UserTest {
 
         user.cashDeposit(100.00);
 
-        assertEquals(100.00, user.statement(), 0);
+        assertEquals(100.00, user.balance(), 0);
     }
 
     @Test
@@ -156,7 +157,7 @@ public class UserTest {
 
         user.creditDeposit(100.00);
 
-        assertEquals(100.00, user.statement(), 0);
+        assertEquals(100.00, user.balance(), 0);
     }
 
     @Test
@@ -164,7 +165,7 @@ public class UserTest {
         User user = userFactory.userWithCash(100.00);
 
         user.takeCash(50.00);
-        assertEquals(50.00, user.statement(), 0);
+        assertEquals(50.00, user.balance(), 0);
     }
 
     @Test
@@ -172,7 +173,7 @@ public class UserTest {
         User user = userFactory.userWithCash(100.00);
 
         user.requireCredit(50.00);
-        assertEquals(50.00, user.statement(), 0);
+        assertEquals(50.00, user.balance(), 0);
     }
 
     @Test
@@ -192,5 +193,26 @@ public class UserTest {
         } catch (MoneyAccountException error) {
             assertEquals(error.getMessage(), AccountManager.USER_LOW_BALANCE);
         }
+    }
+
+    @Test
+    public void userCanNotTakeALoanWithoutBeenDefaulter(){
+        User user = UserFactory.userIndebt();
+
+        try {
+            user.takeOutALoan();
+            fail();
+        } catch (MoneylenderException error) {
+            assertEquals(error.getMessage(), Moneylender.USER_DEFAULTER);
+        }
+    }
+
+    @Test
+    public void userCanTakeALoanBeenDutiful(){
+        User user = UserFactory.user();
+
+        user.takeOutALoan();
+
+        assertEquals(1000.00, user.balance(), 0);
     }
 }
