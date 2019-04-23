@@ -20,17 +20,26 @@ public class UserValidator extends Validator {
 
     public String validateName(String name) {
         validateNullityOf(name, new UserException(USER_IS_INVALID_WITHOUT_NAME));
-        return validateLenghtBetween(name, 1, 30, new UserException(USER_NAME_IS_INVALID));
+
+        validateLenghtBetween(name, 1, 30, new UserException(USER_NAME_IS_INVALID));
+
+        return name;
     }
 
     public String validateLastname(String lastname) {
         validateNullityOf(lastname, new UserException(USER_IS_INVALID_WITHOUT_LASTNAME));
-        return validateLenghtBetween(lastname, 1, 30, new UserException(USER_LASTNAME_IS_INVALID));
+
+        validateLenghtBetween(lastname, 1, 30, new UserException(USER_LASTNAME_IS_INVALID));
+
+        return lastname;
     }
 
     public String validateEmail(String email) {
         validateNullityOf(email, new UserException(USER_IS_INVALID_WITHOUT_EMAIL));
-        return validateThatEmailIsCorrect(email);
+
+        validateThatEmailIsCorrect(email);
+
+        return email;
     }
 
     private String validateThatEmailIsCorrect(String email) {
@@ -45,11 +54,12 @@ public class UserValidator extends Validator {
 
     public String validatePassword(String password) {
         validateNullityOf(password, new UserException(USER_IS_INVALID_WITHOUT_PASSWORD));
-        return validateLenghtBetween(password, 4, 10, new UserException(USER_PASSWORD_IS_INVALID));
+
+        validateLenghtBetween(password, 4, 10, new UserException(USER_PASSWORD_IS_INVALID));
+
+        return password;
     }
 
-    public LocalDate validateBirthday(LocalDate birthday) {
-        return validateNullityOf(birthday, new UserException(USER_IS_INVALID_WITHOUT_BIRTHDAY));
-    }
+    public LocalDate validateBirthday(LocalDate birthday) { return validateNullityOf(birthday, new UserException(USER_IS_INVALID_WITHOUT_BIRTHDAY)); }
 }
 
