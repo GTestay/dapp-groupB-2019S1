@@ -46,4 +46,8 @@ public class User {
     public void requireCredit(double amount) { accountManager.requireCredit(this, amount); }
 
     public void creditDeposit(double amount) { accountManager.creditDeposit(this, amount) ; }
+
+    public boolean hasEmail(String anEmail) {
+        return email == anEmail;
+    }
 }
