@@ -49,7 +49,9 @@ public class PotluckEvent extends Event {
         return this.coveredExpenses.containsKey(anExpense);
     }
 
-    /** Precondition: the expense has been check that is covered */
+    /**
+     * Precondition: the expense has been check that is covered
+     */
     private boolean userHasCoveredAnExpense(User guest, String anExpense) {
         return this.coveredExpenses.get(anExpense).equals(guest);
     }

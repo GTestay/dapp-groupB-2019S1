@@ -24,10 +24,12 @@ public class PotluckEventTest extends EventTest {
     }
 
     @Test
-    public void aPotluckEventHasAListOfExpenses() {
+    public void aPotluckEventHasAListOfExpensesToCoverByGuests() {
         PotluckEvent potluckEvent = createPotluck(oneAssistant(), twoExpenses());
 
         assertEquals(2, potluckEvent.expenses().size());
+        assertEquals(1, potluckEvent.guests().size());
+        assertEquals(200, potluckEvent.totalCost(), 0);
         assertTrue(potluckEvent.coveredExpenses().isEmpty());
     }
 

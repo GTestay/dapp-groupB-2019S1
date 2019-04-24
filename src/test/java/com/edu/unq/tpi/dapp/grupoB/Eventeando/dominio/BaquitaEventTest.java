@@ -5,16 +5,12 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
-public class BaquitaEventTest {
+public class BaquitaEventTest extends EventTest{
 
     private String description;
 
@@ -34,14 +30,14 @@ public class BaquitaEventTest {
             BaquitaEvent.create(newOrganizer(), description, twoExpenses(), null);
             fail();
         } catch (EventException error) {
-            assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_ASSISTANTS);
+            assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
         }
 
         try {
             BaquitaEvent.create(newOrganizer(), description, twoExpenses(), new ArrayList<>());
             fail();
         } catch (EventException error) {
-            assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_ASSISTANTS);
+            assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
         }
     }
 
@@ -68,23 +64,6 @@ public class BaquitaEventTest {
 
     private BaquitaEvent newbaquitaWithExpensesAndAssistants(User organizer, String description) {
         return BaquitaEvent.create(organizer, description, twoExpenses(), oneAssistant());
-    }
-
-    private User newOrganizer() {
-        return User.create("Maximo", "Cossetti", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
-    }
-
-    private List<User> oneAssistant() {
-        ArrayList<User> users = new ArrayList<>();
-        users.add(new User());
-        return users;
-    }
-
-    private Map<String, Double> twoExpenses() {
-        HashMap<String, Double> expenses = new HashMap<>();
-        expenses.put("Coca 3L", 100.00);
-        expenses.put("Sanguchitos x12", 100.00);
-        return expenses;
     }
 
     @Test

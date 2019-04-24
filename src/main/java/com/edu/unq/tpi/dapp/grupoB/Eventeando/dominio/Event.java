@@ -9,7 +9,7 @@ import java.util.stream.DoubleStream;
 
 import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_THE_USER_WAS_NOT_INVITED;
 
-public class Event {
+public abstract class Event {
 
     protected User organizer;
     protected String description;
@@ -27,7 +27,6 @@ public class Event {
         return event;
     }
 
-
     public User organizer() {
         return organizer;
     }
@@ -40,7 +39,13 @@ public class Event {
         return expenses;
     }
 
+    public List<User> guests() {
+        return guests;
+    }
 
+    public Double totalCost() {
+        return expensesTotalCost();
+    }
 
     public Double expensesTotalCost() {
         return allExpensesCost().sum();
@@ -50,14 +55,13 @@ public class Event {
         return expenses.values().stream().mapToDouble(d -> d);
     }
 
-
     protected void validateThatTheUserWasInvited(String anEmail) {
         if (!isInvited(anEmail)) {
             throw new EventException(ERROR_THE_USER_WAS_NOT_INVITED);
         }
     }
 
-    private boolean isInvited(String anEmail) {
+    protected boolean isInvited(String anEmail) {
         return guests.stream().anyMatch(user -> user.hasEmail(anEmail));
     }
 }
