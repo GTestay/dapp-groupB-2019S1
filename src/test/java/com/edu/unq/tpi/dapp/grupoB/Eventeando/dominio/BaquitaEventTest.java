@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
-public class BaquitaEventTest extends EventTest{
+public class BaquitaEventTest extends EventTest {
 
     private String description;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         description = "alta fiesta";
     }
 
@@ -27,14 +27,14 @@ public class BaquitaEventTest extends EventTest{
 
     private void assertThatCanNotBeCreatedWithoutAssistants() {
         try {
-            BaquitaEvent.create(newOrganizer(), description, twoExpenses(), null);
+            Event.createBaquita(organizer(), description, twoExpenses(), null);
             fail();
         } catch (EventException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
         }
 
         try {
-            BaquitaEvent.create(newOrganizer(), description, twoExpenses(), new ArrayList<>());
+            Event.createBaquita(organizer(), description, twoExpenses(), new ArrayList<>());
             fail();
         } catch (EventException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
@@ -43,7 +43,7 @@ public class BaquitaEventTest extends EventTest{
 
     private void assertThatCanNotBeCreatedWithoutOrganizer() {
         try {
-            BaquitaEvent.create(null, description, twoExpenses(), oneAssistant());
+            Event.createBaquita(null, description, twoExpenses(), oneAssistant());
             fail();
         } catch (EventException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_ORGANIZER);
@@ -53,7 +53,7 @@ public class BaquitaEventTest extends EventTest{
 
     @Test
     public void aBaquitaEventIsCreatedWithOrganizerExpensesAndAssistants() {
-        User organizer = newOrganizer();
+        User organizer = organizer();
 
         BaquitaEvent baquita = newbaquitaWithExpensesAndAssistants(organizer, description);
 
@@ -63,12 +63,12 @@ public class BaquitaEventTest extends EventTest{
     }
 
     private BaquitaEvent newbaquitaWithExpensesAndAssistants(User organizer, String description) {
-        return BaquitaEvent.create(organizer, description, twoExpenses(), oneAssistant());
+        return Event.createBaquita(organizer, description, twoExpenses(), oneAssistant());
     }
 
     @Test
     public void theEventCostIsDividedByTheNumberOfAssistanceAndTheOrganizer() {
-        User organizer = newOrganizer();
+        User organizer = organizer();
 
         BaquitaEvent baquita = newbaquitaWithExpensesAndAssistants(organizer, description);
         assertEquals(100.00, baquita.costPerAssitance(), 0);

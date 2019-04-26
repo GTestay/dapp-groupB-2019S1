@@ -6,17 +6,11 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PotluckEvent extends Event {
 
 
-    private HashMap<String, User> coveredExpenses = new HashMap<>();
-
-    public static PotluckEvent create(User organizer, String description, List<User> assistant, Map<String, Double> expenses) {
-
-        return (PotluckEvent) validateInstance(new PotluckEvent(), organizer, description, expenses, assistant);
-    }
+    protected HashMap<String, User> coveredExpenses = new HashMap<>();
 
     public List<String> coveredExpenses() {
         return new ArrayList<>(this.coveredExpenses.keySet());
