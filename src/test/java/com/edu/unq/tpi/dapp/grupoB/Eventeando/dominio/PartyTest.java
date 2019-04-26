@@ -20,7 +20,7 @@ public class PartyTest extends EventTest {
 
     @Before
     public void setUp() {
-        organizer = newOrganizer();
+        organizer = organizer();
         anInvitationLimitDate = LocalDateTime.now();
         pricePerAssistant = 100.0;
         description = "A party";
@@ -37,13 +37,13 @@ public class PartyTest extends EventTest {
 
 
     private Party partyWithGuests() {
-        return Event.createParty(organizer, "A party", this.guests(), new HashMap<String, Double>(), anInvitationLimitDate, 0.0);
+        return Event.createParty(organizer, description, this.guests(), new HashMap<>(), anInvitationLimitDate, 0.0);
     }
 
     @Test
     public void aPartyCanNotBeCreatedWithoutGuests() {
         try {
-            Event.createParty(organizer, "A party", new ArrayList<>(), new HashMap<String, Double>(), anInvitationLimitDate, 0.0);
+            Event.createParty(organizer, description, new ArrayList<>(), new HashMap<>(), anInvitationLimitDate, 0.0);
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
         }
@@ -53,7 +53,7 @@ public class PartyTest extends EventTest {
     @Test
     public void aPartyTicketPriceMustNotBeNegative() {
         try {
-            Event.createParty(organizer, "A party", this.guests(), new HashMap<String, Double>(), anInvitationLimitDate, -1.0);
+            Event.createParty(organizer, description, this.guests(), new HashMap<>(), anInvitationLimitDate, -1.0);
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), EventValidator.EVENT_TICKET_PRICE_MUST_NOT_BE_NEGATIVE);
         }
@@ -97,8 +97,10 @@ public class PartyTest extends EventTest {
     @Test
     public void theCostOfThePartyWithoutSuppliesAndWithConfirmationsIsCalculatedByThePricePerAssistant() {
         Party unaPartyConUnaConfirmacion = partyWithGuestsAndCostPerAssistance(pricePerAssistant);
+        List<User> guests = unaPartyConUnaConfirmacion.guests();
+        User user = guests.get(0);
 
-        unaPartyConUnaConfirmacion.confirmAssistance("anEmail1@gmail.com");
+        unaPartyConUnaConfirmacion.confirmAssistance(user.email());
 
         assertThatTheFullCostOfThePartyIs(unaPartyConUnaConfirmacion, pricePerAssistant);
     }
@@ -127,10 +129,14 @@ public class PartyTest extends EventTest {
     @Test
     public void thePartyCanCalculateTheCostWithSuppliesAndConfirmations() {
         Party party = partyWithGuestsAndCostPerAssistance(pricePerAssistant);
+        List<User> guests = party.guests();
+        User aUserThatIsInvited = guests.get(0);
+        User anotherUserThatIsInvited = guests.get(1);
+
         party.addExpense("Coca de 1 litro", 100.00);
         party.addExpense("Pizza", 100.00);
-        party.confirmAssistance("anEmail1@gmail.com");
-        party.confirmAssistance("anEmail2@gmail.com");
+        party.confirmAssistance(aUserThatIsInvited.email());
+        party.confirmAssistance(anotherUserThatIsInvited.email());
 
         assertThatTheFullCostOfThePartyIs(party, 600.00);
     }

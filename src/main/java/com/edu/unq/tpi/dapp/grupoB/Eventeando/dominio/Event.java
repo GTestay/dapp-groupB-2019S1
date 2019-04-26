@@ -14,7 +14,6 @@ import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.E
 
 public abstract class Event {
 
-    private static Double pricePerAssistant;
     protected User organizer;
     protected String description;
     protected Map<String, Double> expenses;
@@ -38,6 +37,13 @@ public abstract class Event {
         return instance;
     }
 
+    public static PotluckEvent createPotluck(User organizer, String description, List<User> assistant, Map<String, Double> expenses) {
+        return (PotluckEvent) validateInstance(new PotluckEvent(), organizer, description, expenses, assistant);
+    }
+
+    public static BaquitaEvent createBaquita(User organizer, String description, Map<String, Double> expenses, List<User> assistants) {
+        return (BaquitaEvent) validateInstance(new BaquitaEvent(), organizer, description, expenses, assistants);
+    }
 
     public User organizer() {
         return organizer;
