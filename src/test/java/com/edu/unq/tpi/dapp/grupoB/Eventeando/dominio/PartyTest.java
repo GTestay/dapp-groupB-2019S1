@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -15,12 +16,14 @@ public class PartyTest extends EventTest {
     private User organizer;
     private LocalDateTime anInvitationLimitDate;
     private double pricePerAssistant;
+    private String description;
 
     @Before
     public void setUp() {
         organizer = newOrganizer();
         anInvitationLimitDate = LocalDateTime.now();
         pricePerAssistant = 100.0;
+        description = "A party";
     }
 
     @Test
@@ -34,15 +37,25 @@ public class PartyTest extends EventTest {
 
 
     private Party partyWithGuests() {
-        return Party.create(organizer, this.assistants(), anInvitationLimitDate, 0.0);
+        return Event.createParty(organizer, "A party", this.guests(), new HashMap<String, Double>(), anInvitationLimitDate, 0.0);
     }
 
     @Test
     public void aPartyCanNotBeCreatedWithoutGuests() {
         try {
-            Party.create(organizer, new ArrayList<>(), anInvitationLimitDate, 0.0);
+            Event.createParty(organizer, "A party", new ArrayList<>(), new HashMap<String, Double>(), anInvitationLimitDate, 0.0);
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
+        }
+
+    }
+
+    @Test
+    public void aPartyTicketPriceMustNotBeNegative() {
+        try {
+            Event.createParty(organizer, "A party", this.guests(), new HashMap<String, Double>(), anInvitationLimitDate, -1.0);
+        } catch (RuntimeException e) {
+            assertEquals(e.getMessage(), EventValidator.EVENT_TICKET_PRICE_MUST_NOT_BE_NEGATIVE);
         }
 
     }
@@ -123,11 +136,11 @@ public class PartyTest extends EventTest {
     }
 
     private Party partyWithGuestsAndCostPerAssistance(Double pricePerAssistant) {
-        return createParty(assistants(), pricePerAssistant);
+        return createParty(guests(), pricePerAssistant);
     }
 
     private Party createParty(List<User> assistants, Double pricePerAssistant) {
-        return Party.create(organizer, assistants, anInvitationLimitDate, pricePerAssistant);
+        return Event.createParty(organizer, description, assistants, new HashMap<>(), anInvitationLimitDate, pricePerAssistant);
     }
 
     private void assertThatTheFullCostOfThePartyIs(Party party, double costoTotalDeLaFiesta) {

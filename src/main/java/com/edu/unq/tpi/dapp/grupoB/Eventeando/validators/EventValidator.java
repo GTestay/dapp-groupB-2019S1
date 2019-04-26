@@ -13,6 +13,7 @@ public class EventValidator extends Validator {
     public static final String ERROR_THE_USER_WAS_NOT_INVITED = "error, the user was not invited";
     public static final String ERROR_EXPENSE_IS_NOT_IN_THE_LIST = "Error, the expense is not the list";
     public static final String ERROR_EXPENSE_IS_ALREADY_COVERED = "Error, the expense is already covered by other user";
+    public static final String EVENT_TICKET_PRICE_MUST_NOT_BE_NEGATIVE = "Error, the ticket price can not be negative.";
 
     public User validateOrganizer(User organizer) {
         return validateNullityOf(organizer, new EventException(EVENT_IS_INVALID_WITHOUT_ORGANIZER));
@@ -20,5 +21,10 @@ public class EventValidator extends Validator {
 
     public List<User> validateAssistants(List<User> assistants) {
         return validateEmptinessOf(assistants, new EventException(EVENT_IS_INVALID_WITHOUT_GUESTS));
+    }
+
+    public Double validatePricePerAssistant(Double pricePerAssistant) {
+        return validateNegativiyOf(pricePerAssistant, new EventException(EVENT_TICKET_PRICE_MUST_NOT_BE_NEGATIVE));
+
     }
 }

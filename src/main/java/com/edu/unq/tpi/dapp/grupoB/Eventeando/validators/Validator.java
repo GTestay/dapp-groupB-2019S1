@@ -26,4 +26,12 @@ public class Validator {
         }
         return aList;
     }
+
+    protected Double validateNegativiyOf(Double aNumber, RuntimeException exception) {
+        if (aNumber == null || aNumber < 0) {
+            throw exception;
+        }
+        return aNumber;
+    }
+
 }
