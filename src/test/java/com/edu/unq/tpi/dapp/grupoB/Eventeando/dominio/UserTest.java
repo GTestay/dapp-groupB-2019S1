@@ -4,14 +4,24 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyAccountException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.UserException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.time.LocalDate;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
-import java.time.LocalDate;
-
 public class UserTest {
+
+    private UserFactory userFactory;
+
+
+    @Before
+    public void setUp() {
+        userFactory = new UserFactory();
+    }
+
 
     @Test
     public void creationOfANewUser() {
@@ -25,7 +35,7 @@ public class UserTest {
     }
 
     @Test
-    public void userValidations(){
+    public void userValidations() {
         nameValidations();
 
         lastnameValidations();
@@ -133,7 +143,7 @@ public class UserTest {
 
     @Test
     public void userMakesACashDeposit() {
-        User user = UserFactory.user();
+        User user = userFactory.user();
 
         user.cashDeposit(100.00);
 
@@ -142,7 +152,7 @@ public class UserTest {
 
     @Test
     public void userMakesACreditDeposit() {
-        User user = UserFactory.user();
+        User user = userFactory.user();
 
         user.creditDeposit(100.00);
 
@@ -151,7 +161,7 @@ public class UserTest {
 
     @Test
     public void userTakesSomeCashOut() {
-        User user = UserFactory.userWithCash(100.00);
+        User user = userFactory.userWithCash(100.00);
 
         user.takeCash(50.00);
         assertEquals(50.00, user.statement(), 0);
@@ -159,7 +169,7 @@ public class UserTest {
 
     @Test
     public void userRequireSomeCredit() {
-        User user = UserFactory.userWithCash(100.00);
+        User user = userFactory.userWithCash(100.00);
 
         user.requireCredit(50.00);
         assertEquals(50.00, user.statement(), 0);
@@ -167,7 +177,7 @@ public class UserTest {
 
     @Test
     public void userCannotTakeCashOrRequiereCreditWithoutFounds() {
-        User user = UserFactory.user();
+        User user = userFactory.user();
 
         try {
             user.requireCredit(50.00);

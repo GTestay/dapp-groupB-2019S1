@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,29 +13,27 @@ import static org.junit.Assert.assertEquals;
 
 public class BaquitaEventTest extends EventTest {
 
-    private String description;
-
     @Before
     public void setUp() {
-        description = "alta fiesta";
+        userFactory = new UserFactory();
     }
 
     @Test
     public void baquitaValidations() {
         assertThatCanNotBeCreatedWithoutOrganizer();
-        assertThatCanNotBeCreatedWithoutAssistants();
+        assertThatCanNotBeCreatedWithoutGuests();
     }
 
-    private void assertThatCanNotBeCreatedWithoutAssistants() {
+    private void assertThatCanNotBeCreatedWithoutGuests() {
         try {
-            Event.createBaquita(organizer(), description, twoExpenses(), null);
+            Event.createBaquita(userFactory.user(), description, null, twoExpenses());
             fail();
         } catch (EventException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
         }
 
         try {
-            Event.createBaquita(organizer(), description, twoExpenses(), new ArrayList<>());
+            Event.createBaquita(organizer(), description, new ArrayList<>(), twoExpenses());
             fail();
         } catch (EventException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
@@ -43,7 +42,7 @@ public class BaquitaEventTest extends EventTest {
 
     private void assertThatCanNotBeCreatedWithoutOrganizer() {
         try {
-            Event.createBaquita(null, description, twoExpenses(), oneAssistant());
+            Event.createBaquita(null, description, oneGuest(), twoExpenses());
             fail();
         } catch (EventException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_ORGANIZER);
@@ -52,25 +51,25 @@ public class BaquitaEventTest extends EventTest {
 
 
     @Test
-    public void aBaquitaEventIsCreatedWithOrganizerExpensesAndAssistants() {
+    public void aBaquitaEventIsCreatedWithOrganizerExpensesAndGuests() {
         User organizer = organizer();
 
-        BaquitaEvent baquita = newbaquitaWithExpensesAndAssistants(organizer, description);
+        BaquitaEvent baquita = newbaquitaWithExpensesAndGuests(organizer, description);
 
         assertEquals(organizer, baquita.organizer());
         assertEquals(description, baquita.description());
         assertEquals(200.00, baquita.expensesTotalCost(), 0);
     }
 
-    private BaquitaEvent newbaquitaWithExpensesAndAssistants(User organizer, String description) {
-        return Event.createBaquita(organizer, description, twoExpenses(), oneAssistant());
+    private BaquitaEvent newbaquitaWithExpensesAndGuests(User organizer, String description) {
+        return Event.createBaquita(organizer, description, oneGuest(), twoExpenses());
     }
 
     @Test
     public void theEventCostIsDividedByTheNumberOfAssistanceAndTheOrganizer() {
         User organizer = organizer();
 
-        BaquitaEvent baquita = newbaquitaWithExpensesAndAssistants(organizer, description);
+        BaquitaEvent baquita = newbaquitaWithExpensesAndGuests(organizer, description);
         assertEquals(100.00, baquita.costPerAssitance(), 0);
     }
 

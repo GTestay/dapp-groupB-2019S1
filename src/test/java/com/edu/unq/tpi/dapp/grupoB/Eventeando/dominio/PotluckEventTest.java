@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,16 +15,15 @@ import static org.junit.Assert.*;
 
 public class PotluckEventTest extends EventTest {
 
-    private String description;
 
     @Before
     public void setUp() {
-        description = "alta fiesta";
+        userFactory = new UserFactory();
     }
 
     @Test
     public void aPotluckEventHasAListOfExpensesToCoverByGuests() {
-        PotluckEvent potluckEvent = newPotluckEvent(oneAssistant(), twoExpenses());
+        PotluckEvent potluckEvent = newPotluckEvent(oneGuest(), twoExpenses());
 
         assertEquals(2, potluckEvent.expenses().size());
         assertEquals(1, potluckEvent.guests().size());
@@ -99,7 +99,7 @@ public class PotluckEventTest extends EventTest {
         Map<String, Double> expenses = twoExpenses();
         String anExpenseNameThatWasAdded = getAnExpenseName(expenses);
         User userThatWasNotInvited = newUser();
-        PotluckEvent potluckEvent = newPotluckEvent(oneAssistant(), expenses);
+        PotluckEvent potluckEvent = newPotluckEvent(oneGuest(), expenses);
 
         try {
             potluckEvent.aGuestTakeChargeOf(userThatWasNotInvited, anExpenseNameThatWasAdded);

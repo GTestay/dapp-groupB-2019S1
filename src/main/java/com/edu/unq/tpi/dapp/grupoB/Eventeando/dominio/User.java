@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
+
 import java.time.LocalDate;
 
 public class User {
@@ -47,7 +48,7 @@ public class User {
 
     public void creditDeposit(double amount) { accountManager.creditDeposit(this, amount) ; }
 
-    public boolean hasEmail(String anEmail) {
-        return email == anEmail;
+    public boolean hasThisEmail(String anEmail) {
+        return email.equals(anEmail);
     }
 }
