@@ -5,15 +5,40 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import java.time.LocalDate;
 
 public class UserFactory {
-    public static User user() {
-        return User.create("Maximo", "Cossetti", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
+
+    private Integer usersCreated = 0;
+
+    public User user() {
+        User user = User.create(name(), lastname(), email(), genericPassword(), aBirthday());
+        this.usersCreated++;
+        return user;
     }
 
-    public static User userWithCash(double cash) {
+    private LocalDate aBirthday() {
+        return LocalDate.of(2002, 3, 21);
+    }
+
+    private String email() {
+        return "genericMail" + this.usersCreated + "@gmail.com";
+    }
+
+    public User userWithCash(double cash) {
         User user = user();
 
         user.cashDeposit(100.00);
 
         return user;
+    }
+
+    private String name() {
+        return "GenericName";
+    }
+
+    private String lastname() {
+        return "GenericLastname";
+    }
+
+    private String genericPassword() {
+        return "P4S5W0RD";
     }
 }

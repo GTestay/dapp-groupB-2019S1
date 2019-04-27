@@ -1,5 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,14 +17,13 @@ public class PartyTest extends EventTest {
     private User organizer;
     private LocalDateTime anInvitationLimitDate;
     private double pricePerAssistant;
-    private String description;
 
     @Before
     public void setUp() {
+        userFactory = new UserFactory();
         organizer = organizer();
         anInvitationLimitDate = LocalDateTime.now();
         pricePerAssistant = 100.0;
-        description = "A party";
     }
 
     @Test

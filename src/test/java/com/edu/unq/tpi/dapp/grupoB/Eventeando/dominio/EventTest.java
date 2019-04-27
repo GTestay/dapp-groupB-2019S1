@@ -2,29 +2,20 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class EventTest {
 
-    public List<User> oneAssistant() {
-        ArrayList<User> users = new ArrayList<>();
+    protected String description = "Alta fiesta";
+    protected UserFactory userFactory;
 
-        User user = UserFactory.user();
-        users.add(user);
-        return users;
+
+    public List<User> oneGuest() {
+        return Collections.singletonList(userFactory.user());
     }
 
     public List<User> guests() {
-        ArrayList<User> users = new ArrayList<>();
-        User user = UserFactory.user();
-        User user2 = UserFactory.user();
-        users.add(user);
-        users.add(user2);
-        return users;
+        return Arrays.asList(userFactory.user(), userFactory.user());
     }
 
     protected Map<String, Double> twoExpenses() {
@@ -35,11 +26,10 @@ public abstract class EventTest {
     }
 
     public User organizer() {
-        return User.create("Maximo", "Cossetti", "eravenna@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
+        return userFactory.user();
     }
 
     public User newUser() {
-        return User.create("Pepe", "Allido", "pepe@gmail.com", "S1M6L4R", LocalDate.of(2002, 3, 21));
+        return userFactory.user();
     }
-
 }

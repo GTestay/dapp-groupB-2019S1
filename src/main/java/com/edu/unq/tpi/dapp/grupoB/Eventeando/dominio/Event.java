@@ -19,30 +19,30 @@ public abstract class Event {
     protected Map<String, Double> expenses;
     protected List<User> guests;
 
-    protected static Event validateInstance(Event event, User organizer, String description, Map<String, Double> expenses, List<User> guests) {
+    protected static <EventType extends Event> EventType validateEvent(EventType newEvent, User organizer, String description, Map<String, Double> expenses, List<User> guests) {
         EventValidator eventValidator = new EventValidator();
-        event.organizer = eventValidator.validateOrganizer(organizer);
-        event.description = description;
-        event.expenses = expenses;
-        event.guests = eventValidator.validateAssistants(guests);
-        return event;
+        newEvent.organizer = eventValidator.validateOrganizer(organizer);
+        newEvent.description = description;
+        newEvent.expenses = expenses;
+        newEvent.guests = eventValidator.validateGuests(guests);
+        return newEvent;
     }
 
-    public static Party createParty(User organizer, String description, List<User> assistants, HashMap<String, Double> expenses, LocalDateTime invitationLimitDate, Double pricePerAssistant) {
+    public static Party createParty(User organizer, String description, List<User> guests, HashMap<String, Double> expenses, LocalDateTime invitationLimitDate, Double pricePerAssistant) {
         EventValidator eventValidator = new EventValidator();
-        Party instance = (Party) validateInstance(new Party(), organizer, description, expenses, assistants);
+        Party instance = validateEvent(new Party(), organizer, description, expenses, guests);
         instance.guestConfirmations = new ArrayList<>();
         instance.invitationLimitDate = invitationLimitDate;
         instance.pricePerAssistant = eventValidator.validatePricePerAssistant(pricePerAssistant);
         return instance;
     }
 
-    public static PotluckEvent createPotluck(User organizer, String description, List<User> assistant, Map<String, Double> expenses) {
-        return (PotluckEvent) validateInstance(new PotluckEvent(), organizer, description, expenses, assistant);
+    public static PotluckEvent createPotluck(User organizer, String description, List<User> guests, Map<String, Double> expenses) {
+        return validateEvent(new PotluckEvent(), organizer, description, expenses, guests);
     }
 
-    public static BaquitaEvent createBaquita(User organizer, String description, Map<String, Double> expenses, List<User> assistants) {
-        return (BaquitaEvent) validateInstance(new BaquitaEvent(), organizer, description, expenses, assistants);
+    public static BaquitaEvent createBaquita(User organizer, String description, List<User> guests, Map<String, Double> expenses) {
+        return validateEvent(new BaquitaEvent(), organizer, description, expenses, guests);
     }
 
     public User organizer() {
@@ -70,7 +70,7 @@ public abstract class Event {
     }
 
     private DoubleStream allExpensesCost() {
-        return expenses.values().stream().mapToDouble(d -> d);
+        return expenses.values().stream().mapToDouble(cost -> cost);
     }
 
     protected void validateThatTheUserWasInvited(String anEmail) {
@@ -80,6 +80,6 @@ public abstract class Event {
     }
 
     protected boolean isInvited(String anEmail) {
-        return guests.stream().anyMatch(user -> user.hasEmail(anEmail));
+        return guests.stream().anyMatch(user -> user.hasThisEmail(anEmail));
     }
 }

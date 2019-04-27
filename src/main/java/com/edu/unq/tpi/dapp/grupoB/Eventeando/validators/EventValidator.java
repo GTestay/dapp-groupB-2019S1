@@ -19,8 +19,8 @@ public class EventValidator extends Validator {
         return validateNullityOf(organizer, new EventException(EVENT_IS_INVALID_WITHOUT_ORGANIZER));
     }
 
-    public List<User> validateAssistants(List<User> assistants) {
-        return validateEmptinessOf(assistants, new EventException(EVENT_IS_INVALID_WITHOUT_GUESTS));
+    public List<User> validateGuests(List<User> guests) {
+        return validateEmptinessOf(guests, new EventException(EVENT_IS_INVALID_WITHOUT_GUESTS));
     }
 
     public Double validatePricePerAssistant(Double pricePerAssistant) {

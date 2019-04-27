@@ -11,7 +11,8 @@ import static org.junit.Assert.assertEquals;
 
 public class MoneyTransactionTest {
 
-    protected User user = UserFactory.user();
+    private UserFactory userFactory = new UserFactory();
+    protected User user = userFactory.user();
     protected LocalDate date = LocalDate.now();
     protected double amount = 1000.00;
 
