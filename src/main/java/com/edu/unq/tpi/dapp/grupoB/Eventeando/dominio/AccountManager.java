@@ -49,7 +49,5 @@ public class AccountManager {
 
     private void makeDeposit(User user, Deposit deposit) { transactions(user).add(deposit); }
 
-    public boolean isDefaulter(User user) { return indebted.contains(user); }
-
-    public void indebt(User user) { indebted.add(user); }
+    public void payLoan(User user) { transactions(user).add(LoanPayment.create(user)); }
 }

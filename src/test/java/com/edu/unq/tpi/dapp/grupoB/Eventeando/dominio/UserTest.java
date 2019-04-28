@@ -12,6 +12,8 @@ import java.time.LocalDate;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UserTest {
 
@@ -214,5 +216,60 @@ public class UserTest {
         user.takeOutALoan();
 
         assertEquals(1000.00, user.balance(), 0);
+    }
+
+    @Test
+    public void haveToPayLoanAndHaveMoney() {
+        User user = UserFactory.userWithCash(400.00);
+
+        user.payLoan();
+
+        assertFalse(user.isDefaulter());
+        assertEquals(200.00, user.balance(), 0);
+    }
+
+    @Test
+    public void haveToPayLoanAndDoNotHaveMoney() {
+        User user = UserFactory.userWithCash(100.00);
+
+        user.payLoan();
+
+        assertTrue(user.isDefaulter());
+        assertEquals(100.00, user.balance(), 0);
+    }
+
+    @Test
+    public void haveToPayLoanAndDoNotHaveMoneyFirstMonthButWillPayNextMonth() {
+        User user = UserFactory.userWithCash(100.00);
+
+        user.payLoan();
+
+        assertTrue(user.isDefaulter());
+        assertEquals(100.00, user.balance(), 0);
+
+        user.cashDeposit(400.00);
+
+        user.payLoan();
+
+        assertFalse(user.isDefaulter());
+        assertEquals(100.00, user.balance(), 0);
+    }
+
+    @Test
+    public void haveToPayThreeLoansAndOnlyCanPayOne() {
+        User user = UserFactory.userWithCash(100.00);
+
+        user.payLoan();
+
+        assertTrue(user.isDefaulter());
+        assertEquals(100.00, user.balance(), 0);
+
+        user.cashDeposit(200.00);
+
+        user.payLoan();
+        user.payLoan();
+
+        assertTrue(user.isDefaulter());
+        assertEquals(100.00, user.balance(), 0);
     }
 }

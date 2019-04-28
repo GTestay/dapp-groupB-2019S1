@@ -54,6 +54,8 @@ public class User {
 
     public boolean isDefaulter() { return moneyLender.isDefaulter(this); }
 
+    public void payLoan() { moneyLender.payLoan(this); }
+
     public boolean hasThisEmail(String anEmail) {
         return email.equals(anEmail);
     }
