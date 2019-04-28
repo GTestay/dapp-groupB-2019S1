@@ -3,6 +3,8 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User {
 
@@ -13,6 +15,7 @@ public class User {
     private LocalDate birthday;
     private AccountManager accountManager;
     private Moneylender moneyLender;
+    private List<PartyInvitation> partyInvitations;
 
     public static User create(String name, String lastname, String email, String password, LocalDate birthday) {
         User instance = new User();
@@ -27,6 +30,7 @@ public class User {
         instance.accountManager = AccountManager.get(instance);
         instance.moneyLender = Moneylender.get();
 
+        instance.partyInvitations = new ArrayList<>();
         return instance;
     }
 
@@ -58,5 +62,13 @@ public class User {
 
     public boolean hasThisEmail(String anEmail) {
         return email.equals(anEmail);
+    }
+
+    public List<PartyInvitation> invitations() {
+        return partyInvitations;
+    }
+
+    public void receiveEventInvitation(PartyInvitation partyInvitation) {
+        this.partyInvitations.add(partyInvitation);
     }
 }

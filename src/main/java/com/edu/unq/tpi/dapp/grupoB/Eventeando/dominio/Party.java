@@ -43,4 +43,9 @@ public class Party extends Event {
     private Integer quantityOfConfirmations() {
         return guestConfirmations.size();
     }
+
+    public boolean guestHasConfirmed(User guest) {
+        return guestConfirmations.stream().anyMatch(guest::hasThisEmail);
+    }
+
 }
