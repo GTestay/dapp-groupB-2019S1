@@ -2,12 +2,12 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import java.time.LocalDate;
 
-public class Loan extends MoneyTransaction {
+public class LoanPayment extends MoneyTransaction {
 
     private double value = 0.00;
 
-    public static Loan create(User user) {
-        Loan instance = new Loan();
+    public static LoanPayment create(User user) {
+        LoanPayment instance = new LoanPayment();
 
         validateInstance(user, LocalDate.now(), instance);
 
@@ -16,7 +16,7 @@ public class Loan extends MoneyTransaction {
 
     @Override
     public double transactionalValue() {
-        if(value == 0.00){ value = Moneylender.LOAN_COST; }
+        if(value == 0.00){ value = -Moneylender.LOAN_PAYMENT_COST; }
 
         return value;
     }
