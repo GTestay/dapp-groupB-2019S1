@@ -6,10 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class InvitationsTest {
 
@@ -37,7 +39,7 @@ public class InvitationsTest {
 
         EventInvitation eventInvitation = new EventInvitation(party, guest);
 
-        assertFalse(guest.invitations().isEmpty());
+        assertTrue(guest.invitations().contains(eventInvitation));
         assertFalse(eventInvitation.isConfirmed());
         assertFalse(party.guestHasConfirmed(guest));
     }
@@ -52,6 +54,21 @@ public class InvitationsTest {
 
         assertTrue(eventInvitation.isConfirmed());
         assertTrue(party.guestHasConfirmed(guest));
+    }
+
+    @Test
+    public void aListOfInvitationIsCreatedWithTheUsersInvitedInAnEvent() {
+
+        List<User> usersInvitedInEvent = this.userFactory.someUsers();
+        Party party = eventFactory.partyWithGuests(usersInvitedInEvent);
+        List<EventInvitation> invitations = EventInvitation.createListOfInvitationsWith(party);
+
+        assertEquals(usersInvitedInEvent.size(), invitations.size());
+
+        List<EventInvitation> allInvitations = usersInvitedInEvent.stream()
+                .map(User::invitations).flatMap(Collection::stream).collect(Collectors.toList());
+
+        assertTrue(allInvitations.containsAll(invitations));
     }
 
 

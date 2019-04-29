@@ -17,7 +17,7 @@ public class PartyTest extends EventTest {
 
     private User organizer;
     private LocalDateTime anInvitationLimitDate;
-    private double pricePerAssistant;
+    private Double pricePerAssistant;
     private LocalDateTime confirmationDate;
     private EventFactory eventFactory;
 
@@ -101,13 +101,13 @@ public class PartyTest extends EventTest {
 
     @Test
     public void theCostOfThePartyWithoutSuppliesAndWithConfirmationsIsCalculatedByThePricePerAssistant() {
-        Party unaPartyConUnaConfirmacion = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(this.guests(), pricePerAssistant, eventFactory.noExpenses());
-        List<User> guests = unaPartyConUnaConfirmacion.guests();
+        Party partyWithAConfirmation = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(this.guests(), pricePerAssistant, eventFactory.noExpenses());
+        List<User> guests = partyWithAConfirmation.guests();
         User user = guests.get(0);
 
-        unaPartyConUnaConfirmacion.confirmAssistance(user.email(), confirmationDate);
+        partyWithAConfirmation.confirmAssistance(user.email(), confirmationDate);
 
-        assertThatTheFullCostOfThePartyIs(unaPartyConUnaConfirmacion, pricePerAssistant);
+        assertThatTheFullCostOfThePartyIs(partyWithAConfirmation, pricePerAssistant);
     }
 
     @Test
@@ -132,12 +132,12 @@ public class PartyTest extends EventTest {
     }
 
     @Test
-    public void anInvitedUsertCanNotConfirmAssistanceBecauseTheDateTimeLimit() {
+    public void anInvitedUserCanNotConfirmAssistanceBecauseTheDateTimeLimit() {
         Party party = partyWithGuestsAndCostPerAssistance(pricePerAssistant);
         List<User> guests = party.guests();
-        User user = guests.get(0);
+        User invitedUser = guests.get(0);
         try {
-            party.confirmAssistance(user.email(), eventFactory.invalidConfirmationDate());
+            party.confirmAssistance(invitedUser.email(), eventFactory.invalidConfirmationDate());
             fail();
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_THE_CONFIRMATION_DATE_IS_AFTER_THE_INVITATION_LIMIT);
@@ -147,8 +147,8 @@ public class PartyTest extends EventTest {
 
     @Test
     public void thePartyCanCalculateTheCostWithSuppliesAndConfirmations() {
-        Party party = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(this.guests(), pricePerAssistant, eventFactory.expenses());
-        List<User> guests = party.guests();
+        List<User> guests = guests();
+        Party party = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests, pricePerAssistant, eventFactory.expenses());
         User aUserThatIsInvited = guests.get(0);
         User anotherUserThatIsInvited = guests.get(1);
 
@@ -166,7 +166,7 @@ public class PartyTest extends EventTest {
         return eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests, pricePerAssistant, eventFactory.expenses());
     }
 
-    private void assertThatTheFullCostOfThePartyIs(Party party, double costoTotalDeLaFiesta) {
-        assertEquals(costoTotalDeLaFiesta, party.totalCost(), 0);
+    private void assertThatTheFullCostOfThePartyIs(Party party, double totalCostOfTheParty) {
+        assertEquals(totalCostOfTheParty, party.totalCost(), 0);
     }
 }

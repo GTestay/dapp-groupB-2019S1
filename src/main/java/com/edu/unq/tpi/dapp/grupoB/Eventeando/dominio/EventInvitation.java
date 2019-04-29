@@ -1,6 +1,8 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventInvitation {
     private final Event party;
@@ -10,6 +12,12 @@ public class EventInvitation {
         this.party = anEvent;
         this.user = invitedUser;
         invitedUser.receiveEventInvitation(this);
+    }
+
+    public static List<EventInvitation> createListOfInvitationsWith(Event event) {
+        return event.guests().stream()
+                .map(user -> new EventInvitation(event, user))
+                .collect(Collectors.toList());
     }
 
     public boolean isConfirmed() {
