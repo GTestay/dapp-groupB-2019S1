@@ -1,5 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import org.junit.Before;
@@ -17,13 +18,17 @@ public class PartyTest extends EventTest {
     private User organizer;
     private LocalDateTime anInvitationLimitDate;
     private double pricePerAssistant;
+    private LocalDateTime confirmationDate;
+    private EventFactory eventFactory;
 
     @Before
     public void setUp() {
         userFactory = new UserFactory();
+        eventFactory = new EventFactory(userFactory);
         organizer = organizer();
-        anInvitationLimitDate = LocalDateTime.now();
+        anInvitationLimitDate = eventFactory.anInvitationLimitDate();
         pricePerAssistant = 100.0;
+        confirmationDate = eventFactory.confirmationDate();
     }
 
     @Test
@@ -96,11 +101,11 @@ public class PartyTest extends EventTest {
 
     @Test
     public void theCostOfThePartyWithoutSuppliesAndWithConfirmationsIsCalculatedByThePricePerAssistant() {
-        Party unaPartyConUnaConfirmacion = partyWithGuestsAndCostPerAssistance(pricePerAssistant);
+        Party unaPartyConUnaConfirmacion = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(this.guests(), pricePerAssistant, eventFactory.noExpenses());
         List<User> guests = unaPartyConUnaConfirmacion.guests();
         User user = guests.get(0);
 
-        unaPartyConUnaConfirmacion.confirmAssistance(user.email());
+        unaPartyConUnaConfirmacion.confirmAssistance(user.email(), confirmationDate);
 
         assertThatTheFullCostOfThePartyIs(unaPartyConUnaConfirmacion, pricePerAssistant);
     }
@@ -118,7 +123,7 @@ public class PartyTest extends EventTest {
     public void aUsertThatIsNotInvitedCanNotConfirmAssistance() {
         Party party = partyWithGuests();
         try {
-            party.confirmAssistance("unEmailQueNoEstaInvitado@gmail.com");
+            party.confirmAssistance("unEmailQueNoEstaInvitado@gmail.com", confirmationDate);
             fail();
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_THE_USER_WAS_NOT_INVITED);
@@ -127,16 +132,28 @@ public class PartyTest extends EventTest {
     }
 
     @Test
-    public void thePartyCanCalculateTheCostWithSuppliesAndConfirmations() {
+    public void anInvitedUsertCanNotConfirmAssistanceBecauseTheDateTimeLimit() {
         Party party = partyWithGuestsAndCostPerAssistance(pricePerAssistant);
+        List<User> guests = party.guests();
+        User user = guests.get(0);
+        try {
+            party.confirmAssistance(user.email(), eventFactory.invalidConfirmationDate());
+            fail();
+        } catch (RuntimeException e) {
+            assertEquals(e.getMessage(), EventValidator.ERROR_THE_CONFIRMATION_DATE_IS_AFTER_THE_INVITATION_LIMIT);
+            assertThatTheFullCostOfThePartyIs(party, 0);
+        }
+    }
+
+    @Test
+    public void thePartyCanCalculateTheCostWithSuppliesAndConfirmations() {
+        Party party = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(this.guests(), pricePerAssistant, eventFactory.expenses());
         List<User> guests = party.guests();
         User aUserThatIsInvited = guests.get(0);
         User anotherUserThatIsInvited = guests.get(1);
 
-        party.addExpense("Coca de 1 litro", 100.00);
-        party.addExpense("Pizza", 100.00);
-        party.confirmAssistance(aUserThatIsInvited.email());
-        party.confirmAssistance(anotherUserThatIsInvited.email());
+        party.confirmAssistance(aUserThatIsInvited.email(), confirmationDate);
+        party.confirmAssistance(anotherUserThatIsInvited.email(), confirmationDate);
 
         assertThatTheFullCostOfThePartyIs(party, 600.00);
     }
@@ -145,8 +162,8 @@ public class PartyTest extends EventTest {
         return createParty(guests(), pricePerAssistant);
     }
 
-    private Party createParty(List<User> assistants, Double pricePerAssistant) {
-        return Event.createParty(organizer, description, assistants, new HashMap<>(), anInvitationLimitDate, pricePerAssistant);
+    private Party createParty(List<User> guests, Double pricePerAssistant) {
+        return eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests, pricePerAssistant, eventFactory.expenses());
     }
 
     private void assertThatTheFullCostOfThePartyIs(Party party, double costoTotalDeLaFiesta) {

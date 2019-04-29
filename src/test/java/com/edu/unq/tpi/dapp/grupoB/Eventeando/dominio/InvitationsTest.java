@@ -5,6 +5,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static org.junit.Assert.assertFalse;
@@ -15,11 +16,13 @@ public class InvitationsTest {
 
     private UserFactory userFactory;
     private EventFactory eventFactory;
+    private LocalDateTime confirmationDate;
 
     @Before
     public void setUp() {
         userFactory = new UserFactory();
         eventFactory = new EventFactory(userFactory);
+        confirmationDate = LocalDateTime.now();
     }
 
     @Test
@@ -28,26 +31,26 @@ public class InvitationsTest {
     }
 
     @Test
-    public void aUserIsInvitedToAPartyEvent() {
+    public void aUserIsInvitedToAnEvent() {
         User guest = this.userFactory.user();
         Party party = eventFactory.partyWithGuests(Collections.singletonList(guest));
 
-        PartyInvitation partyInvitation = new PartyInvitation(party, guest);
+        EventInvitation eventInvitation = new EventInvitation(party, guest);
 
         assertFalse(guest.invitations().isEmpty());
-        assertFalse(partyInvitation.isConfirmed());
+        assertFalse(eventInvitation.isConfirmed());
         assertFalse(party.guestHasConfirmed(guest));
     }
 
     @Test
-    public void aUserInvitedToAPartyEventConfirmTheInvitation() {
+    public void aUserInvitedToAnEventConfirmTheInvitation() {
         User guest = this.userFactory.user();
         Party party = eventFactory.partyWithGuests(Collections.singletonList(guest));
 
-        PartyInvitation partyInvitation = new PartyInvitation(party, guest);
-        partyInvitation.confirm();
+        EventInvitation eventInvitation = new EventInvitation(party, guest);
+        eventInvitation.confirm(confirmationDate);
 
-        assertTrue(partyInvitation.isConfirmed());
+        assertTrue(eventInvitation.isConfirmed());
         assertTrue(party.guestHasConfirmed(guest));
     }
 

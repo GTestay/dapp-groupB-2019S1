@@ -18,6 +18,7 @@ public abstract class Event {
     protected String description;
     protected Map<String, Double> expenses;
     protected List<User> guests;
+    protected List<String> guestConfirmations;
 
     protected static <EventType extends Event> EventType validateEvent(EventType newEvent, User organizer, String description, Map<String, Double> expenses, List<User> guests) {
         EventValidator eventValidator = new EventValidator();
@@ -65,6 +66,11 @@ public abstract class Event {
         return guests;
     }
 
+    public void confirmAssistance(String anEmail, LocalDateTime confirmationDate) {
+        validateThatTheUserWasInvited(anEmail);
+        guestConfirmations.add(anEmail);
+    }
+
     public Double totalCost() {
         return expensesTotalCost();
     }
@@ -89,5 +95,13 @@ public abstract class Event {
 
     protected void throwEventException(String errorMessage) {
         throw new EventException(errorMessage);
+    }
+
+    protected Integer quantityOfConfirmations() {
+        return guestConfirmations.size();
+    }
+
+    public boolean guestHasConfirmed(User guest) {
+        return guestConfirmations.stream().anyMatch(guest::hasThisEmail);
     }
 }
