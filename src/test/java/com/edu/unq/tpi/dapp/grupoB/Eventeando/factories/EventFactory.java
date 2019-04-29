@@ -60,4 +60,5 @@ public class EventFactory {
     public HashMap<String, Double> noExpenses() {
         return new HashMap<>();
     }
+
 }

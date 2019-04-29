@@ -4,6 +4,8 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 public class UserFactory {
 
@@ -51,5 +53,9 @@ public class UserFactory {
 
     private static String password() {
         return "P4S5W0RD";
+    }
+
+    public List<User> someUsers() {
+        return Arrays.asList(this.user(), this.user());
     }
 }
