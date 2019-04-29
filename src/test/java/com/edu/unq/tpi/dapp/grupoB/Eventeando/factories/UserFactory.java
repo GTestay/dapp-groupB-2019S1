@@ -1,6 +1,5 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.factories;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 
@@ -8,23 +7,25 @@ import java.time.LocalDate;
 
 public class UserFactory {
 
-    private Integer usersCreated = 0;
+    private static Integer usersCreated = 0;
 
-    public User user() {
-        User user = User.create(name(), lastname(), email(), genericPassword(), aBirthday());
-        this.usersCreated++;
+    public static User user() {
+        User user = User.create(name(), lastname(), email(), password(), birthday());
+
+        usersCreated = usersCreated + 1;
+
         return user;
     }
 
-    private LocalDate aBirthday() {
+    private static LocalDate birthday() {
         return LocalDate.of(2002, 3, 21);
     }
 
-    private String email() {
-        return "genericMail" + this.usersCreated + "@gmail.com";
+    private static String email() {
+        return "genericMail" + usersCreated + "@gmail.com";
     }
 
-    public User userWithCash(double cash) {
+    public static User userWithCash(double cash) {
         User user = user();
 
         user.cashDeposit(cash);
@@ -35,20 +36,20 @@ public class UserFactory {
     public static User userIndebt() {
         User user = user();
 
-        Moneylender.get(user).indebt(user);
+        Moneylender.get().indebt(user);
 
         return user;
     }
 
-    private String name() {
+    private static String name() {
         return "GenericName";
     }
 
-    private String lastname() {
+    private static String lastname() {
         return "GenericLastname";
     }
 
-    private String genericPassword() {
+    private static String password() {
         return "P4S5W0RD";
     }
 }

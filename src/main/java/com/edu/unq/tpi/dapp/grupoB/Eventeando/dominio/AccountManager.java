@@ -5,6 +5,8 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyAccountException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AccountManager {
     public static final String USER_LOW_BALANCE = "Not Enough Money For This Transaction";
@@ -22,7 +24,13 @@ public class AccountManager {
         return instance;
     }
 
-    public void giveLoan(User user) { transactions(user).add(Loan.create(user)); }
+    public Loan giveLoan(User user) {
+        Loan newLoan = Loan.create(user);
+
+        transactions(user).add(newLoan);
+
+        return newLoan;
+    }
 
     private ArrayList<MoneyTransaction> transactions(User user) { return accounts.get(user); }
 
@@ -49,5 +57,16 @@ public class AccountManager {
 
     private void makeDeposit(User user, Deposit deposit) { transactions(user).add(deposit); }
 
-    public void payLoan(User user) { transactions(user).add(LoanPayment.create(user)); }
+    public void payLoan(User user) { transactions(user).add(LoanPayment.create(user, Moneylender.get().getLoan(user))); }
+
+    public Integer amountOfPaymentsDone(Loan userLoan) {
+        List<LoanPayment> userPayments = transactions(userLoan.user).stream()
+                .filter(transaction -> transaction instanceof LoanPayment)
+                .map(transaction -> (LoanPayment) transaction)
+                .collect(Collectors.toList());
+
+        userPayments.stream().filter(payment -> payment.belongsTo(userLoan)).collect(Collectors.toList());
+
+        return userPayments.size();
+    }
 }

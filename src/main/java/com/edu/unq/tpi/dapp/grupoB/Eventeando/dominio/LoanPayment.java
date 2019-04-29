@@ -5,11 +5,14 @@ import java.time.LocalDate;
 public class LoanPayment extends MoneyTransaction {
 
     private double value = 0.00;
+    private Loan referenceLoan;
 
-    public static LoanPayment create(User user) {
+    public static LoanPayment create(User user, Loan referenceLoan) {
         LoanPayment instance = new LoanPayment();
 
         validateInstance(user, LocalDate.now(), instance);
+
+        instance.referenceLoan = referenceLoan;
 
         return instance;
     }
@@ -20,4 +23,6 @@ public class LoanPayment extends MoneyTransaction {
 
         return value;
     }
+
+    public boolean belongsTo(Loan loan) { return referenceLoan == loan; }
 }
