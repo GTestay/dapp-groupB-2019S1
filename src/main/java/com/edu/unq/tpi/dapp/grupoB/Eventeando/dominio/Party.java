@@ -1,15 +1,16 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_CAN_NOT_ADD_EXPENSE_WHOSE_PRICE_IS_NEGATIVE;
+import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_THE_CONFIRMATION_DATE_IS_AFTER_THE_INVITATION_LIMIT;
 
 public class Party extends Event {
 
     protected LocalDateTime invitationLimitDate;
     protected Double pricePerAssistant;
-    protected List<String> guestConfirmations;
 
 
     public LocalDateTime invitationLimitDate() {
@@ -23,9 +24,16 @@ public class Party extends Event {
         expenses.put(supplyName, supplyPrice);
     }
 
-    public void confirmAssistance(String anEmail) {
-        validateThatTheUserWasInvited(anEmail);
-        guestConfirmations.add(anEmail);
+    @Override
+    public void confirmAssistance(String anEmail, LocalDateTime confirmationDate) {
+        validateThatTheConfirmationDateIsValidWithTheInvitationLimitDate(confirmationDate);
+        super.confirmAssistance(anEmail, confirmationDate);
+    }
+
+    private void validateThatTheConfirmationDateIsValidWithTheInvitationLimitDate(LocalDateTime confirmationDate) {
+        if (confirmationDate.isAfter(this.invitationLimitDate)) {
+            throw new EventException(ERROR_THE_CONFIRMATION_DATE_IS_AFTER_THE_INVITATION_LIMIT);
+        }
     }
 
     public Double totalCost() {
@@ -38,14 +46,6 @@ public class Party extends Event {
 
     private Double costPerConfirmedAssistance() {
         return pricePerAssistant * this.quantityOfConfirmations();
-    }
-
-    private Integer quantityOfConfirmations() {
-        return guestConfirmations.size();
-    }
-
-    public boolean guestHasConfirmed(User guest) {
-        return guestConfirmations.stream().anyMatch(guest::hasThisEmail);
     }
 
 }

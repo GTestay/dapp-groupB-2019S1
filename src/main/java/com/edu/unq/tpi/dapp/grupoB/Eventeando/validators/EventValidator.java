@@ -9,6 +9,8 @@ public class EventValidator extends Validator {
     public static final String EVENT_IS_INVALID_WITHOUT_ORGANIZER = "Error, the event needs an organizer!";
     public static final String EVENT_IS_INVALID_WITHOUT_GUESTS = "Error, the event needs guests!";
 
+    public static final String ERROR_THE_CONFIRMATION_DATE_IS_AFTER_THE_INVITATION_LIMIT = "Error, the confirmation date es after the invitation limit date";
+
     public static final String ERROR_CAN_NOT_ADD_EXPENSE_WHOSE_PRICE_IS_NEGATIVE = "error, can't not add an expense whose price is negative";
     public static final String ERROR_THE_USER_WAS_NOT_INVITED = "error, the user was not invited";
     public static final String ERROR_EXPENSE_IS_NOT_IN_THE_LIST = "Error, the expense is not the list";

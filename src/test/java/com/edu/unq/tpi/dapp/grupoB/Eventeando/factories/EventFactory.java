@@ -17,18 +17,18 @@ public class EventFactory {
         this.userFactory = userFactory;
     }
 
-    private Party createParty(List<User> guests) {
-        return Event.createParty(userFactory.user(), description(), guests, expenses(), anInvitationLimitDate(), ticketPrice());
+    private Party createParty(List<User> guests, HashMap<String, Double> expenses, Double pricePerAssistant) {
+        return Event.createParty(userFactory.user(), description(), guests, expenses, anInvitationLimitDate(), pricePerAssistant);
     }
 
-    private HashMap<String, Double> expenses() {
+    public HashMap<String, Double> expenses() {
         HashMap<String, Double> expenses = new HashMap<>();
         expenses.put("Coca 3L", 100.0);
         expenses.put("Sanguchitos x 24 ", 100.0);
         return expenses;
     }
 
-    private LocalDateTime anInvitationLimitDate() {
+    public LocalDateTime anInvitationLimitDate() {
         return LocalDateTime.now();
     }
 
@@ -41,6 +41,23 @@ public class EventFactory {
     }
 
     public Party partyWithGuests(List<User> guests) {
-        return createParty(guests);
+        return createParty(guests, expenses(), ticketPrice());
+    }
+
+    public Party partyWithGuestsExpensesAndAPricePerAssistant(List<User> guests, Double pricePerAssistant, HashMap<String, Double> expenses) {
+        return createParty(guests, expenses, pricePerAssistant);
+    }
+
+    public LocalDateTime invalidConfirmationDate() {
+        return this.anInvitationLimitDate().plusDays(1);
+    }
+
+
+    public LocalDateTime confirmationDate() {
+        return this.anInvitationLimitDate().minusDays(1);
+    }
+
+    public HashMap<String, Double> noExpenses() {
+        return new HashMap<>();
     }
 }
