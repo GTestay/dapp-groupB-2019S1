@@ -20,4 +20,6 @@ public class Loan extends MoneyTransaction {
 
         return value;
     }
+
+    public boolean isOwner(User owner) { return owner == user; }
 }

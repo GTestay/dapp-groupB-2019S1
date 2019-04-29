@@ -25,7 +25,7 @@ public class User {
         instance.birthday = validator.validateBirthday(birthday);
 
         instance.accountManager = AccountManager.get(instance);
-        instance.moneyLender = Moneylender.get(instance);
+        instance.moneyLender = Moneylender.get();
 
         return instance;
     }

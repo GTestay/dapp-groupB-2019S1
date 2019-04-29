@@ -221,6 +221,8 @@ public class UserTest {
     @Test
     public void haveToPayLoanAndHaveMoney() {
         User user = UserFactory.userWithCash(400.00);
+        user.takeOutALoan();
+        user.takeCash(1000.00);
 
         user.payLoan();
 
@@ -241,6 +243,8 @@ public class UserTest {
     @Test
     public void haveToPayLoanAndDoNotHaveMoneyFirstMonthButWillPayNextMonth() {
         User user = UserFactory.userWithCash(100.00);
+        user.takeOutALoan();
+        user.takeCash(1000.00);
 
         user.payLoan();
 
@@ -258,6 +262,8 @@ public class UserTest {
     @Test
     public void haveToPayThreeLoansAndOnlyCanPayOne() {
         User user = UserFactory.userWithCash(100.00);
+        user.takeOutALoan();
+        user.takeCash(1000.00);
 
         user.payLoan();
 
