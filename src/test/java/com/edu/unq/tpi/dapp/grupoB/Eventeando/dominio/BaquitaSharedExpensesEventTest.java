@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
-public class BaquitaEventTest extends EventTest {
+public class BaquitaSharedExpensesEventTest extends EventTest {
 
     @Before
     public void setUp() {
@@ -49,19 +49,18 @@ public class BaquitaEventTest extends EventTest {
         }
     }
 
-
     @Test
     public void aBaquitaEventIsCreatedWithOrganizerExpensesAndGuests() {
         User organizer = organizer();
 
-        BaquitaEvent baquita = newbaquitaWithExpensesAndGuests(organizer, description);
+        BaquitaSharedExpensesEvent baquita = newbaquitaWithExpensesAndGuests(organizer, description);
 
         assertEquals(organizer, baquita.organizer());
         assertEquals(description, baquita.description());
         assertEquals(200.00, baquita.expensesTotalCost(), 0);
     }
 
-    private BaquitaEvent newbaquitaWithExpensesAndGuests(User organizer, String description) {
+    private BaquitaSharedExpensesEvent newbaquitaWithExpensesAndGuests(User organizer, String description) {
         return Event.createBaquita(organizer, description, oneGuest(), twoExpenses());
     }
 
@@ -69,9 +68,8 @@ public class BaquitaEventTest extends EventTest {
     public void theEventCostIsDividedByTheNumberOfAssistanceAndTheOrganizer() {
         User organizer = organizer();
 
-        BaquitaEvent baquita = newbaquitaWithExpensesAndGuests(organizer, description);
+        BaquitaSharedExpensesEvent baquita = newbaquitaWithExpensesAndGuests(organizer, description);
         assertEquals(100.00, baquita.costPerAssitance(), 0);
     }
-
 
 }
