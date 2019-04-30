@@ -41,8 +41,12 @@ public abstract class Event {
         return validateEvent(new PotluckEvent(), organizer, description, expenses, guests);
     }
 
-    public static BaquitaEvent createBaquita(User organizer, String description, List<User> guests, Map<String, Double> expenses) {
-        return validateEvent(new BaquitaEvent(), organizer, description, expenses, guests);
+    public static BaquitaSharedExpensesEvent createBaquita(User organizer, String description, List<User> guests, Map<String, Double> expenses) {
+        return validateEvent(new BaquitaSharedExpensesEvent(), organizer, description, expenses, guests);
+    }
+
+    public static BaquitaCrowdFundingEvent createBaquitaCrowdfunding(User organizer, String description, List<User> guests, Map<String, Double> expenses) {
+        return validateEvent(new BaquitaCrowdFundingEvent(), organizer, description, expenses, guests);
     }
 
     public User organizer() {
@@ -81,5 +85,9 @@ public abstract class Event {
 
     protected boolean isInvited(String anEmail) {
         return guests.stream().anyMatch(user -> user.hasThisEmail(anEmail));
+    }
+
+    protected void throwEventException(String errorMessage) {
+        throw new EventException(errorMessage);
     }
 }

@@ -1,6 +1,5 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 
 import java.util.ArrayList;
@@ -25,13 +24,13 @@ public class PotluckEvent extends Event {
 
     private void validateThatExpenseIsNotAlreadyCovered(String anExpense) {
         if (expenseIsCovered(anExpense)) {
-            throw new EventException(EventValidator.ERROR_EXPENSE_IS_ALREADY_COVERED);
+            throwEventException(EventValidator.ERROR_EXPENSE_IS_ALREADY_COVERED);
         }
     }
 
     private void validateExistanceOfExpense(String anExpense) {
         if (!this.expenses.containsKey(anExpense)) {
-            throw new EventException(EventValidator.ERROR_EXPENSE_IS_NOT_IN_THE_LIST);
+            throwEventException(EventValidator.ERROR_EXPENSE_IS_NOT_IN_THE_LIST);
         }
     }
 
