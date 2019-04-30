@@ -10,4 +10,5 @@ public class BaquitaSharedExpensesEvent extends Event {
     private int numberOfAssistantsWithOrganizer() {
         return guests.size() + 1;
     }
+
 }
