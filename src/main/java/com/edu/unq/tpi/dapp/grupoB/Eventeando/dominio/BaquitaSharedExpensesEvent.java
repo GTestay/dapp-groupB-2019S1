@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-public class BaquitaEvent extends Event {
+public class BaquitaSharedExpensesEvent extends Event {
 
 
     public Double costPerAssitance() {
