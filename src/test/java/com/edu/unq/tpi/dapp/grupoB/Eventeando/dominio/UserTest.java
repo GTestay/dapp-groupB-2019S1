@@ -210,6 +210,20 @@ public class UserTest {
     }
 
     @Test
+    public void userCanNotTakeALoanHavingAnotherLoanInProgress(){
+        User user = UserFactory.user();
+
+        user.takeOutALoan();
+
+        try {
+            user.takeOutALoan();
+            fail();
+        } catch (MoneylenderException error) {
+            assertEquals(error.getMessage(), Moneylender.USER_LOAN_IN_PROGRESS);
+        }
+    }
+
+    @Test
     public void userCanTakeALoanBeenDutiful(){
         User user = UserFactory.user();
 
