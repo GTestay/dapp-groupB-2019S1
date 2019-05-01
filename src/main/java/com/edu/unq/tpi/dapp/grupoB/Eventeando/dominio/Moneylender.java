@@ -35,7 +35,15 @@ public class Moneylender {
         actualLoans.add(newLoan);
     }
 
-    private void validateUser(User user) { if (user.isDefaulter()) { throw new MoneylenderException(USER_DEFAULTER); } }
+    private void validateUser(User user) {
+        if (isDefaulter(user)) { throw new MoneylenderException(USER_DEFAULTER); }
+
+        if (hasLoanInProgress(user)) { throw new MoneylenderException(USER_LOAN_IN_PROGRESS); }
+    }
+
+    private boolean hasLoanInProgress(User user) {
+        return !loansOf(user).isEmpty();
+    }
 
     public boolean isDefaulter(User user) { return indebted.contains(user); }
 
@@ -101,5 +109,9 @@ public class Moneylender {
         } else {
             throw new MoneylenderException(USER_WITHOUT_LOAN);
         }
+    }
+
+    private List<Loan> loansOf(User user) {
+        return actualLoans().stream().filter(loan -> loan.isOwner(user)).collect(Collectors.toList());
     }
 }
