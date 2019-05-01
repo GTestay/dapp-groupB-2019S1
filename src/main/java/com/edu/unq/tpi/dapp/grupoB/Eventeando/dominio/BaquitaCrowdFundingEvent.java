@@ -37,7 +37,7 @@ public class BaquitaCrowdFundingEvent extends Event {
 
     private void validateThatTheEventIsNotFullyFunded() {
         if (funds.equals(this.totalCost())) {
-            throwEventException(EventValidator.ERROR_THE_CROWDFUNDED_EVENT_IS_FULLY_FUNDED);
+            throwEventException(EventValidator.ERROR_CAN_NOT_ADD_MORE_MONEY_THE_CROWDFUNDING_EVENT_IS_FUNDED);
         }
     }
 
