@@ -159,11 +159,7 @@ public class PartyTest extends EventTest {
     }
 
     private Party partyWithGuestsAndCostPerAssistance(Double pricePerAssistant) {
-        return createParty(guests(), pricePerAssistant);
-    }
-
-    private Party createParty(List<User> guests, Double pricePerAssistant) {
-        return eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests, pricePerAssistant, eventFactory.expenses());
+        return eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests(), pricePerAssistant, eventFactory.expenses());
     }
 
     private void assertThatTheFullCostOfThePartyIs(Party party, double totalCostOfTheParty) {

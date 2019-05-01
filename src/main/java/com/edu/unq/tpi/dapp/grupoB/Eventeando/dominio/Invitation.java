@@ -4,19 +4,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EventInvitation {
+public class Invitation {
     private final Event party;
     private final User user;
 
-    public EventInvitation(Event anEvent, User invitedUser) {
+    public Invitation(Event anEvent, User invitedUser) {
         this.party = anEvent;
         this.user = invitedUser;
         invitedUser.receiveEventInvitation(this);
     }
 
-    public static List<EventInvitation> createListOfInvitationsWith(Event event) {
+    public static List<Invitation> createListOfInvitationsWith(Event event) {
         return event.guests().stream()
-                .map(user -> new EventInvitation(event, user))
+                .map(user -> new Invitation(event, user))
                 .collect(Collectors.toList());
     }
 

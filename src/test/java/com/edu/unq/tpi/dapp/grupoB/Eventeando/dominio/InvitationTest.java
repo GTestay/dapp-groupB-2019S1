@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-public class InvitationsTest {
+public class InvitationTest {
 
 
     private UserFactory userFactory;
@@ -37,10 +37,10 @@ public class InvitationsTest {
         User guest = this.userFactory.user();
         Party party = eventFactory.partyWithGuests(Collections.singletonList(guest));
 
-        EventInvitation eventInvitation = new EventInvitation(party, guest);
+        Invitation invitation = new Invitation(party, guest);
 
-        assertTrue(guest.invitations().contains(eventInvitation));
-        assertFalse(eventInvitation.isConfirmed());
+        assertTrue(guest.invitations().contains(invitation));
+        assertFalse(invitation.isConfirmed());
         assertFalse(party.guestHasConfirmed(guest));
     }
 
@@ -49,10 +49,10 @@ public class InvitationsTest {
         User guest = this.userFactory.user();
         Party party = eventFactory.partyWithGuests(Collections.singletonList(guest));
 
-        EventInvitation eventInvitation = new EventInvitation(party, guest);
-        eventInvitation.confirm(confirmationDate);
+        Invitation invitation = new Invitation(party, guest);
+        invitation.confirm(confirmationDate);
 
-        assertTrue(eventInvitation.isConfirmed());
+        assertTrue(invitation.isConfirmed());
         assertTrue(party.guestHasConfirmed(guest));
     }
 
@@ -61,11 +61,11 @@ public class InvitationsTest {
 
         List<User> usersInvitedInEvent = this.userFactory.someUsers();
         Party party = eventFactory.partyWithGuests(usersInvitedInEvent);
-        List<EventInvitation> invitations = EventInvitation.createListOfInvitationsWith(party);
+        List<Invitation> invitations = Invitation.createListOfInvitationsWith(party);
 
         assertEquals(usersInvitedInEvent.size(), invitations.size());
 
-        List<EventInvitation> allInvitations = usersInvitedInEvent.stream()
+        List<Invitation> allInvitations = usersInvitedInEvent.stream()
                 .map(User::invitations).flatMap(Collection::stream).collect(Collectors.toList());
 
         assertTrue(allInvitations.containsAll(invitations));

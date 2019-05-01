@@ -15,7 +15,7 @@ public class User {
     private LocalDate birthday;
     private AccountManager accountManager;
     private Moneylender moneyLender;
-    private List<EventInvitation> eventInvitations;
+    private List<Invitation> invitations;
 
     public static User create(String name, String lastname, String email, String password, LocalDate birthday) {
         User instance = new User();
@@ -30,7 +30,7 @@ public class User {
         instance.accountManager = AccountManager.get(instance);
         instance.moneyLender = Moneylender.get();
 
-        instance.eventInvitations = new ArrayList<>();
+        instance.invitations = new ArrayList<>();
         return instance;
     }
 
@@ -64,11 +64,11 @@ public class User {
         return email.equals(anEmail);
     }
 
-    public List<EventInvitation> invitations() {
-        return eventInvitations;
+    public List<Invitation> invitations() {
+        return invitations;
     }
 
-    public void receiveEventInvitation(EventInvitation eventInvitation) {
-        this.eventInvitations.add(eventInvitation);
+    public void receiveEventInvitation(Invitation invitation) {
+        this.invitations.add(invitation);
     }
 }
