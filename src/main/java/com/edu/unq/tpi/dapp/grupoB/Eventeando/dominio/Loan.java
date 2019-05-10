@@ -9,7 +9,7 @@ public class Loan extends MoneyTransaction {
     public static Loan create(User user) {
         Loan instance = new Loan();
 
-        validateInstance(user, LocalDate.now(), instance);
+        validateInstance(user, LocalDate.now(), Moneylender.LOAN_COST, instance);
 
         return instance;
     }

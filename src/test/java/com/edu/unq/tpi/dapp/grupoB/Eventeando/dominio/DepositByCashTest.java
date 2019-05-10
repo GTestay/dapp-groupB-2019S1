@@ -21,7 +21,7 @@ public class DepositByCashTest extends MoneyTransactionTest {
 
         dateValidations();
 
-        amoutValidations();
+        amountValidations();
     }
 }
 
