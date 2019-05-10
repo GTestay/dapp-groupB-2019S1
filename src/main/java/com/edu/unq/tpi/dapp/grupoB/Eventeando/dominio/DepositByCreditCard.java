@@ -10,25 +10,15 @@ public class DepositByCreditCard extends Deposit {
     public Long cardNumber;
 
     public static DepositByCreditCard create(User user, LocalDate date, double amount, YearMonth dueDate, Long cardNumber) {
+        MoneyTransactionValidator validator = new MoneyTransactionValidator();
         DepositByCreditCard instance = new DepositByCreditCard();
 
-        return validateInstance(user, date, amount, dueDate, cardNumber, instance);
-    }
+        validateInstance(user, date, amount, instance);
 
-    protected static DepositByCreditCard validateInstance(User user, LocalDate date, double amount, YearMonth dueDate, Long cardNumber, DepositByCreditCard instance) {
-        makeValidations(user, date, amount, dueDate, cardNumber, instance);
-
-        return instance;
-    }
-
-    protected static void makeValidations(User user, LocalDate date, double amount, YearMonth dueDate, Long cardNumber, DepositByCreditCard instance) {
-        MoneyTransactionValidator validator = new MoneyTransactionValidator();
-
-        instance.user = validator.validateUser(user);
-        instance.date = validator.validateDate(date);
-        instance.amount = validator.validateAmount(amount);
         instance.dueDate = validator.validateDueDate(dueDate);
         instance.cardNumber = validator.validateCreditCardNumber(cardNumber);
+
+        return instance;
     }
 
     public YearMonth dueDate() { return dueDate; }

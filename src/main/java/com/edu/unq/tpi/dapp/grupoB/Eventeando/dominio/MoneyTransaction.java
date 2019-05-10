@@ -10,17 +10,13 @@ public abstract class MoneyTransaction {
     protected double amount;
 
     protected static MoneyTransaction validateInstance(User user, LocalDate date, double amount, MoneyTransaction instance) {
-        makeValidations(user, date, amount, instance);
-
-        return instance;
-    }
-
-    protected static void makeValidations(User user, LocalDate date, double amount, MoneyTransaction instance) {
         MoneyTransactionValidator validator = new MoneyTransactionValidator();
 
         instance.user = validator.validateUser(user);
         instance.date = validator.validateDate(date);
         instance.amount = validator.validateAmount(amount);
+
+        return instance;
     }
 
     public User user() { return user; }
