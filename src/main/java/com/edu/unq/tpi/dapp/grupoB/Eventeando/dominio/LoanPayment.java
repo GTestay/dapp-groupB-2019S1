@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 public class LoanPayment extends MoneyTransaction {
 
-    private double value = 0.00;
     private Loan referenceLoan;
 
     public static LoanPayment create(User user, Loan referenceLoan) {
@@ -18,11 +17,7 @@ public class LoanPayment extends MoneyTransaction {
     }
 
     @Override
-    public double transactionalValue() {
-        if(value == 0.00){ value = -Moneylender.LOAN_PAYMENT_COST; }
-
-        return value;
-    }
+    public double transactionalValue() { return -amount; }
 
     public boolean belongsTo(Loan loan) { return referenceLoan == loan; }
 }
