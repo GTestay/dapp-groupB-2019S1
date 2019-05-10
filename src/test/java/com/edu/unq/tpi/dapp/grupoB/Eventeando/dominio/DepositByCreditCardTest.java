@@ -1,16 +1,22 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyTransactionException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.MoneyTransactionValidator;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
-public class DepositByCreditCardTest extends MoneyTransactionTest {
+public class DepositByCreditCardTest {
 
+    private UserFactory userFactory = new UserFactory();
+    private User user = userFactory.user();
+    private LocalDate date = LocalDate.now();
+    private double amount = 1000.00;
     private YearMonth dueDate = YearMonth.now().plusMonths(1);
     private Long cardNumber = 4111111111111111L;
 
@@ -36,6 +42,33 @@ public class DepositByCreditCardTest extends MoneyTransactionTest {
         dueDatevalidations();
 
         cardNumbervalidations();
+    }
+
+    private void amountValidations() {
+        try {
+            DepositByCreditCard.create(user, date, -200.00, dueDate, cardNumber);
+            fail();
+        } catch (MoneyTransactionException error) {
+            assertEquals(error.getMessage(), MoneyTransactionValidator.AMOUNT_HAS_NEGATIVE_VALUE);
+        }
+    }
+
+    private void dateValidations() {
+        try {
+            DepositByCreditCard.create(user, null, amount, dueDate, cardNumber);
+            fail();
+        } catch (MoneyTransactionException error) {
+            assertEquals(error.getMessage(), MoneyTransactionValidator.MONEY_TRANSACTION_IS_INVALID_WITHOUT_DATE);
+        }
+    }
+
+    private void userValidations() {
+        try {
+            DepositByCreditCard.create(null, date, amount, dueDate, cardNumber);
+            fail();
+        } catch (MoneyTransactionException error) {
+            assertEquals(error.getMessage(), MoneyTransactionValidator.MONEY_TRANSACTION_IS_INVALID_WITHOUT_USER);
+        }
     }
 
     private void dueDatevalidations() {
