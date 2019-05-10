@@ -16,7 +16,7 @@ public class MoneyTransactionTest {
     protected LocalDate date = LocalDate.now();
     protected double amount = 1000.00;
 
-    protected void amoutValidations() {
+    protected void amountValidations() {
         try {
             DepositByCash.create(user, date, -200.00);
             fail();

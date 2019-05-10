@@ -3,6 +3,7 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyAccountException;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,9 +52,13 @@ public class AccountManager {
 
     public double balance(User user) { return transactions(user).stream().mapToDouble(MoneyTransaction::transactionalValue).sum(); }
 
-    public void cashDeposit(User user, double amount) { makeDeposit(user, DepositByCash.create(user, LocalDate.now(), amount)); }
+    public void cashDeposit(User user, double amount) {
+        makeDeposit(user, DepositByCash.create(user, LocalDate.now(), amount));
+    }
 
-    public void creditDeposit(User user, double amount) { makeDeposit(user, DepositByCreditCard.create(user, LocalDate.now(), amount)); }
+    public void creditDeposit(User user, double amount, YearMonth dueDate, Long cardNumber) {
+        makeDeposit(user, DepositByCreditCard.create(user, LocalDate.now(), amount, dueDate, cardNumber));
+    }
 
     private void makeDeposit(User user, Deposit deposit) { transactions(user).add(deposit); }
 

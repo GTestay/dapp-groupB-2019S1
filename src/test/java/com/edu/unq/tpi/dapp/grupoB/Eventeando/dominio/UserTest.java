@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
@@ -156,8 +157,10 @@ public class UserTest {
     @Test
     public void userMakesACreditDeposit() {
         User user = userFactory.user();
+        YearMonth dueDate = YearMonth.now().plusMonths(1);
+        Long cardNumber = 4111111111111111L;
 
-        user.creditDeposit(100.00);
+        user.creditDeposit(100.00, dueDate, cardNumber);
 
         assertEquals(100.00, user.balance(), 0);
     }

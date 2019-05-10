@@ -21,7 +21,7 @@ public class ExtractionTest extends MoneyTransactionTest {
 
         dateValidations();
 
-        amoutValidations();
+        amountValidations();
     }
 }
 

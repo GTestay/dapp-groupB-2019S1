@@ -10,7 +10,7 @@ public class LoanPayment extends MoneyTransaction {
     public static LoanPayment create(User user, Loan referenceLoan) {
         LoanPayment instance = new LoanPayment();
 
-        validateInstance(user, LocalDate.now(), instance);
+        validateInstance(user, LocalDate.now(), Moneylender.LOAN_PAYMENT_COST, instance);
 
         instance.referenceLoan = referenceLoan;
 

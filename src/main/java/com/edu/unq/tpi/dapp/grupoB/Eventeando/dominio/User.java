@@ -3,6 +3,7 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class User {
 
     public void requireCredit(double amount) { accountManager.requireCredit(this, amount); }
 
-    public void creditDeposit(double amount) { accountManager.creditDeposit(this, amount) ; }
+    public void creditDeposit(double amount, YearMonth dueDate, Long cardNumber) { accountManager.creditDeposit(this, amount, dueDate, cardNumber) ; }
 
     public void takeOutALoan() { moneyLender.giveLoan(this); }
 
