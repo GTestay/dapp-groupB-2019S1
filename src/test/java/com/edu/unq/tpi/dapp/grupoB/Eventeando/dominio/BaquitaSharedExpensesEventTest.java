@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import org.junit.Before;
@@ -16,6 +17,7 @@ public class BaquitaSharedExpensesEventTest extends EventTest {
     @Before
     public void setUp() {
         userFactory = new UserFactory();
+        eventFactory = new EventFactory(userFactory);
     }
 
     @Test

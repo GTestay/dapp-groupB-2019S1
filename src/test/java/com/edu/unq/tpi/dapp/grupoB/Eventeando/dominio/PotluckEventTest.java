@@ -1,15 +1,14 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -19,6 +18,7 @@ public class PotluckEventTest extends EventTest {
     @Before
     public void setUp() {
         userFactory = new UserFactory();
+        eventFactory = new EventFactory(userFactory);
     }
 
     @Test
@@ -31,34 +31,34 @@ public class PotluckEventTest extends EventTest {
         assertTrue(potluckEvent.coveredExpenses().isEmpty());
     }
 
-    private PotluckEvent newPotluckEvent(List<User> guests, Map<String, Double> expenses) {
+    private PotluckEvent newPotluckEvent(List<User> guests, List<Expense> expenses) {
         return Event.createPotluck(organizer(), description, guests, expenses);
     }
 
-    private PotluckEvent newPotluckEvent(User guest, Map<String, Double> expenses) {
+    private PotluckEvent newPotluckEvent(User guest, List<Expense> expenses) {
         return Event.createPotluck(organizer(), description, Collections.singletonList(guest), expenses);
     }
 
     @Test
     public void inAPotluckEventAGuestTakeChargeOfAnExpense() {
-        Map<String, Double> expenses = twoExpenses();
-        String anExpenseName = getAnExpenseName(expenses);
+        List<Expense> expenses = twoExpenses();
+        Expense anExpense = expenses.get(0);
         User guest = newUser();
         PotluckEvent potluckEvent = newPotluckEvent(guest, expenses);
 
-        potluckEvent.aGuestTakeChargeOf(guest, anExpenseName);
+        potluckEvent.aGuestTakeChargeOf(guest, anExpense);
 
         assertEquals(1, potluckEvent.coveredExpenses().size());
-        assertTrue(potluckEvent.hasGuestTakeChargeOf(guest, anExpenseName));
+        assertTrue(potluckEvent.hasGuestTakeChargeOf(guest, anExpense));
     }
 
-    private String getAnExpenseName(Map<String, Double> expenses) {
-        return (new ArrayList<>(expenses.keySet())).get(0);
+    private String getAnExpenseName(List<Expense> expenses) {
+        return expenses.get(0).name();
     }
 
     @Test
     public void inAPotluckEventAGuestCanNotTakeChargeOfAnExpenseThatDoNotExist() {
-        String anExpenseName = "An Expense That is not the event";
+        Expense anExpenseName = new Expense("An expense that is not added", 100.0);
         User guest = newUser();
         PotluckEvent potluckEvent = newPotluckEvent(guest, twoExpenses());
 
@@ -74,40 +74,42 @@ public class PotluckEventTest extends EventTest {
 
     @Test
     public void inAPotluckEventAGuestCanNotTakeChargeOfAnExpenseThatHasBeenCovered() {
-        Map<String, Double> expenses = twoExpenses();
-        String anExpenseName = getAnExpenseName(expenses);
+        List<Expense> expenses = twoExpenses();
+        Expense anExpense = expenses.get(0);
+
         List<User> guests = guests();
         User guestThatHasCoveredAnExpense = guests.get(0);
 
         PotluckEvent potluckEvent = newPotluckEvent(guests, expenses);
-        potluckEvent.aGuestTakeChargeOf(guestThatHasCoveredAnExpense, anExpenseName);
+        potluckEvent.aGuestTakeChargeOf(guestThatHasCoveredAnExpense, anExpense);
 
         User aGuestThatCanNotTakeAnExpense = guests.get(1);
         try {
-            potluckEvent.aGuestTakeChargeOf(aGuestThatCanNotTakeAnExpense, anExpenseName);
+            potluckEvent.aGuestTakeChargeOf(aGuestThatCanNotTakeAnExpense, anExpense);
             fail();
         } catch (EventException e) {
             assertEquals(EventValidator.ERROR_EXPENSE_IS_ALREADY_COVERED, e.getMessage());
             assertEquals(1, potluckEvent.coveredExpenses().size());
-            assertTrue(potluckEvent.hasGuestTakeChargeOf(guestThatHasCoveredAnExpense, anExpenseName));
-            assertFalse(potluckEvent.hasGuestTakeChargeOf(aGuestThatCanNotTakeAnExpense, anExpenseName));
+            assertTrue(potluckEvent.hasGuestTakeChargeOf(guestThatHasCoveredAnExpense, anExpense));
+            assertFalse(potluckEvent.hasGuestTakeChargeOf(aGuestThatCanNotTakeAnExpense, anExpense));
         }
     }
 
     @Test
     public void inAPotluckEventAGuestThatIsNotInvitedCanNotTakeChargeOfAnExpense() {
-        Map<String, Double> expenses = twoExpenses();
-        String anExpenseNameThatWasAdded = getAnExpenseName(expenses);
+        List<Expense> expenses = twoExpenses();
+        Expense anExpenseThatWasAdded = expenses.get(0);
+
         User userThatWasNotInvited = newUser();
         PotluckEvent potluckEvent = newPotluckEvent(oneGuest(), expenses);
 
         try {
-            potluckEvent.aGuestTakeChargeOf(userThatWasNotInvited, anExpenseNameThatWasAdded);
+            potluckEvent.aGuestTakeChargeOf(userThatWasNotInvited, anExpenseThatWasAdded);
             fail();
         } catch (EventException e) {
             assertEquals(EventValidator.ERROR_THE_USER_WAS_NOT_INVITED, e.getMessage());
             assertTrue(potluckEvent.coveredExpenses().isEmpty());
-            assertFalse(potluckEvent.hasGuestTakeChargeOf(userThatWasNotInvited, anExpenseNameThatWasAdded));
+            assertFalse(potluckEvent.hasGuestTakeChargeOf(userThatWasNotInvited, anExpenseThatWasAdded));
         }
     }
 

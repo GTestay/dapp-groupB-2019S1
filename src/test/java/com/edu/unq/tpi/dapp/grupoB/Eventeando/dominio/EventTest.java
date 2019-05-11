@@ -1,13 +1,17 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class EventTest {
 
     protected String description = "Alta fiesta";
     protected UserFactory userFactory;
+    protected EventFactory eventFactory;
 
 
     public List<User> oneGuest() {
@@ -18,11 +22,8 @@ public abstract class EventTest {
         return Arrays.asList(userFactory.user(), userFactory.user());
     }
 
-    protected Map<String, Double> twoExpenses() {
-        HashMap<String, Double> expenses = new HashMap<>();
-        expenses.put("Coca 3L", 100.00);
-        expenses.put("Sanguchitos x12", 100.00);
-        return expenses;
+    protected List<Expense> twoExpenses() {
+        return eventFactory.expenses();
     }
 
     public User organizer() {
