@@ -30,7 +30,7 @@ public class BaquitaCrowdfundingTest extends EventTest {
     public void aBaquitaCrowdfundingInitiallyHasNoFundsAndIsNotCovered() {
         BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, oneGuest(), twoExpenses());
 
-        assertEquals(0.0, aBaquitaCrowdfunding.totalFunds(), 0);
+        assertEquals(0.0, aBaquitaCrowdfunding.totalMoneyRaised(), 0);
         assertFalse(aBaquitaCrowdfunding.isFund());
     }
 
@@ -43,8 +43,9 @@ public class BaquitaCrowdfundingTest extends EventTest {
             fail();
         } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_THE_USER_WAS_NOT_INVITED);
-            assertEquals(0.0, aBaquitaCrowdfunding.totalFunds(), 0);
+            assertEquals(0.0, aBaquitaCrowdfunding.totalMoneyRaised(), 0);
             assertFalse(aBaquitaCrowdfunding.isFund());
+            assertFalse(aBaquitaCrowdfunding.hasAddedFunds(anUserToInvite));
         }
 
     }
@@ -58,8 +59,9 @@ public class BaquitaCrowdfundingTest extends EventTest {
             fail();
         } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_THE_AMOUNT_IS_INVALID);
-            assertEquals(0.0, aBaquitaCrowdfunding.totalFunds(), 0);
+            assertEquals(0.0, aBaquitaCrowdfunding.totalMoneyRaised(), 0);
             assertFalse(aBaquitaCrowdfunding.isFund());
+            assertFalse(aBaquitaCrowdfunding.hasAddedFunds(anUserToInvite));
         }
 
     }
@@ -78,8 +80,9 @@ public class BaquitaCrowdfundingTest extends EventTest {
             fail();
         } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_CAN_NOT_ADD_MORE_MONEY_THE_CROWDFUNDING_EVENT_IS_FUNDED);
-            assertEquals(aBaquitaCrowdfunding.totalCost(), aBaquitaCrowdfunding.totalFunds(), 0);
+            assertEquals(aBaquitaCrowdfunding.totalCost(), aBaquitaCrowdfunding.totalMoneyRaised(), 0);
             assertTrue(aBaquitaCrowdfunding.isFund());
+            assertTrue(aBaquitaCrowdfunding.hasAddedFunds(anUserToInvite));
         }
 
     }
@@ -94,8 +97,9 @@ public class BaquitaCrowdfundingTest extends EventTest {
             fail();
         } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_CAN_NOT_ADD_MORE_FUNDS_THAN_IS_REQUIRED_IN_THE_CROWDFUNDING_EVENT);
-            assertEquals(aBaquitaCrowdfunding.totalCost() - 1, aBaquitaCrowdfunding.totalFunds(), 0);
+            assertEquals(aBaquitaCrowdfunding.totalCost() - 1, aBaquitaCrowdfunding.totalMoneyRaised(), 0);
             assertFalse(aBaquitaCrowdfunding.isFund());
+            assertTrue(aBaquitaCrowdfunding.hasAddedFunds(anUserToInvite));
         }
     }
 
@@ -104,7 +108,8 @@ public class BaquitaCrowdfundingTest extends EventTest {
         BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
 
         aBaquitaCrowdfunding.addFunds(anUserToInvite, anAmount());
-        assertEquals(100.0, aBaquitaCrowdfunding.totalFunds(), 0);
+        assertEquals(100.0, aBaquitaCrowdfunding.totalMoneyRaised(), 0);
+        assertTrue(aBaquitaCrowdfunding.hasAddedFunds(anUserToInvite));
         assertFalse(aBaquitaCrowdfunding.isFund());
     }
 
@@ -117,8 +122,9 @@ public class BaquitaCrowdfundingTest extends EventTest {
         BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
 
         aBaquitaCrowdfunding.addFunds(anUserToInvite, aBaquitaCrowdfunding.totalCost());
-        assertEquals(200.0, aBaquitaCrowdfunding.totalFunds(), 0);
+        assertEquals(200.0, aBaquitaCrowdfunding.totalMoneyRaised(), 0);
         assertTrue(aBaquitaCrowdfunding.isFund());
+        assertTrue(aBaquitaCrowdfunding.hasAddedFunds(anUserToInvite));
     }
 
 }
