@@ -1,8 +1,8 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 public class Expense {
-    private final String name;
-    private final Double cost;
+    private String name;
+    private Double cost;
 
     private Expense(String name, Double cost) {
 

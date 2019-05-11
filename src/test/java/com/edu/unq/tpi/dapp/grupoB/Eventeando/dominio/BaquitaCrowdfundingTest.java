@@ -8,18 +8,22 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-public class BaquitaCrowdfunding extends EventTest {
+public class BaquitaCrowdfundingTest extends EventTest {
+
+    private User anUserToInvite;
 
     @Before
     public void setUp() {
         userFactory = new UserFactory();
-        eventFactory = new EventFactory(userFactory);
+        eventFactory = new EventFactory();
+        anUserToInvite = userFactory.user();
     }
 
     @Test
@@ -32,10 +36,10 @@ public class BaquitaCrowdfunding extends EventTest {
 
     @Test
     public void anUserThatWasNotInvitedCanNotAddFundsToTheCrowdfundingEvent() {
-        User user = this.userFactory.user();
+        User anUserThatIsNotInvited = userFactory.user();
         BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, guests(), twoExpenses());
         try {
-            aBaquitaCrowdfunding.addFunds(user, 100.00);
+            aBaquitaCrowdfunding.addFunds(anUserThatIsNotInvited, anAmount());
             fail();
         } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_THE_USER_WAS_NOT_INVITED);
@@ -47,10 +51,10 @@ public class BaquitaCrowdfunding extends EventTest {
 
     @Test
     public void canNotAddANegativeAmountToFundsToTheCrowdfundingEvent() {
-        User user = this.userFactory.user();
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, Collections.singletonList(user), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
         try {
-            aBaquitaCrowdfunding.addFunds(user, -1.0);
+            double negativeAmount = -1.0;
+            aBaquitaCrowdfunding.addFunds(anUserToInvite, negativeAmount);
             fail();
         } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_THE_AMOUNT_IS_INVALID);
@@ -60,14 +64,17 @@ public class BaquitaCrowdfunding extends EventTest {
 
     }
 
+    private List<User> createGuest(User anUser) {
+        return Collections.singletonList(anUser);
+    }
+
     @Test
     public void anUserCanNotAddMoreFundsInAFullyFundedCrowdfundedEvent() {
-        User user = this.userFactory.user();
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, Collections.singletonList(user), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
 
-        aBaquitaCrowdfunding.addFunds(user, aBaquitaCrowdfunding.totalCost());
+        aBaquitaCrowdfunding.addFunds(anUserToInvite, aBaquitaCrowdfunding.totalCost());
         try {
-            aBaquitaCrowdfunding.addFunds(user, 1.00);
+            aBaquitaCrowdfunding.addFunds(anUserToInvite, 1.00);
             fail();
         } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_CAN_NOT_ADD_MORE_MONEY_THE_CROWDFUNDING_EVENT_IS_FUNDED);
@@ -79,12 +86,11 @@ public class BaquitaCrowdfunding extends EventTest {
 
     @Test
     public void anUserCanNotAddMoreFundsThanIsRequiredInTheCrowdfundingEvent() {
-        User user = this.userFactory.user();
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, Collections.singletonList(user), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
 
-        aBaquitaCrowdfunding.addFunds(user, aBaquitaCrowdfunding.totalCost() - 1);
+        aBaquitaCrowdfunding.addFunds(anUserToInvite, aBaquitaCrowdfunding.totalCost() - 1);
         try {
-            aBaquitaCrowdfunding.addFunds(user, 2.00);
+            aBaquitaCrowdfunding.addFunds(anUserToInvite, 2.00);
             fail();
         } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_CAN_NOT_ADD_MORE_FUNDS_THAN_IS_REQUIRED_IN_THE_CROWDFUNDING_EVENT);
@@ -95,20 +101,22 @@ public class BaquitaCrowdfunding extends EventTest {
 
     @Test
     public void oneGuestOfTheBaquitaCrowdfundedAddFunds() {
-        User user = this.userFactory.user();
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, Collections.singletonList(user), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
 
-        aBaquitaCrowdfunding.addFunds(user, 100.00);
+        aBaquitaCrowdfunding.addFunds(anUserToInvite, anAmount());
         assertEquals(100.0, aBaquitaCrowdfunding.totalFunds(), 0);
         assertFalse(aBaquitaCrowdfunding.isFund());
     }
 
+    private double anAmount() {
+        return 100.00;
+    }
+
     @Test
     public void oneGuestOfTheBaquitaCrowdfundedAddMoreMoneyAndTheEventIsFullyFunded() {
-        User user = this.userFactory.user();
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, Collections.singletonList(user), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
 
-        aBaquitaCrowdfunding.addFunds(user, aBaquitaCrowdfunding.totalCost());
+        aBaquitaCrowdfunding.addFunds(anUserToInvite, aBaquitaCrowdfunding.totalCost());
         assertEquals(200.0, aBaquitaCrowdfunding.totalFunds(), 0);
         assertTrue(aBaquitaCrowdfunding.isFund());
     }
