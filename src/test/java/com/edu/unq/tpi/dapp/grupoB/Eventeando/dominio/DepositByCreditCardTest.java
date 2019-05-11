@@ -18,7 +18,7 @@ public class DepositByCreditCardTest {
     private LocalDate date = LocalDate.now();
     private double amount = 1000.00;
     private YearMonth dueDate = YearMonth.now().plusMonths(1);
-    private Long cardNumber = 4111111111111111L;
+    private String cardNumber = "4111111111111111";
 
     @Test
     public void creationOfANewDepositMoneyByCreditCard() {
@@ -82,7 +82,7 @@ public class DepositByCreditCardTest {
 
     private void cardNumbervalidations() {
         try {
-            DepositByCreditCard.create(user, date, amount, dueDate, 1234L);
+            DepositByCreditCard.create(user, date, amount, dueDate, "1234");
             fail();
         } catch (MoneyTransactionException error) {
             assertEquals(error.getMessage(), MoneyTransactionValidator.INVALID_CREDIT_CARD_NUMBER);

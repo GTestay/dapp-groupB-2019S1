@@ -7,9 +7,9 @@ import java.time.YearMonth;
 
 public class DepositByCreditCard extends Deposit {
     public YearMonth dueDate;
-    public Long cardNumber;
+    public String cardNumber;
 
-    public static DepositByCreditCard create(User user, LocalDate date, double amount, YearMonth dueDate, Long cardNumber) {
+    public static DepositByCreditCard create(User user, LocalDate date, double amount, YearMonth dueDate, String cardNumber) {
         MoneyTransactionValidator validator = new MoneyTransactionValidator();
         DepositByCreditCard instance = new DepositByCreditCard();
 
@@ -23,5 +23,5 @@ public class DepositByCreditCard extends Deposit {
 
     public YearMonth dueDate() { return dueDate; }
 
-    public Long cardNumber() { return cardNumber; }
+    public String cardNumber() { return cardNumber; }
 }

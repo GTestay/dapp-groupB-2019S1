@@ -53,7 +53,7 @@ public class User {
 
     public void requireCredit(double amount) { accountManager.requireCredit(this, amount); }
 
-    public void creditDeposit(double amount, YearMonth dueDate, Long cardNumber) { accountManager.creditDeposit(this, amount, dueDate, cardNumber) ; }
+    public void creditDeposit(double amount, YearMonth dueDate, String cardNumber) { accountManager.creditDeposit(this, amount, dueDate, cardNumber) ; }
 
     public void takeOutALoan() { moneyLender.giveLoan(this); }
 
