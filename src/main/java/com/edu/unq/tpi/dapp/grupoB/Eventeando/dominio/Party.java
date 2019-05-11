@@ -4,7 +4,6 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
 
 import java.time.LocalDateTime;
 
-import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_CAN_NOT_ADD_EXPENSE_WHOSE_PRICE_IS_NEGATIVE;
 import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_THE_CONFIRMATION_DATE_IS_AFTER_THE_INVITATION_LIMIT;
 
 public class Party extends Event {
@@ -17,11 +16,9 @@ public class Party extends Event {
         return invitationLimitDate;
     }
 
-    public void addExpense(String supplyName, Double supplyPrice) {
-        if (supplyPrice < 0) {
-            throw new RuntimeException(ERROR_CAN_NOT_ADD_EXPENSE_WHOSE_PRICE_IS_NEGATIVE);
-        }
-        expenses.put(supplyName, supplyPrice);
+    public void addExpense(Expense expense) {
+
+        expenses.add(expense);
     }
 
     @Override

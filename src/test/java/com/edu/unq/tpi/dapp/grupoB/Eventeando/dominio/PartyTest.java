@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -42,13 +41,13 @@ public class PartyTest extends EventTest {
 
 
     private Party partyWithGuests() {
-        return Event.createParty(organizer, description, this.guests(), new HashMap<>(), anInvitationLimitDate, 0.0);
+        return Event.createParty(organizer, description, this.guests(), new ArrayList<>(), anInvitationLimitDate, 0.0);
     }
 
     @Test
     public void aPartyCanNotBeCreatedWithoutGuests() {
         try {
-            Event.createParty(organizer, description, new ArrayList<>(), new HashMap<>(), anInvitationLimitDate, 0.0);
+            Event.createParty(organizer, description, new ArrayList<>(), new ArrayList<>(), anInvitationLimitDate, 0.0);
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
         }
@@ -58,7 +57,7 @@ public class PartyTest extends EventTest {
     @Test
     public void aPartyTicketPriceMustNotBeNegative() {
         try {
-            Event.createParty(organizer, description, this.guests(), new HashMap<>(), anInvitationLimitDate, -1.0);
+            Event.createParty(organizer, description, this.guests(), new ArrayList<>(), anInvitationLimitDate, -1.0);
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), EventValidator.EVENT_TICKET_PRICE_MUST_NOT_BE_NEGATIVE);
         }
@@ -77,7 +76,7 @@ public class PartyTest extends EventTest {
     @Test
     public void aPartyCanNotAddASupplyWhoseCostIsNegative() {
         try {
-            partyWithGuests().addExpense("Coca de 1 litro", -1.00);
+            partyWithGuests().addExpense(new Expense("Coca de 1 litro", -1.00));
             fail();
         } catch (RuntimeException e) {
             assertThatThePriceOfSuppliesOfAPartyIs(0, partyWithGuests());
@@ -88,10 +87,10 @@ public class PartyTest extends EventTest {
     public void aPartyCanAddASupply() {
         Party partyDePepito = partyWithGuests();
 
-        partyDePepito.addExpense("Coca de 1 litro", 100.00);
-        partyDePepito.addExpense("Sanguches de Miga x 24", 200.00);
+        partyDePepito.addExpense(eventFactory.coca());
+        partyDePepito.addExpense(eventFactory.sanguchitos());
 
-        assertThatThePriceOfSuppliesOfAPartyIs(300, partyDePepito);
+        assertThatThePriceOfSuppliesOfAPartyIs(200, partyDePepito);
     }
 
     @Test
@@ -114,7 +113,7 @@ public class PartyTest extends EventTest {
     public void theTotalCostOfAPartyWIthoutAssistantsAndWithSuppliesIsZero() {
         Party partyWithSupplies = partyWithGuests();
 
-        partyWithSupplies.addExpense("Coca de 1 litro", 100.00);
+        partyWithSupplies.addExpense(eventFactory.coca());
 
         assertThatTheFullCostOfThePartyIs(partyWithSupplies, 0);
     }

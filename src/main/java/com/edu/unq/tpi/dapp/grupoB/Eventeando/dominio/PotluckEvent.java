@@ -9,43 +9,41 @@ import java.util.List;
 public class PotluckEvent extends Event {
 
 
-    protected HashMap<String, User> coveredExpenses = new HashMap<>();
+    protected HashMap<Expense, User> coveredExpenses = new HashMap<>();
 
-    public List<String> coveredExpenses() {
+    public List<Expense> coveredExpenses() {
         return new ArrayList<>(this.coveredExpenses.keySet());
     }
 
-    public void aGuestTakeChargeOf(User guest, String anExpense) {
+    public void aGuestTakeChargeOf(User guest, Expense anExpense) {
         validateThatTheUserWasInvited(guest.email());
         validateExistanceOfExpense(anExpense);
         validateThatExpenseIsNotAlreadyCovered(anExpense);
         this.coveredExpenses.put(anExpense, guest);
     }
 
-    private void validateThatExpenseIsNotAlreadyCovered(String anExpense) {
+    private void validateThatExpenseIsNotAlreadyCovered(Expense anExpense) {
         if (expenseIsCovered(anExpense)) {
             throwEventException(EventValidator.ERROR_EXPENSE_IS_ALREADY_COVERED);
         }
     }
 
-    private void validateExistanceOfExpense(String anExpense) {
-        if (!this.expenses.containsKey(anExpense)) {
-            throwEventException(EventValidator.ERROR_EXPENSE_IS_NOT_IN_THE_LIST);
-        }
+    private void validateExistanceOfExpense(Expense anExpense) {
+        if (!this.expenses.contains(anExpense)) throwEventException(EventValidator.ERROR_EXPENSE_IS_NOT_IN_THE_LIST);
     }
 
-    public boolean hasGuestTakeChargeOf(User guest, String anExpense) {
+    public boolean hasGuestTakeChargeOf(User guest, Expense anExpense) {
         return expenseIsCovered(anExpense) && userHasCoveredAnExpense(guest, anExpense);
     }
 
-    private boolean expenseIsCovered(String anExpense) {
+    private boolean expenseIsCovered(Expense anExpense) {
         return this.coveredExpenses.containsKey(anExpense);
     }
 
     /**
      * Precondition: the expense has been check that is covered
      */
-    private boolean userHasCoveredAnExpense(User guest, String anExpense) {
+    private boolean userHasCoveredAnExpense(User guest, Expense anExpense) {
         return this.coveredExpenses.get(anExpense).equals(guest);
     }
 }

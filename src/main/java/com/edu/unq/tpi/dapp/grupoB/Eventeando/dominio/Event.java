@@ -5,9 +5,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.DoubleStream;
 
 import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_THE_USER_WAS_NOT_INVITED;
@@ -16,11 +14,11 @@ public abstract class Event {
 
     protected User organizer;
     protected String description;
-    protected Map<String, Double> expenses;
+    protected List<Expense> expenses;
     protected List<User> guests;
     protected List<String> guestConfirmations;
 
-    protected static <EventType extends Event> EventType validateEvent(EventType newEvent, User organizer, String description, Map<String, Double> expenses, List<User> guests) {
+    protected static <EventType extends Event> EventType validateEvent(EventType newEvent, User organizer, String description, List<Expense> expenses, List<User> guests) {
         EventValidator eventValidator = new EventValidator();
         newEvent.organizer = eventValidator.validateOrganizer(organizer);
         newEvent.description = description;
@@ -29,7 +27,7 @@ public abstract class Event {
         return newEvent;
     }
 
-    public static Party createParty(User organizer, String description, List<User> guests, HashMap<String, Double> expenses, LocalDateTime invitationLimitDate, Double pricePerAssistant) {
+    public static Party createParty(User organizer, String description, List<User> guests, List<Expense> expenses, LocalDateTime invitationLimitDate, Double pricePerAssistant) {
         EventValidator eventValidator = new EventValidator();
         Party instance = validateEvent(new Party(), organizer, description, expenses, guests);
         instance.guestConfirmations = new ArrayList<>();
@@ -38,15 +36,15 @@ public abstract class Event {
         return instance;
     }
 
-    public static PotluckEvent createPotluck(User organizer, String description, List<User> guests, Map<String, Double> expenses) {
+    public static PotluckEvent createPotluck(User organizer, String description, List<User> guests, List<Expense> expenses) {
         return validateEvent(new PotluckEvent(), organizer, description, expenses, guests);
     }
 
-    public static BaquitaSharedExpensesEvent createBaquita(User organizer, String description, List<User> guests, Map<String, Double> expenses) {
+    public static BaquitaSharedExpensesEvent createBaquita(User organizer, String description, List<User> guests, List<Expense> expenses) {
         return validateEvent(new BaquitaSharedExpensesEvent(), organizer, description, expenses, guests);
     }
 
-    public static BaquitaCrowdFundingEvent createBaquitaCrowdfunding(User organizer, String description, List<User> guests, Map<String, Double> expenses) {
+    public static BaquitaCrowdFundingEvent createBaquitaCrowdfunding(User organizer, String description, List<User> guests, List<Expense> expenses) {
         return validateEvent(new BaquitaCrowdFundingEvent(), organizer, description, expenses, guests);
     }
 
@@ -58,7 +56,7 @@ public abstract class Event {
         return description;
     }
 
-    public Map<String, Double> expenses() {
+    public List<Expense> expenses() {
         return expenses;
     }
 
@@ -80,7 +78,7 @@ public abstract class Event {
     }
 
     private DoubleStream allExpensesCost() {
-        return expenses.values().stream().mapToDouble(cost -> cost);
+        return expenses().stream().mapToDouble(Expense::cost);
     }
 
     protected void validateThatTheUserWasInvited(String anEmail) {
