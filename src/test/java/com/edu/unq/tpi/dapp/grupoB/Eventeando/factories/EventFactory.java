@@ -61,10 +61,10 @@ public class EventFactory {
     }
 
     public Expense sanguchitos() {
-        return new Expense("Sanguches de Miga x 24", 100.00);
+        return Expense.create("Sanguches de Miga x 24", 100.00);
     }
 
     public Expense coca() {
-        return new Expense("Coca 3L", 100.00);
+        return Expense.create("Coca 3L", 100.00);
     }
 }
