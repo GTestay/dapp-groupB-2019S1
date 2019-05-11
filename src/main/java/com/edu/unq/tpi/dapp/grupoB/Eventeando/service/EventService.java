@@ -1,15 +1,24 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.repository.EventDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class EventService {
 
+    private final EventDao eventDao;
+
+    @Autowired
+    public EventService(EventDao eventDao) {
+        this.eventDao = eventDao;
+    }
+
     public List<Event> allEvents() {
-        return new ArrayList<>();
+        return eventDao.findAll();
+
     }
 }
