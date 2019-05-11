@@ -7,14 +7,10 @@ public class ExpenseValidator extends Validator {
     public static final String ERROR_EXPENSE_IS_INVALID_WITHOUT_NAME = "The expense needs a name!";
 
     void validateCost(Double cost) {
-        if (cost < 0) {
-            throw new RuntimeException(ERROR_CAN_NOT_CREATE_AN_EXPENSE_WHOSE_PRICE_IS_NEGATIVE);
-        }
+        super.validateNegativiyOf(cost, new RuntimeException(ERROR_CAN_NOT_CREATE_AN_EXPENSE_WHOSE_PRICE_IS_NEGATIVE));
     }
 
     void validateName(String name) {
-        if (name == null || name.isEmpty()) {
-            throw new RuntimeException(ERROR_EXPENSE_IS_INVALID_WITHOUT_NAME);
-        }
+        super.validateEmptinessOf(name, new RuntimeException(ERROR_EXPENSE_IS_INVALID_WITHOUT_NAME));
     }
 }

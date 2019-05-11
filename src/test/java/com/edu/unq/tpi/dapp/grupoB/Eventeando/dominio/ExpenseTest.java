@@ -26,6 +26,14 @@ public class ExpenseTest {
         } catch (RuntimeException e) {
             assertThat(e.getMessage()).isEqualTo(ExpenseValidator.ERROR_EXPENSE_IS_INVALID_WITHOUT_NAME);
         }
+
+        try {
+            Expense.create("", 1.00);
+            fail();
+        } catch (RuntimeException e) {
+            assertThat(e.getMessage()).isEqualTo(ExpenseValidator.ERROR_EXPENSE_IS_INVALID_WITHOUT_NAME);
+        }
+
     }
 
 

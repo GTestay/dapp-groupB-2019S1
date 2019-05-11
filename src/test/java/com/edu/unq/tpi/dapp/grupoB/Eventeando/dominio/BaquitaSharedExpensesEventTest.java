@@ -17,7 +17,7 @@ public class BaquitaSharedExpensesEventTest extends EventTest {
     @Before
     public void setUp() {
         userFactory = new UserFactory();
-        eventFactory = new EventFactory(userFactory);
+        eventFactory = new EventFactory();
     }
 
     @Test

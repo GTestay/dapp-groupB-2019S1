@@ -27,6 +27,13 @@ public class Validator {
         return aList;
     }
 
+    protected String validateEmptinessOf(String aString, RuntimeException aRuntimeExceptionToBeThrown) {
+        if (aString == null || aString.isEmpty()) {
+            throw aRuntimeExceptionToBeThrown;
+        }
+        return aString;
+    }
+
     protected Double validateNegativiyOf(Double aNumber, RuntimeException exception) {
         if (aNumber == null || aNumber < 0) {
             throw exception;

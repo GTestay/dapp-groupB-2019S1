@@ -12,15 +12,8 @@ import java.util.List;
 
 public class EventFactory {
 
-    private UserFactory userFactory;
-
-    public EventFactory(UserFactory userFactory) {
-
-        this.userFactory = userFactory;
-    }
-
-    private Party createParty(List<User> guests, List<Expense> expenses, Double pricePerAssistant) {
-        return Event.createParty(userFactory.user(), description(), guests, expenses, anInvitationLimitDate(), pricePerAssistant);
+    private Party createParty(List<User> guests, List<Expense> expenses, Double pricePerAssistant, User organizer) {
+        return Event.createParty(organizer, description(), guests, expenses, anInvitationLimitDate(), pricePerAssistant);
     }
 
     public List<Expense> expenses() {
@@ -39,12 +32,12 @@ public class EventFactory {
         return "An event description";
     }
 
-    public Party partyWithGuests(List<User> guests) {
-        return createParty(guests, expenses(), ticketPrice());
+    public Party partyWithGuests(List<User> guests, User organizer) {
+        return partyWithGuestsExpensesAndAPricePerAssistant(guests, ticketPrice(), expenses(), organizer);
     }
 
-    public Party partyWithGuestsExpensesAndAPricePerAssistant(List<User> guests, Double pricePerAssistant, List<Expense> expenses) {
-        return createParty(guests, expenses, pricePerAssistant);
+    public Party partyWithGuestsExpensesAndAPricePerAssistant(List<User> guests, Double pricePerAssistant, List<Expense> expenses, User organizer) {
+        return createParty(guests, expenses, pricePerAssistant, organizer);
     }
 
     public LocalDateTime invalidConfirmationDate() {

@@ -1,21 +1,27 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class MoneylenderTest {
 
+    private UserFactory userFactory;
+
+    @Before
+    public void setUp() {
+        userFactory = new UserFactory();
+    }
+
     @Test
     public void getActualLoansForAllTheUsers() {
-        User arya = UserFactory.user();
-        User sansa = UserFactory.user();
+        User arya = userFactory.user();
+        User sansa = userFactory.user();
 
         Moneylender moneylender = Moneylender.get();
 
@@ -32,7 +38,7 @@ public class MoneylenderTest {
 
     @Test
     public void loanInformationOffAnUserWithFiveRemainingPayments() {
-        User user = UserFactory.user();
+        User user = userFactory.user();
         Moneylender moneylender = Moneylender.get();
 
         user.takeOutALoan();
@@ -45,7 +51,7 @@ public class MoneylenderTest {
 
     @Test
     public void loanInformationOffAnUserWithFiveRemainingPaymentsAndTwoUnpaids() {
-        User user = UserFactory.user();
+        User user = userFactory.user();
         Moneylender moneylender = Moneylender.get();
 
         user.takeOutALoan();
@@ -66,7 +72,7 @@ public class MoneylenderTest {
 
     @Test
     public void loanInformationOffAnUserWithSomeActivity() {
-        User user = UserFactory.user();
+        User user = userFactory.user();
         Moneylender moneylender = Moneylender.get();
         user.takeOutALoan();
 

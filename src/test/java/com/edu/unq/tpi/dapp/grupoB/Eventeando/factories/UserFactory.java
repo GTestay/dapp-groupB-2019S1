@@ -9,25 +9,13 @@ import java.util.List;
 
 public class UserFactory {
 
-    private static Integer usersCreated = 0;
+    private Integer usersCreated = 0;
 
-    public static User user() {
-        User user = User.create(name(), lastname(), email(), password(), birthday());
-
-        usersCreated = usersCreated + 1;
-
-        return user;
-    }
-
-    private static LocalDate birthday() {
-        return LocalDate.of(2002, 3, 21);
-    }
-
-    private static String email() {
+    private String email() {
         return "genericMail" + usersCreated + "@gmail.com";
     }
 
-    public static User userWithCash(double cash) {
+    public User userWithCash(double cash) {
         User user = user();
 
         user.cashDeposit(cash);
@@ -35,7 +23,23 @@ public class UserFactory {
         return user;
     }
 
-    public static User userIndebt() {
+    private String name() {
+        return "GenericName";
+    }
+
+    private String password() {
+        return "P4S5W0RD";
+    }
+
+    private String lastname() {
+        return "GenericLastname";
+    }
+
+    private LocalDate birthday() {
+        return LocalDate.of(2002, 3, 21);
+    }
+
+    public User userIndebt() {
         User user = user();
 
         Moneylender.get().indebt(user);
@@ -43,19 +47,14 @@ public class UserFactory {
         return user;
     }
 
-    private static String name() {
-        return "GenericName";
-    }
+    public User user() {
+        User user = User.create(name(), lastname(), email(), password(), birthday());
 
-    private static String lastname() {
-        return "GenericLastname";
-    }
-
-    private static String password() {
-        return "P4S5W0RD";
+        usersCreated += 1;
+        return user;
     }
 
     public List<User> someUsers() {
-        return Arrays.asList(this.user(), this.user());
+        return Arrays.asList(user(), user());
     }
 }

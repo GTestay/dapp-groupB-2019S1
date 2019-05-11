@@ -23,7 +23,7 @@ public class PartyTest extends EventTest {
     @Before
     public void setUp() {
         userFactory = new UserFactory();
-        eventFactory = new EventFactory(userFactory);
+        eventFactory = new EventFactory();
         organizer = organizer();
         anInvitationLimitDate = eventFactory.anInvitationLimitDate();
         pricePerAssistant = 100.0;
@@ -90,7 +90,7 @@ public class PartyTest extends EventTest {
 
     @Test
     public void theCostOfThePartyWithoutSuppliesAndWithConfirmationsIsCalculatedByThePricePerAssistant() {
-        Party partyWithAConfirmation = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(this.guests(), pricePerAssistant, eventFactory.noExpenses());
+        Party partyWithAConfirmation = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(this.guests(), pricePerAssistant, eventFactory.noExpenses(), organizer);
         List<User> guests = partyWithAConfirmation.guests();
         User user = guests.get(0);
 
@@ -137,7 +137,7 @@ public class PartyTest extends EventTest {
     @Test
     public void thePartyCanCalculateTheCostWithSuppliesAndConfirmations() {
         List<User> guests = guests();
-        Party party = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests, pricePerAssistant, eventFactory.expenses());
+        Party party = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests, pricePerAssistant, eventFactory.expenses(), organizer);
         User aUserThatIsInvited = guests.get(0);
         User anotherUserThatIsInvited = guests.get(1);
 
@@ -148,7 +148,7 @@ public class PartyTest extends EventTest {
     }
 
     private Party partyWithGuestsAndCostPerAssistance(Double pricePerAssistant) {
-        return eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests(), pricePerAssistant, eventFactory.expenses());
+        return eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests(), pricePerAssistant, eventFactory.expenses(), organizer);
     }
 
     private void assertThatTheFullCostOfThePartyIs(Party party, double totalCostOfTheParty) {

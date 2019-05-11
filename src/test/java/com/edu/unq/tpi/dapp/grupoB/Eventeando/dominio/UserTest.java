@@ -12,9 +12,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 
 import static junit.framework.TestCase.fail;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class UserTest {
 
@@ -202,7 +200,7 @@ public class UserTest {
 
     @Test
     public void userCanNotTakeALoanWithoutBeenDefaulter(){
-        User user = UserFactory.userIndebt();
+        User user = userFactory.userIndebt();
 
         try {
             user.takeOutALoan();
@@ -214,7 +212,7 @@ public class UserTest {
 
     @Test
     public void userCanNotTakeALoanHavingAnotherLoanInProgress(){
-        User user = UserFactory.user();
+        User user = userFactory.user();
 
         user.takeOutALoan();
 
@@ -228,7 +226,7 @@ public class UserTest {
 
     @Test
     public void userCanTakeALoanBeenDutiful(){
-        User user = UserFactory.user();
+        User user = userFactory.user();
 
         user.takeOutALoan();
 
@@ -237,7 +235,7 @@ public class UserTest {
 
     @Test
     public void haveToPayLoanAndHaveMoney() {
-        User user = UserFactory.userWithCash(400.00);
+        User user = userFactory.userWithCash(400.00);
         user.takeOutALoan();
         user.takeCash(1000.00);
 
@@ -249,7 +247,7 @@ public class UserTest {
 
     @Test
     public void haveToPayLoanAndDoNotHaveMoney() {
-        User user = UserFactory.userWithCash(100.00);
+        User user = userFactory.userWithCash(100.00);
 
         user.payLoan();
 
@@ -259,7 +257,7 @@ public class UserTest {
 
     @Test
     public void haveToPayLoanAndDoNotHaveMoneyFirstMonthButWillPayNextMonth() {
-        User user = UserFactory.userWithCash(100.00);
+        User user = userFactory.userWithCash(100.00);
         user.takeOutALoan();
         user.takeCash(1000.00);
 
@@ -278,7 +276,7 @@ public class UserTest {
 
     @Test
     public void haveToPayThreeLoansAndOnlyCanPayOne() {
-        User user = UserFactory.userWithCash(100.00);
+        User user = userFactory.userWithCash(100.00);
         user.takeOutALoan();
         user.takeCash(1000.00);
 

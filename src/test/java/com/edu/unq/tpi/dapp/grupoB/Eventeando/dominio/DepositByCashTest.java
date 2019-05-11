@@ -3,6 +3,7 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyTransactionException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.MoneyTransactionValidator;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -12,10 +13,17 @@ import static org.junit.Assert.assertEquals;
 
 public class DepositByCashTest {
 
-    private UserFactory userFactory = new UserFactory();
-    private User user = userFactory.user();
+    private UserFactory userFactory;
+    private User user;
+
     private LocalDate date = LocalDate.now();
     private double amount = 1000.00;
+
+    @Before
+    public void setUp() throws Exception {
+        userFactory = new UserFactory();
+        user = userFactory.user();
+    }
 
     @Test
     public void creationOfANewDepositMoneyByCash() {
