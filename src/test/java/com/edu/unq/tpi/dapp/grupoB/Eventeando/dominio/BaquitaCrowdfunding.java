@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.Collections;
 
+import static com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.MoneyUtilsTest.pesos;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
@@ -63,13 +64,13 @@ public class BaquitaCrowdfunding extends EventTest {
         User user = this.userFactory.user();
         BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, Collections.singletonList(user), twoExpenses());
 
-        aBaquitaCrowdfunding.addFunds(user, aBaquitaCrowdfunding.totalCost());
+        aBaquitaCrowdfunding.addFunds(user, aBaquitaCrowdfunding.totalCost().getNumber().doubleValueExact());
         try {
             aBaquitaCrowdfunding.addFunds(user, 1.00);
             fail();
         } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_CAN_NOT_ADD_MORE_MONEY_THE_CROWDFUNDING_EVENT_IS_FUNDED);
-            assertEquals(aBaquitaCrowdfunding.totalCost(), aBaquitaCrowdfunding.totalFunds(), 0);
+            assertEquals(aBaquitaCrowdfunding.totalCost(), pesos(aBaquitaCrowdfunding.totalFunds()));
             assertTrue(aBaquitaCrowdfunding.isFund());
         }
 
@@ -80,13 +81,13 @@ public class BaquitaCrowdfunding extends EventTest {
         User user = this.userFactory.user();
         BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, Collections.singletonList(user), twoExpenses());
 
-        aBaquitaCrowdfunding.addFunds(user, aBaquitaCrowdfunding.totalCost() - 1);
+        aBaquitaCrowdfunding.addFunds(user, aBaquitaCrowdfunding.totalCost().getNumber().doubleValueExact() - 1);
         try {
             aBaquitaCrowdfunding.addFunds(user, 2.00);
             fail();
         } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_CAN_NOT_ADD_MORE_FUNDS_THAN_IS_REQUIRED_IN_THE_CROWDFUNDING_EVENT);
-            assertEquals(aBaquitaCrowdfunding.totalCost() - 1, aBaquitaCrowdfunding.totalFunds(), 0);
+            assertEquals(aBaquitaCrowdfunding.totalCost().getNumber().doubleValueExact() - 1, aBaquitaCrowdfunding.totalFunds(), 0);
             assertFalse(aBaquitaCrowdfunding.isFund());
         }
     }
@@ -106,7 +107,7 @@ public class BaquitaCrowdfunding extends EventTest {
         User user = this.userFactory.user();
         BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, Collections.singletonList(user), twoExpenses());
 
-        aBaquitaCrowdfunding.addFunds(user, aBaquitaCrowdfunding.totalCost());
+        aBaquitaCrowdfunding.addFunds(user, aBaquitaCrowdfunding.totalCost().getNumber().doubleValueExact());
         assertEquals(200.0, aBaquitaCrowdfunding.totalFunds(), 0);
         assertTrue(aBaquitaCrowdfunding.isFund());
     }

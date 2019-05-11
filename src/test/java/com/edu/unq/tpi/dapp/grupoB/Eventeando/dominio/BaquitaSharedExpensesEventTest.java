@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import static com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.MoneyUtilsTest.pesos;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
@@ -57,7 +58,7 @@ public class BaquitaSharedExpensesEventTest extends EventTest {
 
         assertEquals(organizer, baquita.organizer());
         assertEquals(description, baquita.description());
-        assertEquals(200.00, baquita.expensesTotalCost(), 0);
+        assertEquals(pesos(200.00), baquita.totalCost());
     }
 
     private BaquitaSharedExpensesEvent newbaquitaWithExpensesAndGuests(User organizer, String description) {
@@ -69,6 +70,6 @@ public class BaquitaSharedExpensesEventTest extends EventTest {
         User organizer = organizer();
 
         BaquitaSharedExpensesEvent baquita = newbaquitaWithExpensesAndGuests(organizer, description);
-        assertEquals(100.00, baquita.costPerAssitance(), 0);
+        assertEquals(pesos(100.00), baquita.costPerAssitance());
     }
 }

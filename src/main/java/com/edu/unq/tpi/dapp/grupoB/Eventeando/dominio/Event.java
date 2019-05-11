@@ -2,6 +2,7 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
+import org.javamoney.moneta.Money;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -71,8 +72,8 @@ public abstract class Event {
         guestConfirmations.add(anEmail);
     }
 
-    public Double totalCost() {
-        return expensesTotalCost();
+    public Money totalCost() {
+        return Money.of(expensesTotalCost(), "ARS");
     }
 
     public Double expensesTotalCost() {

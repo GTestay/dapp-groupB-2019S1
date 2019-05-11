@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.MoneyUtilsTest.pesos;
 import static org.junit.Assert.*;
 
 public class PartyTest extends EventTest {
@@ -163,6 +164,6 @@ public class PartyTest extends EventTest {
     }
 
     private void assertThatTheFullCostOfThePartyIs(Party party, double totalCostOfTheParty) {
-        assertEquals(totalCostOfTheParty, party.totalCost(), 0);
+        assertEquals(pesos(totalCostOfTheParty), party.totalCost());
     }
 }

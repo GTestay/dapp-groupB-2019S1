@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
+import org.javamoney.moneta.Money;
 
 import java.time.LocalDateTime;
 
@@ -36,8 +37,8 @@ public class Party extends Event {
         }
     }
 
-    public Double totalCost() {
-        return expensesCostPerAssistant() + costPerConfirmedAssistance();
+    public Money totalCost() {
+        return Money.of(expensesCostPerAssistant() + costPerConfirmedAssistance(), "ARS");
     }
 
     private double expensesCostPerAssistant() {

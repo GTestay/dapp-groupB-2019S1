@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.MoneyUtilsTest.pesos;
 import static org.junit.Assert.*;
 
 public class PotluckEventTest extends EventTest {
@@ -27,7 +28,7 @@ public class PotluckEventTest extends EventTest {
 
         assertEquals(2, potluckEvent.expenses().size());
         assertEquals(1, potluckEvent.guests().size());
-        assertEquals(200, potluckEvent.totalCost(), 0);
+        assertEquals(pesos(200.0), potluckEvent.totalCost());
         assertTrue(potluckEvent.coveredExpenses().isEmpty());
     }
 
