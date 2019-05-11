@@ -74,16 +74,6 @@ public class PartyTest extends EventTest {
     }
 
     @Test
-    public void aPartyCanNotAddASupplyWhoseCostIsNegative() {
-        try {
-            partyWithGuests().addExpense(new Expense("Coca de 1 litro", -1.00));
-            fail();
-        } catch (RuntimeException e) {
-            assertThatThePriceOfSuppliesOfAPartyIs(0, partyWithGuests());
-        }
-    }
-
-    @Test
     public void aPartyCanAddASupply() {
         Party partyDePepito = partyWithGuests();
 

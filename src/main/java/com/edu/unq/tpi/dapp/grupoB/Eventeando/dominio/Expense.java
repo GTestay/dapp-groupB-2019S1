@@ -1,17 +1,21 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_CAN_NOT_ADD_EXPENSE_WHOSE_PRICE_IS_NEGATIVE;
-
 public class Expense {
     private final String name;
     private final Double cost;
 
-    public Expense(String name, Double cost) {
-        if (cost < 0) {
-            throw new RuntimeException(ERROR_CAN_NOT_ADD_EXPENSE_WHOSE_PRICE_IS_NEGATIVE);
-        }
+    private Expense(String name, Double cost) {
+
         this.name = name;
         this.cost = cost;
+    }
+
+    public static Expense create(String name, Double cost) {
+        ExpenseValidator validator = new ExpenseValidator();
+        validator.validateCost(cost);
+        validator.validateName(name);
+
+        return new Expense(name, cost);
     }
 
     public String name() {

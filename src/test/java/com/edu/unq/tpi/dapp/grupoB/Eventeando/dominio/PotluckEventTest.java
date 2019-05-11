@@ -58,7 +58,7 @@ public class PotluckEventTest extends EventTest {
 
     @Test
     public void inAPotluckEventAGuestCanNotTakeChargeOfAnExpenseThatDoNotExist() {
-        Expense anExpenseName = new Expense("An expense that is not added", 100.0);
+        Expense anExpenseName = Expense.create("An expense that is not added", 100.0);
         User guest = newUser();
         PotluckEvent potluckEvent = newPotluckEvent(guest, twoExpenses());
 
