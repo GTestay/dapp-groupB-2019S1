@@ -158,7 +158,7 @@ public class UserTest {
     public void userMakesACreditDeposit() {
         User user = userFactory.user();
         YearMonth dueDate = YearMonth.now().plusMonths(1);
-        Long cardNumber = 4111111111111111L;
+        String cardNumber = "4111111111111111";
 
         user.creditDeposit(100.00, dueDate, cardNumber);
 

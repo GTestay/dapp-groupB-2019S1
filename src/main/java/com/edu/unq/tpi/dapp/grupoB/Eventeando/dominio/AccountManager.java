@@ -56,7 +56,7 @@ public class AccountManager {
         makeDeposit(user, DepositByCash.create(user, LocalDate.now(), amount));
     }
 
-    public void creditDeposit(User user, double amount, YearMonth dueDate, Long cardNumber) {
+    public void creditDeposit(User user, double amount, YearMonth dueDate, String cardNumber) {
         makeDeposit(user, DepositByCreditCard.create(user, LocalDate.now(), amount, dueDate, cardNumber));
     }
 
