@@ -29,10 +29,14 @@ public class EventControllerTest {
     @Test
     public void noneEventIsRetrieved() throws Exception {
 
-        ResultActions perform = clientRest.perform(get("/events"));
+        ResultActions perform = clientRest.perform(get(ulrAllEvents()));
 
         perform.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+    }
+
+    private String ulrAllEvents() {
+        return "/events";
     }
 
 
