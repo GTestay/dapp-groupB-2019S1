@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,6 +24,7 @@ public class EventController {
     @GetMapping(baseUrl)
     @ResponseBody
     public List<Event> events() {
-        return eventService.allEvents();
+//        List<Event> allEvents = eventService.allEvents();
+        return new ArrayList<>();
     }
 }

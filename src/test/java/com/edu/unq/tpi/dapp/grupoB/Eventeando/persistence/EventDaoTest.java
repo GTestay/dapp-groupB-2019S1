@@ -1,4 +1,4 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
@@ -8,26 +8,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Collections;
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-public class EventServiceTest {
+@DataJpaTest
+@Transactional
+public class EventDaoTest {
 
     @Autowired
-    private EventService eventService;
-    @MockBean
-    private CrudRepository<Event, Long> eventDao;
+    private EventDao eventDao;
     private UserFactory userFactory;
     private EventFactory eventFactory;
     private User organizer;
@@ -41,18 +36,16 @@ public class EventServiceTest {
 
     @Test
     public void noneEventIsRetrieved() {
-        List<Event> events = eventService.allEvents();
+        List<Event> events = eventDao.findAll();
         assertThat(events).isEmpty();
     }
 
     @Test
     public void anEventIsRetrieved() throws Exception {
         organizer = userFactory.user();
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(userFactory.user()), organizer);
-
-        given(this.eventDao.findAll()).willReturn(Collections.singletonList(anEvent));
-
-        List<Event> events = eventService.allEvents();
+        Event anEvent = eventFactory.partyWithGuests(userFactory.someUsers(), organizer);
+        eventDao.save(anEvent);
+        List<Event> events = eventDao.findAll();
 
         assertThat(events).containsOnlyOnce(anEvent);
     }
