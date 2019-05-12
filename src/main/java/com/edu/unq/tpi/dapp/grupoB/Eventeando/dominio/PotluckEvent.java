@@ -2,15 +2,20 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Entity
 public class PotluckEvent extends Event {
 
-
+    @Transient
     protected HashMap<Expense, User> coveredExpenses = new HashMap<>();
 
+    @OneToMany
     public List<Expense> coveredExpenses() {
         return new ArrayList<>(this.coveredExpenses.keySet());
     }
