@@ -4,10 +4,10 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.jobs.LoanPaymentsJob;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
-import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
+import static org.quartz.CronScheduleBuilder.monthlyOnDayAndHourAndMinute;
 
 public class LoanPaymentsTrigger {
     public static void main(String[] args) {
@@ -18,7 +18,8 @@ public class LoanPaymentsTrigger {
             // Preparas como es que se va a triggerear el job
             Trigger trigger = TriggerBuilder.newTrigger()
                     .withIdentity("LoanPaymentsTrigger", "Eventeando")
-                    .withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(5).repeatForever())
+                    .withSchedule(monthlyOnDayAndHourAndMinute(5, 0, 0))
+                    .forJob("LoanPaymentsJob", "Eventeando")
                     .build();
 
             // Lo pones en un scheduler

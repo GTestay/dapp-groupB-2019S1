@@ -5,10 +5,10 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
 public class LoanPaymentsJob implements Job {
-    private LoanPaymentsService lps = new LoanPaymentsService();
+    private LoanPaymentsService loanPaymentsService = new LoanPaymentsService();
 
     @Override
     public void execute(JobExecutionContext context) {
-        lps.sayHello();
+        loanPaymentsService.execute();
     }
 }
