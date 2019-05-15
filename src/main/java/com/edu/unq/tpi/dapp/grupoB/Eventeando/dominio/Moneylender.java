@@ -1,6 +1,5 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyAccountException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneylenderException;
 
 import java.util.*;
@@ -58,6 +57,10 @@ public class Moneylender {
             indebt(user);
             unpaidFee(user);
         }
+    }
+
+    public void checkIfLoanIsOver() {
+        actualLoans.removeIf(loan -> remainingPayments(loan.user) == 0);
     }
 
     private void checkPayments(User user) {
