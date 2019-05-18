@@ -17,8 +17,12 @@ public class EventController {
 
     private static final String baseUrl = "/events";
 
+    private final EventService eventService;
+
     @Autowired
-    private EventService eventService;
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(baseUrl)

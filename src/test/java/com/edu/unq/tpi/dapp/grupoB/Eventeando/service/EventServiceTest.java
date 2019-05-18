@@ -4,13 +4,13 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collections;
@@ -24,10 +24,10 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest
 public class EventServiceTest {
 
+    @MockBean
+    private EventDao eventDao;
     @Autowired
     private EventService eventService;
-    @MockBean
-    private CrudRepository<Event, Long> eventDao;
     private UserFactory userFactory;
     private EventFactory eventFactory;
     private User organizer;

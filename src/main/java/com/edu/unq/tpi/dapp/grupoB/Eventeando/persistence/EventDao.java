@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-interface EventDao extends CrudRepository<Event, Long> {
+public interface EventDao extends CrudRepository<Event, Long> {
     List<Event> findAll();
 }
