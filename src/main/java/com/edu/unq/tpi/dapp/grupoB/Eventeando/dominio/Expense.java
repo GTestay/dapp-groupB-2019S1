@@ -1,14 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
 public class Expense {
-
-    @Id
-    private Long id;
-
     private String name;
     private Double cost;
 

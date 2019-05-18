@@ -2,29 +2,20 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String name;
     private String lastname;
     private String email;
     private String password;
     private LocalDate birthday;
-    @Transient
     private AccountManager accountManager;
-    @Transient
     private Moneylender moneyLender;
-
-    @Transient
     private List<Invitation> invitations;
 
     public static User create(String name, String lastname, String email, String password, LocalDate birthday) {
@@ -80,9 +71,5 @@ public class User {
 
     public void receiveEventInvitation(Invitation invitation) {
         this.invitations.add(invitation);
-    }
-
-    public Long id() {
-        return id;
     }
 }

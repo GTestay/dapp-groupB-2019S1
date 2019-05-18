@@ -2,13 +2,8 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-
-@Entity
 public class BaquitaCrowdFundingEvent extends Event {
 
-    @OneToOne
     private final SharedAccount sharedAccount = new SharedAccount();
 
     public Double totalMoneyRaised() {

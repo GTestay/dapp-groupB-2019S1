@@ -3,7 +3,6 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,21 +10,12 @@ import java.util.stream.DoubleStream;
 
 import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_THE_USER_WAS_NOT_INVITED;
 
-
-@Entity
 public abstract class Event {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
-    protected String description;
 
-    @Transient
     protected User organizer;
-    @Transient
+    protected String description;
     protected List<Expense> expenses;
-    @Transient
     protected List<User> guests;
-    @Embedded
     protected List<String> guestConfirmations;
 
     protected static <EventType extends Event> EventType validateEvent(EventType newEvent, User organizer, String description, List<Expense> expenses, List<User> guests) {
