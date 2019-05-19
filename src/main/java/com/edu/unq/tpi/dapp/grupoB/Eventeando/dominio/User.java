@@ -1,6 +1,10 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.serializer.UserDeserializer;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.serializer.UserSerializer;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -9,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@JsonSerialize(using = UserSerializer.class)
+@JsonDeserialize(using = UserDeserializer.class)
 public class User {
 
     @Id
