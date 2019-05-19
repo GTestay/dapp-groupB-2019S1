@@ -19,18 +19,13 @@ public class UserController {
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody User newUser) {
-
-        User user = userService.createUser(newUser);
-
-        return user;
+        return userService.createUser(newUser);
     }
 
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public User findUser(@PathVariable("id") Long id) {
-
-        User user = userService.searchUser(id);
-        return user;
+        return userService.searchUser(id);
     }
 
 }

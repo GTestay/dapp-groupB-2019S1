@@ -4,6 +4,9 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.UserService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
+import org.assertj.core.api.Assertions;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -45,6 +48,23 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @Test
+    public void anUserCanNotBeCreatedBecauseTheRequestIsInvalid() throws Exception {
+
+        UserFactory userFactory = new UserFactory();
+
+        User user = userFactory.user();
+
+        JSONObject bodyRequest = getUserBody(user);
+        bodyRequest.put("email", "1");
+        ResultActions perform = clientRest.perform(post(url()).contentType(MediaType.APPLICATION_JSON).content(bodyRequest.toString()));
+
+        MvcResult mvcResult = perform.andExpect(status().isBadRequest())
+                .andReturn();
+        Assertions.assertThat(mvcResult.getResolvedException()).hasMessageContaining(UserValidator.USER_EMAIL_IS_INVALID);
+    }
+
+
+    @Test
     public void anUserIsRetrieved() throws Exception {
 
         UserFactory userFactory = new UserFactory();
@@ -64,6 +84,18 @@ public class UserControllerTest extends ControllerTest {
         JSONObject actual = new JSONObject(contentAsString);
         assertEquals(bodyRequest.toString(), actual.toString());
 
+    }
+
+    @Test
+    public void whenTheUserIdDoesNotExistTheResponseIsNotFound() throws Exception {
+
+        String urlTemplate = url() + "/" + -1;
+        ResultActions perform = clientRest.perform(get(urlTemplate).contentType(MediaType.APPLICATION_JSON));
+
+        MvcResult mvcResult = perform.andExpect(status().isNotFound())
+                .andReturn();
+
+        Assertions.assertThat(mvcResult.getResolvedException()).hasMessageContaining(UserService.messageUserNotFound());
     }
 
     private JSONObject getUserBody(User user) throws JSONException {

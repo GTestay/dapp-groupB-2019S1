@@ -1,8 +1,8 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.serializer;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.UserException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,22 +17,38 @@ public class UserDeserializer extends StdDeserializer<User> {
         this(null);
     }
 
-    public UserDeserializer(Class<User> t) {
-        super(t);
+    public UserDeserializer(Class<User> klazz) {
+        super(klazz);
     }
 
     @Override
-    public User deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException, JsonProcessingException {
+    public User deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
 
         ObjectCodec oc = jsonParser.getCodec();
-        JsonNode node = oc.readTree(jsonParser);
-        JsonNode name = node.get("name");
-        JsonNode lastname = node.get("lastname");
-        JsonNode email = node.get("email");
+        JsonNode jsonNode = oc.readTree(jsonParser);
 
-        JsonNode password = node.get("password");
-        JsonNode birthday = node.get("birthday");
+        String name = parseString(jsonNode, "name");
+        String lastname = parseString(jsonNode, "lastname");
+        String email = parseString(jsonNode, "email");
+        String password = parseString(jsonNode, "password");
+        LocalDate birthday = parseDate(jsonNode, "birthday");
 
-        return User.create(name.asText(), lastname.asText(), email.asText(), password.asText(), LocalDate.parse(birthday.textValue()));
+        return createUser(name, lastname, email, password, birthday);
+    }
+
+    private User createUser(String name, String lastname, String email, String password, LocalDate birthday) {
+        try {
+            return User.create(name, lastname, email, password, birthday);
+        } catch (UserException e) {
+            throw new InvalidCreation(e.getMessage());
+        }
+    }
+
+    private LocalDate parseDate(JsonNode node, String field) {
+        return LocalDate.parse(parseString(node, field));
+    }
+
+    private String parseString(JsonNode node, String name) {
+        return node.get(name).asText();
     }
 }
