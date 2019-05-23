@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import GoogleLogin from "react-google-login";
 
+import '../styles/Login.css';
+
 export class UserLogin extends Component {
     render() {
         return <div className="App">
