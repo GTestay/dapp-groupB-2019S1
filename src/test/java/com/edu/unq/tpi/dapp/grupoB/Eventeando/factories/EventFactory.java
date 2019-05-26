@@ -1,9 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.factories;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Expense;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Party;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,7 +10,19 @@ import java.util.List;
 public class EventFactory {
 
     private Party createParty(List<User> guests, List<Expense> expenses, Double pricePerAssistant, User organizer) {
-        return Event.createParty(organizer, description(), guests, expenses, anInvitationLimitDate(), pricePerAssistant);
+        return Party.create(organizer, description(), guests, expenses, anInvitationLimitDate(), pricePerAssistant);
+    }
+
+    public PotluckEvent potluckWithGuests(List<User> guests, User organizer) {
+        return PotluckEvent.create(organizer, description(), guests, expenses());
+    }
+
+    public BaquitaSharedExpensesEvent baquitaSharedExpenses(User organizer, List<User> guests) {
+        return BaquitaSharedExpensesEvent.create(organizer, description(), guests, expenses());
+    }
+
+    public BaquitaCrowdFundingEvent baquitaCrowfunding(User organizer, List<User> guests) {
+        return BaquitaCrowdFundingEvent.create(organizer, description(), guests, expenses());
     }
 
     public List<Expense> expenses() {
@@ -43,7 +52,6 @@ public class EventFactory {
     public LocalDateTime invalidConfirmationDate() {
         return this.anInvitationLimitDate().plusDays(1);
     }
-
 
     public LocalDateTime confirmationDate() {
         return this.anInvitationLimitDate().minusDays(1);

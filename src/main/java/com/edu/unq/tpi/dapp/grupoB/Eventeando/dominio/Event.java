@@ -2,6 +2,9 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,23 +13,47 @@ import java.util.List;
 import java.util.stream.DoubleStream;
 
 import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_THE_USER_WAS_NOT_INVITED;
+import static javax.persistence.CascadeType.PERSIST;
 
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@DiscriminatorColumn(name = "event_type")
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.CLASS,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Party.class, name = "Party"),
+        @JsonSubTypes.Type(value = BaquitaSharedExpensesEvent.class, name = "BaquitaSharedExpensesEvent"),
+        @JsonSubTypes.Type(value = BaquitaCrowdFundingEvent.class, name = "BaquitaCrowdFundingEvent"),
+        @JsonSubTypes.Type(value = PotluckEvent.class, name = "PotluckEvent"),
+})
 public abstract class Event {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @JsonProperty
     protected Long id;
+
+    @JsonProperty
     protected String description;
 
-    @Transient
+    @ManyToOne(cascade = PERSIST)
+    @JsonProperty
     protected User organizer;
-    @Transient
-    protected List<Expense> expenses;
-    @Transient
-    protected List<User> guests;
-    @Embedded
-    protected List<String> guestConfirmations;
+
+    @OneToMany(cascade = PERSIST)
+    @JsonProperty
+    protected List<Expense> expenses = new ArrayList<>();
+
+    @OneToMany(cascade = PERSIST)
+    @JsonProperty
+    protected List<User> guests = new ArrayList<>();
+
+    @ElementCollection
+    @JsonProperty
+    protected List<String> guestConfirmations = new ArrayList<>();
 
     protected static <EventType extends Event> EventType validateEvent(EventType newEvent, User organizer, String description, List<Expense> expenses, List<User> guests) {
         EventValidator eventValidator = new EventValidator();
@@ -35,27 +62,6 @@ public abstract class Event {
         newEvent.expenses = expenses;
         newEvent.guests = eventValidator.validateGuests(guests);
         return newEvent;
-    }
-
-    public static Party createParty(User organizer, String description, List<User> guests, List<Expense> expenses, LocalDateTime invitationLimitDate, Double pricePerAssistant) {
-        EventValidator eventValidator = new EventValidator();
-        Party instance = validateEvent(new Party(), organizer, description, expenses, guests);
-        instance.guestConfirmations = new ArrayList<>();
-        instance.invitationLimitDate = invitationLimitDate;
-        instance.pricePerAssistant = eventValidator.validatePricePerAssistant(pricePerAssistant);
-        return instance;
-    }
-
-    public static PotluckEvent createPotluck(User organizer, String description, List<User> guests, List<Expense> expenses) {
-        return validateEvent(new PotluckEvent(), organizer, description, expenses, guests);
-    }
-
-    public static BaquitaSharedExpensesEvent createBaquita(User organizer, String description, List<User> guests, List<Expense> expenses) {
-        return validateEvent(new BaquitaSharedExpensesEvent(), organizer, description, expenses, guests);
-    }
-
-    public static BaquitaCrowdFundingEvent createBaquitaCrowdfunding(User organizer, String description, List<User> guests, List<Expense> expenses) {
-        return validateEvent(new BaquitaCrowdFundingEvent(), organizer, description, expenses, guests);
     }
 
     public User organizer() {
@@ -111,5 +117,13 @@ public abstract class Event {
 
     public boolean guestHasConfirmed(User guest) {
         return guestConfirmations.stream().anyMatch(guest::hasThisEmail);
+    }
+
+    public Long id() {
+        return id;
+    }
+
+    public Boolean hasSameOrganizer(User organizer) {
+        return this.organizer.hasThisEmail(organizer.email());
     }
 }

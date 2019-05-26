@@ -41,13 +41,13 @@ public class PartyTest extends EventTest {
 
 
     private Party partyWithGuests() {
-        return Event.createParty(organizer, description, this.guests(), new ArrayList<>(), anInvitationLimitDate, 0.0);
+        return Party.create(organizer, description, this.guests(), new ArrayList<>(), anInvitationLimitDate, 0.0);
     }
 
     @Test
     public void aPartyCanNotBeCreatedWithoutGuests() {
         try {
-            Event.createParty(organizer, description, new ArrayList<>(), new ArrayList<>(), anInvitationLimitDate, 0.0);
+            Party.create(organizer, description, new ArrayList<>(), new ArrayList<>(), anInvitationLimitDate, 0.0);
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
         }
@@ -57,7 +57,7 @@ public class PartyTest extends EventTest {
     @Test
     public void aPartyTicketPriceMustNotBeNegative() {
         try {
-            Event.createParty(organizer, description, this.guests(), new ArrayList<>(), anInvitationLimitDate, -1.0);
+            Party.create(organizer, description, this.guests(), new ArrayList<>(), anInvitationLimitDate, -1.0);
         } catch (RuntimeException e) {
             assertEquals(e.getMessage(), EventValidator.EVENT_TICKET_PRICE_MUST_NOT_BE_NEGATIVE);
         }

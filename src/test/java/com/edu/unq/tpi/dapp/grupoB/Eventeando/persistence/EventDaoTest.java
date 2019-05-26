@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Party;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
@@ -41,7 +42,7 @@ public class EventDaoTest {
     @Test
     public void anEventIsRetrieved() throws Exception {
         organizer = userFactory.user();
-        Event anEvent = eventFactory.partyWithGuests(userFactory.someUsers(), organizer);
+        Party anEvent = eventFactory.partyWithGuests(userFactory.someUsers(), organizer);
         eventDao.save(anEvent);
         List<Event> events = eventDao.findAll();
 
