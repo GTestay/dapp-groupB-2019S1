@@ -26,6 +26,7 @@ public class UserSerializer extends StdSerializer<User> {
         jgen.writeStringField("lastname", anUser.lastname());
         jgen.writeStringField("email", anUser.email());
         jgen.writeObjectField("birthday", anUser.birthday());
+        jgen.writeObjectField("password", anUser.password());
 
         jgen.writeEndObject();
     }
