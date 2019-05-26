@@ -32,11 +32,11 @@ public class PotluckEventTest extends EventTest {
     }
 
     private PotluckEvent newPotluckEvent(List<User> guests, List<Expense> expenses) {
-        return Event.createPotluck(organizer(), description, guests, expenses);
+        return PotluckEvent.create(organizer(), description, guests, expenses);
     }
 
     private PotluckEvent newPotluckEvent(User guest, List<Expense> expenses) {
-        return Event.createPotluck(organizer(), description, Collections.singletonList(guest), expenses);
+        return PotluckEvent.create(organizer(), description, Collections.singletonList(guest), expenses);
     }
 
     @Test

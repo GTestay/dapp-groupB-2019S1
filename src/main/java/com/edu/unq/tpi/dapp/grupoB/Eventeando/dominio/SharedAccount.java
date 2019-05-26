@@ -1,5 +1,8 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +15,14 @@ import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.E
 public class SharedAccount {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     private Long id;
 
+    @JsonProperty
     private Double funds = 0.0;
     @Transient
+    @JsonIgnore
     private List<User> guestsWhoPaid;
 
     public SharedAccount() {

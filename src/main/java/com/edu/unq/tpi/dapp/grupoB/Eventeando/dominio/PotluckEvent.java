@@ -1,21 +1,31 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Entity
+@DiscriminatorValue("Potluck")
 public class PotluckEvent extends Event {
 
     @Transient
+    @JsonIgnore
     protected HashMap<Expense, User> coveredExpenses = new HashMap<>();
 
-    @OneToMany
+    @JsonCreator
+    public static PotluckEvent create(User organizer, String description, List<User> guests, List<Expense> expenses) {
+        return validateEvent(new PotluckEvent(), organizer, description, expenses, guests);
+    }
+
+    @ManyToMany
     public List<Expense> coveredExpenses() {
         return new ArrayList<>(this.coveredExpenses.keySet());
     }

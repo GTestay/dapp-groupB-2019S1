@@ -28,14 +28,14 @@ public class BaquitaSharedExpensesEventTest extends EventTest {
 
     private void assertThatCanNotBeCreatedWithoutGuests() {
         try {
-            Event.createBaquita(userFactory.user(), description, null, twoExpenses());
+            BaquitaSharedExpensesEvent.create(userFactory.user(), description, null, twoExpenses());
             fail();
         } catch (EventException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
         }
 
         try {
-            Event.createBaquita(organizer(), description, new ArrayList<>(), twoExpenses());
+            BaquitaSharedExpensesEvent.create(organizer(), description, new ArrayList<>(), twoExpenses());
             fail();
         } catch (EventException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
@@ -44,7 +44,7 @@ public class BaquitaSharedExpensesEventTest extends EventTest {
 
     private void assertThatCanNotBeCreatedWithoutOrganizer() {
         try {
-            Event.createBaquita(null, description, oneGuest(), twoExpenses());
+            BaquitaSharedExpensesEvent.create(null, description, oneGuest(), twoExpenses());
             fail();
         } catch (EventException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_ORGANIZER);
@@ -63,7 +63,7 @@ public class BaquitaSharedExpensesEventTest extends EventTest {
     }
 
     private BaquitaSharedExpensesEvent newbaquitaWithExpensesAndGuests(User organizer, String description) {
-        return Event.createBaquita(organizer, description, oneGuest(), twoExpenses());
+        return BaquitaSharedExpensesEvent.create(organizer, description, oneGuest(), twoExpenses());
     }
 
     @Test

@@ -28,7 +28,7 @@ public class BaquitaCrowdfundingTest extends EventTest {
 
     @Test
     public void aBaquitaCrowdfundingInitiallyHasNoFundsAndIsNotCovered() {
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, oneGuest(), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = BaquitaCrowdFundingEvent.create(organizer(), description, oneGuest(), twoExpenses());
 
         assertEquals(0.0, aBaquitaCrowdfunding.totalMoneyRaised(), 0);
         assertFalse(aBaquitaCrowdfunding.isFund());
@@ -37,7 +37,7 @@ public class BaquitaCrowdfundingTest extends EventTest {
     @Test
     public void anUserThatWasNotInvitedCanNotAddFundsToTheCrowdfundingEvent() {
         User anUserThatIsNotInvited = userFactory.user();
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, guests(), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = BaquitaCrowdFundingEvent.create(organizer(), description, guests(), twoExpenses());
         try {
             aBaquitaCrowdfunding.addFunds(anUserThatIsNotInvited, anAmount());
             fail();
@@ -52,7 +52,7 @@ public class BaquitaCrowdfundingTest extends EventTest {
 
     @Test
     public void canNotAddANegativeAmountToFundsToTheCrowdfundingEvent() {
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = BaquitaCrowdFundingEvent.create(organizer(), description, createGuest(anUserToInvite), twoExpenses());
         try {
             double negativeAmount = -1.0;
             aBaquitaCrowdfunding.addFunds(anUserToInvite, negativeAmount);
@@ -72,7 +72,7 @@ public class BaquitaCrowdfundingTest extends EventTest {
 
     @Test
     public void anUserCanNotAddMoreFundsInAFullyFundedCrowdfundedEvent() {
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = BaquitaCrowdFundingEvent.create(organizer(), description, createGuest(anUserToInvite), twoExpenses());
 
         aBaquitaCrowdfunding.addFunds(anUserToInvite, aBaquitaCrowdfunding.totalCost());
         try {
@@ -89,7 +89,7 @@ public class BaquitaCrowdfundingTest extends EventTest {
 
     @Test
     public void anUserCanNotAddMoreFundsThanIsRequiredInTheCrowdfundingEvent() {
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = BaquitaCrowdFundingEvent.create(organizer(), description, createGuest(anUserToInvite), twoExpenses());
 
         aBaquitaCrowdfunding.addFunds(anUserToInvite, aBaquitaCrowdfunding.totalCost() - 1);
         try {
@@ -105,7 +105,7 @@ public class BaquitaCrowdfundingTest extends EventTest {
 
     @Test
     public void oneGuestOfTheBaquitaCrowdfundedAddFunds() {
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = BaquitaCrowdFundingEvent.create(organizer(), description, createGuest(anUserToInvite), twoExpenses());
 
         aBaquitaCrowdfunding.addFunds(anUserToInvite, anAmount());
         assertEquals(100.0, aBaquitaCrowdfunding.totalMoneyRaised(), 0);
@@ -119,7 +119,7 @@ public class BaquitaCrowdfundingTest extends EventTest {
 
     @Test
     public void oneGuestOfTheBaquitaCrowdfundedAddMoreMoneyAndTheEventIsFullyFunded() {
-        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = Event.createBaquitaCrowdfunding(organizer(), description, createGuest(anUserToInvite), twoExpenses());
+        BaquitaCrowdFundingEvent aBaquitaCrowdfunding = BaquitaCrowdFundingEvent.create(organizer(), description, createGuest(anUserToInvite), twoExpenses());
 
         aBaquitaCrowdfunding.addFunds(anUserToInvite, aBaquitaCrowdfunding.totalCost());
         assertEquals(200.0, aBaquitaCrowdfunding.totalMoneyRaised(), 0);
