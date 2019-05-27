@@ -99,7 +99,7 @@ public abstract class Event {
 
     protected void validateThatTheUserWasInvited(String anEmail) {
         if (!isInvited(anEmail)) {
-            throw new EventException(ERROR_THE_USER_WAS_NOT_INVITED);
+            throwEventException(ERROR_THE_USER_WAS_NOT_INVITED);
         }
     }
 

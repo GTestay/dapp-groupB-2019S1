@@ -13,7 +13,6 @@ public abstract class EventTest {
     protected UserFactory userFactory;
     protected EventFactory eventFactory;
 
-
     public List<User> oneGuest() {
         return Collections.singletonList(userFactory.user());
     }
