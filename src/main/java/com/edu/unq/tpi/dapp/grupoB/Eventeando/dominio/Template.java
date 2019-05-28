@@ -41,7 +41,7 @@ public class Template {
     }
 
     public Party generateNewPartyEventWith(User user, List<User> guests, LocalDateTime anInvitationLimitDate) {
-        Party party = Party.create(user, description, guests, expenses, anInvitationLimitDate, 0.0);
+        Party party = Party.create(user, description, guests, expenses, anInvitationLimitDate);
         this.usesForUsers.add(user);
         return party;
     }

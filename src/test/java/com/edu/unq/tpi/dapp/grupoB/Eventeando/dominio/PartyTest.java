@@ -1,5 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
@@ -41,25 +42,16 @@ public class PartyTest extends EventTest {
 
 
     private Party partyWithGuests() {
-        return Party.create(organizer, description, this.guests(), new ArrayList<>(), anInvitationLimitDate, 0.0);
+        return Party.create(organizer, description, this.guests(), new ArrayList<>(), anInvitationLimitDate);
     }
 
     @Test
     public void aPartyCanNotBeCreatedWithoutGuests() {
         try {
-            Party.create(organizer, description, new ArrayList<>(), new ArrayList<>(), anInvitationLimitDate, 0.0);
-        } catch (RuntimeException e) {
+            Party.create(organizer, description, new ArrayList<>(), new ArrayList<>(), anInvitationLimitDate);
+            fail();
+        } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
-        }
-
-    }
-
-    @Test
-    public void aPartyTicketPriceMustNotBeNegative() {
-        try {
-            Party.create(organizer, description, this.guests(), new ArrayList<>(), anInvitationLimitDate, -1.0);
-        } catch (RuntimeException e) {
-            assertEquals(e.getMessage(), EventValidator.EVENT_TICKET_PRICE_MUST_NOT_BE_NEGATIVE);
         }
 
     }
@@ -89,17 +81,6 @@ public class PartyTest extends EventTest {
     }
 
     @Test
-    public void theCostOfThePartyWithoutSuppliesAndWithConfirmationsIsCalculatedByThePricePerAssistant() {
-        Party partyWithAConfirmation = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(this.guests(), pricePerAssistant, eventFactory.noExpenses(), organizer);
-        List<User> guests = partyWithAConfirmation.guests();
-        User user = guests.get(0);
-
-        partyWithAConfirmation.confirmAssistance(user.email(), confirmationDate);
-
-        assertThatTheFullCostOfThePartyIs(partyWithAConfirmation, pricePerAssistant);
-    }
-
-    @Test
     public void theTotalCostOfAPartyWIthoutAssistantsAndWithSuppliesIsZero() {
         Party partyWithSupplies = partyWithGuests();
 
@@ -114,7 +95,7 @@ public class PartyTest extends EventTest {
         try {
             party.confirmAssistance("unEmailQueNoEstaInvitado@gmail.com", confirmationDate);
             fail();
-        } catch (RuntimeException e) {
+        } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_THE_USER_WAS_NOT_INVITED);
             assertThatTheFullCostOfThePartyIs(party, 0);
         }
@@ -128,7 +109,7 @@ public class PartyTest extends EventTest {
         try {
             party.confirmAssistance(invitedUser.email(), eventFactory.invalidConfirmationDate());
             fail();
-        } catch (RuntimeException e) {
+        } catch (EventException e) {
             assertEquals(e.getMessage(), EventValidator.ERROR_THE_CONFIRMATION_DATE_IS_AFTER_THE_INVITATION_LIMIT);
             assertThatTheFullCostOfThePartyIs(party, 0);
         }
@@ -144,7 +125,7 @@ public class PartyTest extends EventTest {
         party.confirmAssistance(aUserThatIsInvited.email(), confirmationDate);
         party.confirmAssistance(anotherUserThatIsInvited.email(), confirmationDate);
 
-        assertThatTheFullCostOfThePartyIs(party, 600.00);
+        assertThatTheFullCostOfThePartyIs(party, 400.00);
     }
 
     private Party partyWithGuestsAndCostPerAssistance(Double pricePerAssistant) {

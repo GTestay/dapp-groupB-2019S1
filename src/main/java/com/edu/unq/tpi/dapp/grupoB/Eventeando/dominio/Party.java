@@ -1,7 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,15 +17,11 @@ public class Party extends Event {
 
     @JsonProperty
     protected LocalDateTime invitationLimitDate;
-    @JsonProperty
-    protected Double pricePerAssistant;
 
     @JsonCreator
-    public static Party create(User organizer, String description, List<User> guests, List<Expense> expenses, LocalDateTime invitationLimitDate, Double pricePerAssistant) {
-        EventValidator eventValidator = new EventValidator();
+    public static Party create(User organizer, String description, List<User> guests, List<Expense> expenses, LocalDateTime invitationLimitDate) {
         Party instance = validateEvent(new Party(), organizer, description, expenses, guests);
         instance.invitationLimitDate = invitationLimitDate;
-        instance.pricePerAssistant = eventValidator.validatePricePerAssistant(pricePerAssistant);
         return instance;
     }
 
@@ -36,7 +31,6 @@ public class Party extends Event {
     }
 
     public void addExpense(Expense expense) {
-
         expenses.add(expense);
     }
 
@@ -53,15 +47,11 @@ public class Party extends Event {
     }
 
     public Double totalCost() {
-        return expensesCostPerAssistant() + costPerConfirmedAssistance();
+        return expensesCostPerAssistant();
     }
 
     private double expensesCostPerAssistant() {
         return quantityOfConfirmations() * expensesTotalCost();
-    }
-
-    private Double costPerConfirmedAssistance() {
-        return pricePerAssistant * this.quantityOfConfirmations();
     }
 
 }
