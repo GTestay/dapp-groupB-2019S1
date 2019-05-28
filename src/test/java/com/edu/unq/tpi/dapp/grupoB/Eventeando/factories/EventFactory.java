@@ -9,8 +9,8 @@ import java.util.List;
 
 public class EventFactory {
 
-    private Party createParty(List<User> guests, List<Expense> expenses, Double pricePerAssistant, User organizer) {
-        return Party.create(organizer, description(), guests, expenses, anInvitationLimitDate(), pricePerAssistant);
+    private Party createParty(List<User> guests, List<Expense> expenses, User organizer) {
+        return Party.create(organizer, description(), guests, expenses, anInvitationLimitDate());
     }
 
     public PotluckEvent potluckWithGuests(List<User> guests, User organizer) {
@@ -46,7 +46,7 @@ public class EventFactory {
     }
 
     public Party partyWithGuestsExpensesAndAPricePerAssistant(List<User> guests, Double pricePerAssistant, List<Expense> expenses, User organizer) {
-        return createParty(guests, expenses, pricePerAssistant, organizer);
+        return createParty(guests, expenses, organizer);
     }
 
     public LocalDateTime invalidConfirmationDate() {
