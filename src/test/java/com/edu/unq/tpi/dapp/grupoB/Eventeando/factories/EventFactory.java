@@ -37,7 +37,7 @@ public class EventFactory {
         return 0.0;
     }
 
-    private String description() {
+    public String description() {
         return "An event description";
     }
 
