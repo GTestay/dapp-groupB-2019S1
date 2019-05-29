@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Invitation;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.services.MailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +27,30 @@ public class EventService {
     }
 
     public void createEvent(Event event) {
-        List<User> guests = event.guests();
-
-        sendEmails(guests);
+        List<Invitation> invitations = Invitation.createListOfInvitationsWith(event);
+        sendInvitationsEmails(invitations);
     }
 
-    private void sendEmails(List<User> guests) {
-        guests.forEach(guest -> sendEmail(guest));
+    private void sendInvitationsEmails(List<Invitation> invitations) {
+        invitations.forEach(invitation -> sendEmail(invitation));
+
     }
 
-    private void sendEmail(User guest) {
+    private void sendEmail(Invitation invitation) {
         try {
-            service.sendEmail(guest.email(), "Venite a mi evento!", "Nueva Invitacion");
+            service.sendEmail(invitation.guestEmail(), bodyDelMail(invitation), subjectDelMail(invitation));
         } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
+
+    private String subjectDelMail(Invitation invitation) {
+        return "Nueva Invitacion de " + invitation.organizerFullName();
+    }
+
+    private String bodyDelMail(Invitation invitation) {
+        return "Hola! " + invitation.guestFullName() + ". Venite a mi evento! \n" +
+                invitation.eventDescription();
+    }
+
 }

@@ -91,4 +91,8 @@ public class User {
     public Long id() {
         return id;
     }
+
+    public String fullName() {
+        return this.name + " " + this.lastname;
+    }
 }

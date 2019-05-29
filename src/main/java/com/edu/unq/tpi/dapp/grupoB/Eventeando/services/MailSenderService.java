@@ -10,8 +10,12 @@ import javax.mail.internet.MimeMessage;
 @Component
 public class MailSenderService {
 
+    private final JavaMailSender sender;
+
     @Autowired
-    private JavaMailSender sender;
+    public MailSenderService(JavaMailSender sender) {
+        this.sender = sender;
+    }
 
     public void sendEmail(String receiver, String body, String subject) throws Exception {
         MimeMessage message = sender.createMimeMessage();
