@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Invitation {
-    private final Event party;
-    private final User user;
+    private final Event event;
+    private final User guest;
 
-    public Invitation(Event anEvent, User invitedUser) {
-        this.party = anEvent;
-        this.user = invitedUser;
-        invitedUser.receiveEventInvitation(this);
+    public Invitation(Event anEvent, User guest) {
+        this.event = anEvent;
+        this.guest = guest;
+        guest.receiveEventInvitation(this);
     }
 
     public static List<Invitation> createListOfInvitationsWith(Event event) {
@@ -21,10 +21,26 @@ public class Invitation {
     }
 
     public boolean isConfirmed() {
-        return party.guestHasConfirmed(user);
+        return event.guestHasConfirmed(guest);
     }
 
     public void confirm(LocalDateTime confirmationDate) {
-        party.confirmAssistance(this.user.email(), confirmationDate);
+        event.confirmAssistance(this.guest.email(), confirmationDate);
+    }
+
+    public String guestEmail() {
+        return guest.email();
+    }
+
+    public String organizerFullName() {
+        return event.organizer().fullName();
+    }
+
+    public String eventDescription() {
+        return event.description();
+    }
+
+    public String guestFullName() {
+        return guest.fullName();
     }
 }

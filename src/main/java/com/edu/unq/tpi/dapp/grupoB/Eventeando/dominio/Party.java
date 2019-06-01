@@ -42,7 +42,7 @@ public class Party extends Event {
 
     private void validateThatTheConfirmationDateIsValidWithTheInvitationLimitDate(LocalDateTime confirmationDate) {
         if (confirmationDate.isAfter(this.invitationLimitDate)) {
-            throw new EventException(ERROR_THE_CONFIRMATION_DATE_IS_AFTER_THE_INVITATION_LIMIT);
+            throwEventException(ERROR_THE_CONFIRMATION_DATE_IS_AFTER_THE_INVITATION_LIMIT);
         }
     }
 

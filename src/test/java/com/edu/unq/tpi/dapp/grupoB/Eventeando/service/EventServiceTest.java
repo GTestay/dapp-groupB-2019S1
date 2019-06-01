@@ -5,6 +5,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.services.MailSenderService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,9 @@ import static org.mockito.BDDMockito.given;
 public class EventServiceTest {
 
     @MockBean
+    private MailSenderService mailSenderService;
+
+    @MockBean
     private EventDao eventDao;
     @Autowired
     private EventService eventService;
@@ -34,7 +38,7 @@ public class EventServiceTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         userFactory = new UserFactory();
         eventFactory = new EventFactory();
     }
@@ -46,7 +50,7 @@ public class EventServiceTest {
     }
 
     @Test
-    public void anEventIsRetrieved() throws Exception {
+    public void anEventIsRetrieved() {
         organizer = userFactory.user();
         Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(userFactory.user()), organizer);
 
@@ -56,4 +60,18 @@ public class EventServiceTest {
 
         assertThat(events).containsOnlyOnce(anEvent);
     }
+
+
+    @Test
+    public void whenTheEventIsCreatedItSendsMailsToTheGuests() {
+        organizer = userFactory.user();
+        User guest = userFactory.user();
+        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(guest), organizer);
+
+        eventService.createEvent(anEvent);
+
+        assertThat(guest.invitations()).isNotEmpty();
+    }
+
+
 }
