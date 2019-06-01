@@ -1,11 +1,23 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import org.hibernate.annotations.Cascade;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Entity
 public class Invitation {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @ManyToOne
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private final Event event;
+    @ManyToOne
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private final User guest;
 
     public Invitation(Event anEvent, User guest) {
