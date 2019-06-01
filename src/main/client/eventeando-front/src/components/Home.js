@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {ListaDeEventos} from "./ListaDeEventos";
 
+import '../styles/Home.css';
+
 export class Home extends Component {
     constructor(props) {
         super(props);
@@ -23,7 +25,7 @@ export class Home extends Component {
 
     render() {
         return (
-            <div>
+            <div className="lista-eventos">
                 <ListaDeEventos title="Eventos En Curso" eventos={this.getEventosEnCurso()}/>
                 <ListaDeEventos title="Mis Eventos" eventos={this.getMisEventos()}/>
                 <ListaDeEventos title="Eventos Populares" eventos={this.getEventosPopulares()}/>

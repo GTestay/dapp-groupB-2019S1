@@ -1,11 +1,13 @@
 import React, {Component} from "react";
 
+import '../styles/ListaDeEventos.css';
+
 export class ListaDeEventos extends Component {
     render() {
         return (
-            <div>
+            <div className="titulo-evento">
                 <h3>{this.props.title}</h3>
-                <ul>
+                <ul className="evento-listado">
                     {this.listarEventos()}
                 </ul>
             </div>
@@ -13,6 +15,6 @@ export class ListaDeEventos extends Component {
     }
 
     listarEventos() {
-        return (this.props.eventos.map(evento => <li> {evento} </li>))
+        return (this.props.eventos.map(evento => <li className="evento"> {evento} </li>))
     }
 }
