@@ -29,8 +29,7 @@ public class User {
     private AccountManager accountManager;
     @Transient
     private Moneylender moneyLender;
-
-    @Transient
+    @OneToMany
     private List<Invitation> invitations;
 
     public static User create(String name, String lastname, String email, String password, LocalDate birthday) {

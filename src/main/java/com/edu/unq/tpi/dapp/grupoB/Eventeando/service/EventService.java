@@ -4,6 +4,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.*;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.ExpensesNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.InvitationDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.services.MailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,15 +17,17 @@ public class EventService {
 
     private final EventDao eventDao;
     private final UserService userService;
-    private final MailSenderService service;
+    private final MailSenderService mailSenderService;
     private final ExpenseDao expenseDao;
+    private final InvitationDao invitationDao;
 
     @Autowired
-    public EventService(UserService userService, EventDao eventDao, MailSenderService service, ExpenseDao expenseDao) {
+    public EventService(UserService userService, EventDao eventDao, MailSenderService mailSenderService, ExpenseDao expenseDao, InvitationDao invitationDao) {
         this.userService = userService;
         this.eventDao = eventDao;
-        this.service = service;
+        this.mailSenderService = mailSenderService;
         this.expenseDao = expenseDao;
+        this.invitationDao = invitationDao;
     }
 
     public List<Event> allEvents() {
@@ -35,7 +38,9 @@ public class EventService {
         User organizer = userService.findUserByEmail(organizerEmail);
         List<User> guests = userService.obtainUsersFromEmails(guestsEmails);
         List<Expense> expenses = getExpenses(expensesId);
-        return Party.create(organizer, description, guests, expenses, LocalDateTime.from(invitationLimitDate));
+        Party party = Party.create(organizer, description, guests, expenses, LocalDateTime.from(invitationLimitDate));
+        createEvent(party);
+        return party;
     }
 
     private List<Expense> getExpenses(List<Long> expensesId) {
@@ -52,29 +57,8 @@ public class EventService {
 
     public void createEvent(Event event) {
         List<Invitation> invitations = Invitation.createListOfInvitationsWith(event);
-        sendInvitationsEmails(invitations);
-    }
-
-    private void sendInvitationsEmails(List<Invitation> invitations) {
-        invitations.forEach(invitation -> sendEmail(invitation));
-
-    }
-
-    private void sendEmail(Invitation invitation) {
-        try {
-            service.sendEmail(invitation.guestEmail(), bodyDelMail(invitation), subjectDelMail(invitation));
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    private String subjectDelMail(Invitation invitation) {
-        return "Nueva Invitacion de " + invitation.organizerFullName();
-    }
-
-    private String bodyDelMail(Invitation invitation) {
-        return "Hola! " + invitation.guestFullName() + ". Venite a mi evento! \n" +
-                invitation.eventDescription();
+        invitationDao.saveAll(invitations);
+        mailSenderService.sendInvitationsEmails(invitations);
     }
 
 }
