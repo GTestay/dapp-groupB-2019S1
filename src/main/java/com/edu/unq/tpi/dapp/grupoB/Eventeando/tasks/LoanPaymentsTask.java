@@ -1,9 +1,9 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.services;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.tasks;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Loan;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
 
-public class LoanPaymentsService {
+public class LoanPaymentsTask {
     public void execute() {
         Moneylender moneyLender = Moneylender.get();
 

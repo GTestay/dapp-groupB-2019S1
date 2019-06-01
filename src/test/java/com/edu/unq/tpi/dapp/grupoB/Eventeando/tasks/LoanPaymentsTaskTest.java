@@ -1,4 +1,4 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.services;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.tasks;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
@@ -6,10 +6,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class LoanPaymentsServiceTest {
+public class LoanPaymentsTaskTest {
 
     private UserFactory userFactory = new UserFactory();
-    private LoanPaymentsService service = new LoanPaymentsService();
+    private LoanPaymentsTask service = new LoanPaymentsTask();
 
     @Test
     public void forUsersWithALoanInProgressChargeTheLoan(){
