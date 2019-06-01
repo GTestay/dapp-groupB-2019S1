@@ -45,4 +45,12 @@ public class Expense {
     public Double cost() {
         return cost;
     }
+
+    public Long id() {
+        return this.id;
+    }
+
+    public void setId(Long i) {
+        this.id = i;
+    }
 }

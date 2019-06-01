@@ -1,13 +1,12 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Party;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.EventService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos.PartyEventDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,4 +28,18 @@ public class EventController {
     public List<Event> events() {
         return eventService.allEvents();
     }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(baseUrl)
+    @ResponseBody
+    public Party createParty(@RequestBody PartyEventDto partyEventDto) {
+
+        return eventService.createParty(
+                partyEventDto.getOrganizerEmail(),
+                partyEventDto.getDescription(), partyEventDto.getGuestsEmails(),
+                partyEventDto.getInvitationLimitDate(),
+                partyEventDto.getExpensesIds());
+    }
+
+
 }

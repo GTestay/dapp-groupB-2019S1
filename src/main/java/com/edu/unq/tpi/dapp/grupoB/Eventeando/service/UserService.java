@@ -6,6 +6,8 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private final UserDao userDao;
@@ -20,7 +22,8 @@ public class UserService {
     }
 
     public User searchUser(Long id) {
-        return userDao.findById(id).orElseThrow(this::notFound);
+        return userDao.findById(id)
+                .orElseThrow(this::notFound);
     }
 
     private RuntimeException notFound() {
@@ -31,4 +34,24 @@ public class UserService {
         return "User not found";
     }
 
+    public User findUserByEmail(String email) {
+        return userDao.findByEmail(email)
+                .orElseThrow(this::notFound);
+    }
+
+    private List<User> findUsersWithEmails(List<String> guestsEmails) {
+        return userDao.findAllByEmailIn(guestsEmails);
+    }
+
+    public List<User> obtainUsersFromEmails(List<String> guestsEmails) {
+        List<User> guests = findUsersWithEmails(guestsEmails);
+        if (guestsEmails.size() != guests.size()) {
+            throw new UserNotFound(usersNotFoundFromEmails());
+        }
+        return guests;
+    }
+
+    public static String usersNotFoundFromEmails() {
+        return "There are no users with the emails given";
+    }
 }
