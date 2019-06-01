@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,7 +20,15 @@ public class Party extends Event {
     protected LocalDateTime invitationLimitDate;
 
     @JsonCreator
-    public static Party create(User organizer, String description, List<User> guests, List<Expense> expenses, LocalDateTime invitationLimitDate) {
+    public static Party create
+    (
+        @JsonProperty("organizer") User organizer,
+        @JsonProperty("description") String description,
+        @JsonProperty("guests") List<User> guests,
+        @JsonProperty("expenses") List<Expense> expenses,
+        @JsonProperty("invitationLimitDate") LocalDateTime invitationLimitDate
+    )
+    {
         Party instance = validateEvent(new Party(), organizer, description, expenses, guests);
         instance.invitationLimitDate = invitationLimitDate;
         return instance;
