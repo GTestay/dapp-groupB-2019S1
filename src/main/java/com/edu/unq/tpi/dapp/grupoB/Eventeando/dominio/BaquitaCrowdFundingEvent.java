@@ -3,6 +3,7 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -21,7 +22,14 @@ public class BaquitaCrowdFundingEvent extends Event {
     private final SharedAccount sharedAccount = new SharedAccount();
 
     @JsonCreator
-    public static BaquitaCrowdFundingEvent create(User organizer, String description, List<User> guests, List<Expense> expenses) {
+    public static BaquitaCrowdFundingEvent create
+    (
+        @JsonProperty("organizer") User organizer,
+        @JsonProperty("description") String description,
+        @JsonProperty("guests") List<User> guests,
+        @JsonProperty("expenses") List<Expense> expenses
+    )
+    {
         return validateEvent(new BaquitaCrowdFundingEvent(), organizer, description, expenses, guests);
     }
 
