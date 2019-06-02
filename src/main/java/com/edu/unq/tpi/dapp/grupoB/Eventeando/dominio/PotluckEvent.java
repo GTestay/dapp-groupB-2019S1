@@ -3,7 +3,6 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -22,14 +21,7 @@ public class PotluckEvent extends Event {
     protected HashMap<Expense, User> coveredExpenses = new HashMap<>();
 
     @JsonCreator
-    public static PotluckEvent create
-    (
-        @JsonProperty("organizer") User organizer,
-        @JsonProperty("description") String description,
-        @JsonProperty("guests") List<User> guests,
-        @JsonProperty("expenses") List<Expense> expenses
-    )
-    {
+    public static PotluckEvent create(User organizer, String description, List<User> guests, List<Expense> expenses) {
         return validateEvent(new PotluckEvent(), organizer, description, expenses, guests);
     }
 
