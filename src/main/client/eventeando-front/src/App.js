@@ -1,17 +1,19 @@
 import React, {Component} from 'react';
-import './App.css';
+import {BrowserRouter, Route} from 'react-router-dom'
+
+import './styles/App.css';
+import {Home} from "./components/Home";
+import {UserLogin} from "./components/UserLogin";
 
 class App extends Component {
     render() {
         return (
-            <div className="App">
-                <header className="App-header">
-                    <p>
-                        ¡Eventeando!
-                    </p>
-
-                </header>
-            </div>
+            <BrowserRouter>
+                <div>
+                    <Route exact path="/" component={UserLogin}/>
+                    <Route exact path="/home" component={Home}/>
+                </div>
+            </BrowserRouter>
         );
     }
 }
