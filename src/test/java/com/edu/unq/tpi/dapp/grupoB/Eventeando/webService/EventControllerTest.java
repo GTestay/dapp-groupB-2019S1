@@ -156,11 +156,9 @@ public class EventControllerTest extends ControllerTest {
         Party anEvent = eventFactory.partyWithGuests(guests, organizer);
         expenseLongCrudRepository.saveAll(anEvent.expenses());
 
-        JSONObject jsonObject = jsonPostParty(anEvent);
+        JSONObject jsonObject = createJsonEvent(anEvent);
 
-        ResultActions perform = clientRest.perform(post(ulrAllEvents())
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(jsonObject.toString()));
+        ResultActions perform = performPost(jsonObject);
 
         MvcResult mvcResult = perform.andExpect(status().isNotFound())
                 .andReturn();
@@ -177,11 +175,9 @@ public class EventControllerTest extends ControllerTest {
         Party anEvent = eventFactory.partyWithGuests(guests, organizer);
         expenseLongCrudRepository.saveAll(anEvent.expenses());
 
-        JSONObject jsonObject = jsonPostParty(anEvent);
+        JSONObject jsonObject = createJsonEvent(anEvent);
 
-        ResultActions perform = clientRest.perform(post(ulrAllEvents())
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(jsonObject.toString()));
+        ResultActions perform = performPost(jsonObject);
 
         MvcResult mvcResult = perform.andExpect(status().isNotFound())
                 .andReturn();
@@ -198,11 +194,9 @@ public class EventControllerTest extends ControllerTest {
         Party anEvent = eventFactory.partyWithGuests(guests, organizer);
         anEvent.expenses().forEach(expense -> expense.setId(0L));
 
-        JSONObject jsonObject = jsonPostParty(anEvent);
+        JSONObject jsonObject = createJsonEvent(anEvent);
 
-        ResultActions perform = clientRest.perform(post(ulrAllEvents())
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(jsonObject.toString()));
+        ResultActions perform = performPost(jsonObject);
 
         MvcResult mvcResult = perform.andExpect(status().isNotFound())
                 .andReturn();
@@ -220,31 +214,110 @@ public class EventControllerTest extends ControllerTest {
         userDao.save(organizer);
         expenseLongCrudRepository.saveAll(anEvent.expenses());
 
-        JSONObject jsonObject = jsonPostParty(anEvent);
+        JSONObject jsonObject = createJsonEvent(anEvent);
 
-        ResultActions perform = clientRest.perform(post(ulrAllEvents())
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(jsonObject.toString()));
+        ResultActions perform = performPost(jsonObject);
 
-        MvcResult mvcResult = perform.andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andReturn();
-        Party newPartyCreated = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Party.class);
+        MvcResult mvcResult = assertThatResponseIsCreated(perform);
+        Party newPartyCreated = mapResponse(mvcResult, Party.class);
         assertThatIsAValidEvent(anEvent, newPartyCreated);
     }
 
+    @Test
+    public void canCreateAPotluckEvent() throws Exception {
+        List<User> guests = userFactory.someUsers();
 
-    private JSONObject jsonPostParty(Party anEvent) throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("type", anEvent.getClass().getSimpleName());
-        jsonObject.put("description", anEvent.description());
-        jsonObject.put("organizerEmail", anEvent.organizer().email());
-        jsonObject.put("guestsEmails", new JSONArray(anEvent.guests().stream().map(User::email).collect(Collectors.toList())));
-        jsonObject.put("expensesIds", new JSONArray(anEvent.expenses().stream().map(Expense::id).collect(Collectors.toList())));
+        PotluckEvent anEvent = eventFactory.potluckWithGuests(guests, organizer);
+        userDao.saveAll(guests);
+        userDao.save(organizer);
+        expenseLongCrudRepository.saveAll(anEvent.expenses());
+
+        JSONObject jsonObject = createJsonEvent(anEvent);
+
+        ResultActions perform = performPost(jsonObject);
+
+        MvcResult mvcResult = assertThatResponseIsCreated(perform);
+
+        PotluckEvent newPartyCreated = mapResponse(mvcResult, PotluckEvent.class);
+
+        assertThatIsAValidEvent(anEvent, newPartyCreated);
+    }
+
+    @Test
+    public void canCreateABaquitaSharedExpensesEvent() throws Exception {
+        List<User> guests = userFactory.someUsers();
+
+        BaquitaSharedExpensesEvent anEvent = eventFactory.baquitaSharedExpenses(organizer, guests);
+        userDao.saveAll(guests);
+        userDao.save(organizer);
+        expenseLongCrudRepository.saveAll(anEvent.expenses());
+
+        JSONObject jsonObject = createJsonEvent(anEvent);
+
+        ResultActions perform = performPost(jsonObject);
+
+        MvcResult mvcResult = assertThatResponseIsCreated(perform);
+
+        BaquitaSharedExpensesEvent newPartyCreated = mapResponse(mvcResult, BaquitaSharedExpensesEvent.class);
+
+        assertThatIsAValidEvent(anEvent, newPartyCreated);
+    }
+
+    @Test
+    public void canCreateABaquitaCrowfundingEvent() throws Exception {
+        List<User> guests = userFactory.someUsers();
+
+        BaquitaCrowdFundingEvent anEvent = eventFactory.baquitaCrowfunding(organizer, guests);
+        userDao.saveAll(guests);
+        userDao.save(organizer);
+        expenseLongCrudRepository.saveAll(anEvent.expenses());
+
+        JSONObject jsonObject = createJsonEvent(anEvent);
+
+        ResultActions perform = performPost(jsonObject);
+
+        MvcResult mvcResult = assertThatResponseIsCreated(perform);
+
+        BaquitaCrowdFundingEvent newPartyCreated = mapResponse(mvcResult, BaquitaCrowdFundingEvent.class);
+
+        assertThatIsAValidEvent(anEvent, newPartyCreated);
+    }
+
+    private ResultActions performPost(JSONObject jsonObject) throws Exception {
+        return clientRest.perform(post(ulrAllEvents())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(jsonObject.toString()));
+    }
+
+    private <T> T mapResponse(MvcResult mvcResult, Class<T> valueType) throws java.io.IOException {
+        return objectMapper.readValue(mvcResult.getResponse().getContentAsString(), valueType);
+    }
+
+    private MvcResult assertThatResponseIsCreated(ResultActions perform) throws Exception {
+        return perform.andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andReturn();
+    }
+
+    private JSONObject createJsonEvent(Event anEvent) throws JSONException {
+        return createJsonEvent(anEvent.getClass().getSimpleName(), anEvent.description(), anEvent.organizer(), anEvent.guests(), anEvent.expenses());
+    }
+
+    private JSONObject createJsonEvent(Party anEvent) throws JSONException {
+        JSONObject jsonObject = createJsonEvent(anEvent.getClass().getSimpleName(), anEvent.description(), anEvent.organizer(), anEvent.guests(), anEvent.expenses());
         jsonObject.put("invitationLimitDate", anEvent.invitationLimitDate());
         return jsonObject;
     }
 
+    private JSONObject createJsonEvent(String simpleName, String description, User organizer, List<User> guests, List<Expense> expenses) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", simpleName);
+        jsonObject.put("description", description);
+        jsonObject.put("organizerEmail", organizer.email());
+        jsonObject.put("guestsEmails", new JSONArray(guests.stream().map(User::email).collect(Collectors.toList())));
+        jsonObject.put("expensesIds", new JSONArray(expenses.stream().map(Expense::id).collect(Collectors.toList())));
+        return jsonObject;
+    }
 
     private void assertThatIsAValidEvent(Event anEvent, Event eventRetrievedFromApi) {
         Assertions.assertThat(eventRetrievedFromApi.description()).isEqualTo(anEvent.description());
