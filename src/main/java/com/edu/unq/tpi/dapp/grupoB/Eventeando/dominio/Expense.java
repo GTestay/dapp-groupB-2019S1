@@ -1,5 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
@@ -30,6 +31,7 @@ public class Expense {
         this.cost = cost;
     }
 
+    @JsonCreator
     public static Expense create(String name, Double cost) {
         ExpenseValidator validator = new ExpenseValidator();
         validator.validateCost(cost);
