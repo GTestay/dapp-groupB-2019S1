@@ -38,8 +38,10 @@ public class EventService {
         User organizer = userService.findUserByEmail(organizerEmail);
         List<User> guests = userService.obtainUsersFromEmails(guestsEmails);
         List<Expense> expenses = getExpenses(expensesId);
+
         Party party = Party.create(organizer, description, guests, expenses, LocalDateTime.from(invitationLimitDate));
         createEvent(party);
+
         return party;
     }
 
@@ -61,4 +63,36 @@ public class EventService {
         mailSenderService.sendInvitationsEmails(invitations);
     }
 
+    public PotluckEvent createPotluckEvent(String organizerEmail, String description, List<String> guestsEmails, List<Long> expensesIds) {
+        User organizer = userService.findUserByEmail(organizerEmail);
+        List<User> guests = userService.obtainUsersFromEmails(guestsEmails);
+        List<Expense> expenses = getExpenses(expensesIds);
+
+        PotluckEvent potluckEvent = PotluckEvent.create(organizer, description, guests, expenses);
+        createEvent(potluckEvent);
+
+        return potluckEvent;
+    }
+
+    public BaquitaSharedExpensesEvent createBaquitaSharedExpensesEvent(String organizerEmail, String description, List<String> guestsEmails, List<Long> expensesIds) {
+        User organizer = userService.findUserByEmail(organizerEmail);
+        List<User> guests = userService.obtainUsersFromEmails(guestsEmails);
+        List<Expense> expenses = getExpenses(expensesIds);
+
+        BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = BaquitaSharedExpensesEvent.create(organizer, description, guests, expenses);
+        createEvent(baquitaSharedExpensesEvent);
+
+        return baquitaSharedExpensesEvent;
+    }
+
+    public BaquitaCrowdFundingEvent createBaquitaCrowdFundingEvent(String organizerEmail, String description, List<String> guestsEmails, List<Long> expensesIds) {
+        User organizer = userService.findUserByEmail(organizerEmail);
+        List<User> guests = userService.obtainUsersFromEmails(guestsEmails);
+        List<Expense> expenses = getExpenses(expensesIds);
+
+        BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = BaquitaCrowdFundingEvent.create(organizer, description, guests, expenses);
+        createEvent(baquitaCrowdFundingEvent);
+
+        return baquitaCrowdFundingEvent;
+    }
 }
