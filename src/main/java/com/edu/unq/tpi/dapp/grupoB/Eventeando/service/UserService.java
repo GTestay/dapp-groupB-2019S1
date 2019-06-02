@@ -39,12 +39,12 @@ public class UserService {
                 .orElseThrow(this::notFound);
     }
 
-    private List<User> findUsersWithEmails(List<String> guestsEmails) {
+    private List<User> findUsersByEmails(List<String> guestsEmails) {
         return userDao.findAllByEmailIn(guestsEmails);
     }
 
     public List<User> obtainUsersFromEmails(List<String> guestsEmails) {
-        List<User> guests = findUsersWithEmails(guestsEmails);
+        List<User> guests = findUsersByEmails(guestsEmails);
         if (guestsEmails.size() != guests.size()) {
             throw new UserNotFound(usersNotFoundFromEmails());
         }

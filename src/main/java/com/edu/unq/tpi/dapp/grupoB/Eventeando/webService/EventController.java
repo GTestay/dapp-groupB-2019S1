@@ -74,7 +74,8 @@ public class EventController {
     private Party createParty(PartyEventDto partyEventDto) {
         return eventService.createParty(
                 partyEventDto.getOrganizerEmail(),
-                partyEventDto.getDescription(), partyEventDto.getGuestsEmails(),
+                partyEventDto.getDescription(),
+                partyEventDto.getGuestsEmails(),
                 partyEventDto.getInvitationLimitDate(),
                 partyEventDto.getExpensesIds());
     }

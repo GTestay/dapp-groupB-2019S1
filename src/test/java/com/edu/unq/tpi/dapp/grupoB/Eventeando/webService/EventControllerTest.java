@@ -9,7 +9,6 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.EventService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +27,6 @@ import java.util.stream.Collectors;
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,15 +37,14 @@ public class EventControllerTest extends ControllerTest {
     private EventFactory eventFactory;
 
     @Autowired
-    private ExpenseDao expenseLongCrudRepository;
+    private ExpenseDao expenseDao;
 
     @Autowired
     private EventDao eventDao;
 
     @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
     private UserDao userDao;
+    private List<User> guests;
 
     @Before
     public void setUp() throws Exception {
@@ -57,6 +53,7 @@ public class EventControllerTest extends ControllerTest {
         eventFactory = new EventFactory();
 
         organizer = userFactory.user();
+        guests = userFactory.someUsers();
     }
 
     @Test
@@ -76,7 +73,7 @@ public class EventControllerTest extends ControllerTest {
 
         ResultActions perform = getAllEvents();
 
-        MvcResult mvcResult = assertStatusAndMediaType(perform);
+        MvcResult mvcResult = assertStatusIsOkAndMediaType(perform);
 
         String eventsRequest = getBodyOfTheRequest(mvcResult);
 
@@ -94,7 +91,7 @@ public class EventControllerTest extends ControllerTest {
         eventDao.save(anEvent);
 
         ResultActions perform = getAllEvents();
-        MvcResult mvcResult = assertStatusAndMediaType(perform);
+        MvcResult mvcResult = assertStatusIsOkAndMediaType(perform);
 
         String eventsRequest = getBodyOfTheRequest(mvcResult);
 
@@ -112,7 +109,7 @@ public class EventControllerTest extends ControllerTest {
         eventDao.save(anEvent);
 
         ResultActions perform = getAllEvents();
-        MvcResult mvcResult = assertStatusAndMediaType(perform);
+        MvcResult mvcResult = assertStatusIsOkAndMediaType(perform);
 
         String eventsRequest = getBodyOfTheRequest(mvcResult);
 
@@ -135,7 +132,7 @@ public class EventControllerTest extends ControllerTest {
         eventDao.save(anEvent);
         ResultActions perform = getAllEvents();
 
-        MvcResult mvcResult = assertStatusAndMediaType(perform);
+        MvcResult mvcResult = assertStatusIsOkAndMediaType(perform);
 
         String eventsRequest = getBodyOfTheRequest(mvcResult);
 
@@ -150,18 +147,16 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void canNotCreateAnEventBecauseTheGivenOrganizerEmailDontExist() throws Exception {
-        List<User> guests = userFactory.someUsers();
         userDao.saveAll(guests);
 
         Party anEvent = eventFactory.partyWithGuests(guests, organizer);
-        expenseLongCrudRepository.saveAll(anEvent.expenses());
+        expenseDao.saveAll(anEvent.expenses());
 
-        JSONObject jsonObject = createJsonEvent(anEvent);
+        JSONObject jsonObject = eventToJson(anEvent);
 
-        ResultActions perform = performPost(jsonObject);
+        ResultActions perform = performPost(jsonObject, url());
 
-        MvcResult mvcResult = perform.andExpect(status().isNotFound())
-                .andReturn();
+        MvcResult mvcResult = assertThatRequestIsNotFound(perform);
 
         assertThat(mvcResult.getResolvedException())
                 .hasMessageContaining(UserService.messageUserNotFound());
@@ -169,18 +164,16 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void canNotCreateAnEventBecauseTheGivenGuestsEmailsDontExists() throws Exception {
-        List<User> guests = userFactory.someUsers();
         userDao.save(organizer);
 
         Party anEvent = eventFactory.partyWithGuests(guests, organizer);
-        expenseLongCrudRepository.saveAll(anEvent.expenses());
+        expenseDao.saveAll(anEvent.expenses());
 
-        JSONObject jsonObject = createJsonEvent(anEvent);
+        JSONObject jsonObject = eventToJson(anEvent);
 
-        ResultActions perform = performPost(jsonObject);
+        ResultActions perform = performPost(jsonObject, url());
 
-        MvcResult mvcResult = perform.andExpect(status().isNotFound())
-                .andReturn();
+        MvcResult mvcResult = assertThatRequestIsNotFound(perform);
 
         assertThat(mvcResult.getResolvedException())
                 .hasMessageContaining(UserService.usersNotFoundFromEmails());
@@ -188,18 +181,16 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void canNotCreateAnEventBecauseTheGivenExpensesDontExists() throws Exception {
-        List<User> guests = userFactory.someUsers();
         userDao.saveAll(guests);
         userDao.save(organizer);
         Party anEvent = eventFactory.partyWithGuests(guests, organizer);
         anEvent.expenses().forEach(expense -> expense.setId(0L));
 
-        JSONObject jsonObject = createJsonEvent(anEvent);
+        JSONObject jsonObject = eventToJson(anEvent);
 
-        ResultActions perform = performPost(jsonObject);
+        ResultActions perform = performPost(jsonObject, url());
 
-        MvcResult mvcResult = perform.andExpect(status().isNotFound())
-                .andReturn();
+        MvcResult mvcResult = assertThatRequestIsNotFound(perform);
 
         assertThat(mvcResult.getResolvedException())
                 .hasMessageContaining(EventService.messageExpensesNotFound());
@@ -207,16 +198,12 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void canCreateAPartyEvent() throws Exception {
-        List<User> guests = userFactory.someUsers();
-
         Party anEvent = eventFactory.partyWithGuests(guests, organizer);
-        userDao.saveAll(guests);
-        userDao.save(organizer);
-        expenseLongCrudRepository.saveAll(anEvent.expenses());
+        persistExpensesAndUsers(anEvent);
 
-        JSONObject jsonObject = createJsonEvent(anEvent);
+        JSONObject jsonObject = eventToJson(anEvent);
 
-        ResultActions perform = performPost(jsonObject);
+        ResultActions perform = performPost(jsonObject, url());
 
         MvcResult mvcResult = assertThatResponseIsCreated(perform);
         Party newPartyCreated = mapResponse(mvcResult, Party.class);
@@ -225,91 +212,84 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void canCreateAPotluckEvent() throws Exception {
-        List<User> guests = userFactory.someUsers();
-
         PotluckEvent anEvent = eventFactory.potluckWithGuests(guests, organizer);
-        userDao.saveAll(guests);
-        userDao.save(organizer);
-        expenseLongCrudRepository.saveAll(anEvent.expenses());
+        persistExpensesAndUsers(anEvent);
 
-        JSONObject jsonObject = createJsonEvent(anEvent);
+        JSONObject jsonObject = eventToJson(anEvent);
 
-        ResultActions perform = performPost(jsonObject);
+        ResultActions perform = performPost(jsonObject, url());
 
         MvcResult mvcResult = assertThatResponseIsCreated(perform);
 
-        PotluckEvent newPartyCreated = mapResponse(mvcResult, PotluckEvent.class);
+        PotluckEvent potluckEvent = mapResponse(mvcResult, PotluckEvent.class);
 
-        assertThatIsAValidEvent(anEvent, newPartyCreated);
+        assertThatIsAValidEvent(anEvent, potluckEvent);
+    }
+
+    public void persistExpensesAndUsers(Event anEvent) {
+        userDao.saveAll(guests);
+        userDao.save(organizer);
+        expenseDao.saveAll(anEvent.expenses());
     }
 
     @Test
     public void canCreateABaquitaSharedExpensesEvent() throws Exception {
-        List<User> guests = userFactory.someUsers();
-
         BaquitaSharedExpensesEvent anEvent = eventFactory.baquitaSharedExpenses(organizer, guests);
-        userDao.saveAll(guests);
-        userDao.save(organizer);
-        expenseLongCrudRepository.saveAll(anEvent.expenses());
+        persistExpensesAndUsers(anEvent);
 
-        JSONObject jsonObject = createJsonEvent(anEvent);
+        JSONObject jsonObject = eventToJson(anEvent);
 
-        ResultActions perform = performPost(jsonObject);
+        ResultActions perform = performPost(jsonObject, url());
 
         MvcResult mvcResult = assertThatResponseIsCreated(perform);
 
-        BaquitaSharedExpensesEvent newPartyCreated = mapResponse(mvcResult, BaquitaSharedExpensesEvent.class);
+        BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = mapResponse(mvcResult, BaquitaSharedExpensesEvent.class);
 
-        assertThatIsAValidEvent(anEvent, newPartyCreated);
+        assertThatIsAValidEvent(anEvent, baquitaSharedExpensesEvent);
     }
 
     @Test
     public void canCreateABaquitaCrowfundingEvent() throws Exception {
-        List<User> guests = userFactory.someUsers();
 
         BaquitaCrowdFundingEvent anEvent = eventFactory.baquitaCrowfunding(organizer, guests);
-        userDao.saveAll(guests);
-        userDao.save(organizer);
-        expenseLongCrudRepository.saveAll(anEvent.expenses());
+        persistExpensesAndUsers(anEvent);
 
-        JSONObject jsonObject = createJsonEvent(anEvent);
+        JSONObject jsonObject = eventToJson(anEvent);
 
-        ResultActions perform = performPost(jsonObject);
+        ResultActions perform = performPost(jsonObject, url());
 
         MvcResult mvcResult = assertThatResponseIsCreated(perform);
 
-        BaquitaCrowdFundingEvent newPartyCreated = mapResponse(mvcResult, BaquitaCrowdFundingEvent.class);
+        BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = mapResponse(mvcResult, BaquitaCrowdFundingEvent.class);
 
-        assertThatIsAValidEvent(anEvent, newPartyCreated);
+        assertThatIsAValidEvent(anEvent, baquitaCrowdFundingEvent);
     }
 
-    private ResultActions performPost(JSONObject jsonObject) throws Exception {
-        return clientRest.perform(post(ulrAllEvents())
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(jsonObject.toString()));
-    }
 
-    private <T> T mapResponse(MvcResult mvcResult, Class<T> valueType) throws java.io.IOException {
-        return objectMapper.readValue(mvcResult.getResponse().getContentAsString(), valueType);
-    }
+    @Test
+    public void aBadRequestIsGivenWhenSendingAnInvalidEventType() throws Exception {
+        BaquitaCrowdFundingEvent anEvent = eventFactory.baquitaCrowfunding(organizer, guests);
 
-    private MvcResult assertThatResponseIsCreated(ResultActions perform) throws Exception {
-        return perform.andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        JSONObject jsonObject = eventToJson(anEvent);
+        jsonObject.put("type", "InvalidType");
+
+        ResultActions perform = performPost(jsonObject, url());
+        perform.andExpect(status().isBadRequest())
                 .andReturn();
     }
 
-    private JSONObject createJsonEvent(Event anEvent) throws JSONException {
-        return createJsonEvent(anEvent.getClass().getSimpleName(), anEvent.description(), anEvent.organizer(), anEvent.guests(), anEvent.expenses());
+
+    private JSONObject eventToJson(Event anEvent) throws JSONException {
+        return createJson(anEvent.getClass().getSimpleName(), anEvent.description(), anEvent.organizer(), anEvent.guests(), anEvent.expenses());
     }
 
-    private JSONObject createJsonEvent(Party anEvent) throws JSONException {
-        JSONObject jsonObject = createJsonEvent(anEvent.getClass().getSimpleName(), anEvent.description(), anEvent.organizer(), anEvent.guests(), anEvent.expenses());
+    private JSONObject eventToJson(Party anEvent) throws JSONException {
+        JSONObject jsonObject = createJson(anEvent.getClass().getSimpleName(), anEvent.description(), anEvent.organizer(), anEvent.guests(), anEvent.expenses());
         jsonObject.put("invitationLimitDate", anEvent.invitationLimitDate());
         return jsonObject;
     }
 
-    private JSONObject createJsonEvent(String simpleName, String description, User organizer, List<User> guests, List<Expense> expenses) throws JSONException {
+    private JSONObject createJson(String simpleName, String description, User organizer, List<User> guests, List<Expense> expenses) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("type", simpleName);
         jsonObject.put("description", description);
@@ -325,12 +305,6 @@ public class EventControllerTest extends ControllerTest {
         assertTrue(eventRetrievedFromApi.hasSameOrganizer(anEvent.organizer()));
     }
 
-    private MvcResult assertStatusAndMediaType(ResultActions perform) throws Exception {
-        return perform.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andReturn();
-    }
-
     private JSONArray assertThatHasBroughtOneEvent(String eventsRequest) throws JSONException {
         JSONArray actual = new JSONArray(eventsRequest);
         Assertions.assertThat(actual.length()).isEqualTo(1);
@@ -338,14 +312,10 @@ public class EventControllerTest extends ControllerTest {
     }
 
     private ResultActions getAllEvents() throws Exception {
-        return clientRest.perform(get(ulrAllEvents()));
+        return clientRest.perform(get(url()));
     }
 
-    private String getBodyOfTheRequest(MvcResult mvcResult) throws UnsupportedEncodingException {
-        return mvcResult.getResponse().getContentAsString();
-    }
-
-    private String ulrAllEvents() {
+    private String url() {
         return "/events";
     }
 }
