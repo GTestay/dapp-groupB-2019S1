@@ -69,7 +69,7 @@ public class EventServiceTest {
         User guest = userFactory.user();
         Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(guest), organizer);
 
-        eventService.createEvent(anEvent);
+        eventService.sendInvitations(anEvent);
 
         assertThat(guest.invitations()).isNotEmpty();
     }

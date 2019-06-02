@@ -7,13 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 public class ExpenseControllerTest extends ControllerTest {
@@ -34,16 +29,12 @@ public class ExpenseControllerTest extends ControllerTest {
         bodyRequest.put("name", coca.name());
         bodyRequest.putOpt("cost", coca.cost());
 
-        ResultActions perform = clientRest.perform(post(url())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(bodyRequest.toString()));
+        ResultActions perform = performPost(bodyRequest, url());
 
-        MvcResult result = perform
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andReturn();
+        MvcResult result = assertThatResponseIsCreated(perform);
 
-        String responseString = result.getResponse().getContentAsString();
+        String responseString = getBodyOfTheRequest(result);
+
         JSONObject jsonResponse = new JSONObject(responseString);
         jsonResponse.remove("id");
         JSONAssert.assertEquals(jsonResponse, bodyRequest, true);
