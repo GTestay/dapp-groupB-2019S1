@@ -2,8 +2,8 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.*;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.EventFactory;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.EventFactory;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;

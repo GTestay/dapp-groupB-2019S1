@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventeandoNotFound;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventeandoNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.serializer.InvalidCreation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

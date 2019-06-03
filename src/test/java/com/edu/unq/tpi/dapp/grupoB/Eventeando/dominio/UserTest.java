@@ -1,10 +1,10 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyAccountException;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneylenderException;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.UserException;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.MoneyAccountException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.MoneylenderException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.UserValidator;
 import org.junit.Before;
 import org.junit.Test;
 

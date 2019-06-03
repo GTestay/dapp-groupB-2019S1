@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.Validator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.Validator;
 
 public class ExpenseValidator extends Validator {
     public static final String ERROR_CAN_NOT_CREATE_AN_EXPENSE_WHOSE_PRICE_IS_NEGATIVE = "error, can't not create an expense whose price is negative";

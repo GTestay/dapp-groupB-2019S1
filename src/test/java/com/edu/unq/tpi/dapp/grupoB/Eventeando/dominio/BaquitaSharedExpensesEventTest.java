@@ -1,9 +1,9 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.EventFactory;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.EventFactory;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator;
 import org.junit.Before;
 import org.junit.Test;
 

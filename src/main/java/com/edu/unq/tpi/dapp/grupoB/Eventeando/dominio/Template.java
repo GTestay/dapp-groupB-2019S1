@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.Validator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.Validator;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
