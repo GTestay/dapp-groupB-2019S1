@@ -9,9 +9,11 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile({"prod"})
 public class Seeds implements ApplicationRunner {
 
     private UserDao userDao;
