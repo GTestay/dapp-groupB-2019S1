@@ -1,7 +1,5 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +8,7 @@ import javax.persistence.Entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_THE_CONFIRMATION_DATE_IS_AFTER_THE_INVITATION_LIMIT;
+import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator.ERROR_THE_CONFIRMATION_DATE_IS_AFTER_THE_INVITATION_LIMIT;
 
 @Entity
 @DiscriminatorValue("Party")
@@ -20,15 +18,7 @@ public class Party extends Event {
     protected LocalDateTime invitationLimitDate;
 
     @JsonCreator
-    public static Party create
-    (
-        @JsonProperty("organizer") User organizer,
-        @JsonProperty("description") String description,
-        @JsonProperty("guests") List<User> guests,
-        @JsonProperty("expenses") List<Expense> expenses,
-        @JsonProperty("invitationLimitDate") LocalDateTime invitationLimitDate
-    )
-    {
+    public static Party create(User organizer, String description, List<User> guests, List<Expense> expenses, LocalDateTime invitationLimitDate) {
         Party instance = validateEvent(new Party(), organizer, description, expenses, guests);
         instance.invitationLimitDate = invitationLimitDate;
         return instance;

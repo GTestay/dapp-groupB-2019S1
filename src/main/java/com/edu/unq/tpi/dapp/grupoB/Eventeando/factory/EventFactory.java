@@ -1,4 +1,4 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.factories;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.factory;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.*;
 

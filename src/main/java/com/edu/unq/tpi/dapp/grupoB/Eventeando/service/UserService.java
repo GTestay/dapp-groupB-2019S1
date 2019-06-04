@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.UserNotFound;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

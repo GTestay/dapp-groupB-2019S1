@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_CAN_NOT_ADD_MORE_FUNDS_THAN_IS_REQUIRED_IN_THE_CROWDFUNDING_EVENT;
-import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_THE_AMOUNT_IS_INVALID;
+import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator.ERROR_CAN_NOT_ADD_MORE_FUNDS_THAN_IS_REQUIRED_IN_THE_CROWDFUNDING_EVENT;
+import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator.ERROR_THE_AMOUNT_IS_INVALID;
 
 
 @Entity

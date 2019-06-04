@@ -1,4 +1,4 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.validators;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.validator;
 
 import java.util.List;
 

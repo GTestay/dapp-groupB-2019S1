@@ -1,4 +1,4 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.tasks;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.task;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Loan;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;

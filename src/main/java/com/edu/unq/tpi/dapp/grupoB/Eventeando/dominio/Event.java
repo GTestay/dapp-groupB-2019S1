@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
-import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.EventValidator.ERROR_THE_USER_WAS_NOT_INVITED;
+import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator.ERROR_THE_USER_WAS_NOT_INVITED;
 import static javax.persistence.CascadeType.PERSIST;
 
 

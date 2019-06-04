@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.serializer;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.UserException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;

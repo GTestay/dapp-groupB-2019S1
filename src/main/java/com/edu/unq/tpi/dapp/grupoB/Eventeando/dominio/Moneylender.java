@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneylenderException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.MoneylenderException;
 
 import java.util.*;
 import java.util.stream.Collectors;

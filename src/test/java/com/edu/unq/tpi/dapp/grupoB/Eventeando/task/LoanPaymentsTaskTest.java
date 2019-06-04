@@ -1,7 +1,7 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.tasks;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.task;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

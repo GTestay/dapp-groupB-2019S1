@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.MoneyTransactionValidator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.MoneyTransactionValidator;
 
 import java.time.LocalDate;
 import java.time.YearMonth;

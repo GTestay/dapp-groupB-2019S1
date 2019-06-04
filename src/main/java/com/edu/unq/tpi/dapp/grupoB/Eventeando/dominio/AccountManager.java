@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyAccountException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.MoneyAccountException;
 
 import java.time.LocalDate;
 import java.time.YearMonth;

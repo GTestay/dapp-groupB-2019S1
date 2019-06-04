@@ -1,6 +1,6 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.validators;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.validator;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.UserException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserException;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;

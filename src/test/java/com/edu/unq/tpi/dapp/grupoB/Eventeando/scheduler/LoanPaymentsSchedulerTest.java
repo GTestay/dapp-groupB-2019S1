@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.scheduler;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.tasks.LoanPaymentsTask;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.task.LoanPaymentsTask;
 import org.junit.Test;
 import org.mockito.Mockito;
 

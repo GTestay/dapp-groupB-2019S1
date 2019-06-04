@@ -1,7 +1,7 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.validators;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.validator;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventException;
 
 import java.util.List;
 

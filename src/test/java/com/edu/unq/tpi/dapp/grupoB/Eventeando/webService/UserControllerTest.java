@@ -2,10 +2,10 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.UserService;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.UserValidator;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;

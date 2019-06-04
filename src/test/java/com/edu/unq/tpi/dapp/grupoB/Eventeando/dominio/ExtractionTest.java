@@ -1,8 +1,8 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.MoneyTransactionException;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.factories.UserFactory;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.MoneyTransactionValidator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.MoneyTransactionException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.MoneyTransactionValidator;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,18 +1,20 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.factories;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.factory;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
+import com.github.javafaker.Faker;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 
 public class UserFactory {
 
-    private Integer usersCreated = 0;
+    private Faker faker = new Faker();
 
     private String email() {
-        return "genericMail" + usersCreated + "@gmail.com";
+        return faker.internet().emailAddress();
     }
 
     public User userWithCash(double cash) {
@@ -24,19 +26,20 @@ public class UserFactory {
     }
 
     private String name() {
-        return "GenericName";
+        return faker.name().firstName();
     }
 
     private String password() {
-        return "P4S5W0RD";
+        return faker.internet().password(4, 10);
     }
 
     private String lastname() {
-        return "GenericLastname";
+        return faker.name().lastName();
     }
 
     private LocalDate birthday() {
-        return LocalDate.of(2002, 3, 21);
+        return faker.date().birthday()
+                .toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public User userIndebt() {
@@ -48,10 +51,7 @@ public class UserFactory {
     }
 
     public User user() {
-        User user = User.create(name(), lastname(), email(), password(), birthday());
-
-        usersCreated += 1;
-        return user;
+        return User.create(name(), lastname(), email(), password(), birthday());
     }
 
     public List<User> someUsers() {

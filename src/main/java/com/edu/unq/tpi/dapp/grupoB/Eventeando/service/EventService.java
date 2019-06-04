@@ -1,11 +1,10 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.*;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exceptions.ExpensesNotFound;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.ExpensesNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.InvitationDao;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.services.MailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

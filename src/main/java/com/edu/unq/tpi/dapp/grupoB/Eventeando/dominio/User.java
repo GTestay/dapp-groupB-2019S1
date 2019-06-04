@@ -2,7 +2,7 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.serializer.UserDeserializer;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.serializer.UserSerializer;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.validators.UserValidator;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.UserValidator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

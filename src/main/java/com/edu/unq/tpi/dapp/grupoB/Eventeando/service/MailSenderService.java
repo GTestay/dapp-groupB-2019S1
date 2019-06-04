@@ -1,4 +1,4 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.services;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Invitation;
 import org.springframework.beans.factory.annotation.Autowired;
