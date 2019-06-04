@@ -2,11 +2,12 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.*;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.EventService;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos.*;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos.EventDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -32,52 +33,27 @@ public class EventController {
     @PostMapping(baseUrl)
     @ResponseBody
     public Event createEvent(@RequestBody EventDto eventDto) {
-        switch (eventDto.getType()) {
-            case "Party":
-                return createParty((PartyEventDto) eventDto);
-            case "PotluckEvent":
-                return createPotluckEvent((PotluckEventDto) eventDto);
-            case "BaquitaSharedExpensesEvent":
-                return createBaquitaSharedExpensesEvent((BaquitaSharedExpensesEventDto) eventDto);
-            case "BaquitaCrowdFundingEvent":
-                return createBaquitaCrowdFundingEvent((BaquitaCrowdFundingEventDto) eventDto);
-            default:
-                throw new IllegalStateException("Unexpected value: " + eventDto.getType());
-        }
-
+        return deserializeEventDto(eventDto);
     }
 
-    private BaquitaCrowdFundingEvent createBaquitaCrowdFundingEvent(BaquitaCrowdFundingEventDto baquitaCrowdFundingEventDto) {
-        return eventService.createBaquitaCrowdFundingEvent(
-                baquitaCrowdFundingEventDto.getOrganizerEmail(),
-                baquitaCrowdFundingEventDto.getDescription(),
-                baquitaCrowdFundingEventDto.getGuestsEmails(),
-                baquitaCrowdFundingEventDto.getExpensesIds());
+    public Event deserializeEventDto(@RequestBody EventDto eventDto) {
+        return EventDtoDeserializer.createEventDtoDeserializer(this, eventService, eventDto).invoke();
     }
 
-    private BaquitaSharedExpensesEvent createBaquitaSharedExpensesEvent(BaquitaSharedExpensesEventDto baquitaSharedExpensesEventDto) {
-        return eventService.createBaquitaSharedExpensesEvent(
-                baquitaSharedExpensesEventDto.getOrganizerEmail(),
-                baquitaSharedExpensesEventDto.getDescription(),
-                baquitaSharedExpensesEventDto.getGuestsEmails(),
-                baquitaSharedExpensesEventDto.getExpensesIds());
+    BaquitaCrowdFundingEvent createBaquitaCrowdFundingEvent(EventData eventData) {
+        return eventService.createBaquitaCrowdFundingEvent(eventData);
     }
 
-    private PotluckEvent createPotluckEvent(PotluckEventDto potluckEventDto) {
-        return eventService.createPotluckEvent(
-                potluckEventDto.getOrganizerEmail(),
-                potluckEventDto.getDescription(),
-                potluckEventDto.getGuestsEmails(),
-                potluckEventDto.getExpensesIds());
+    BaquitaSharedExpensesEvent createBaquitaSharedExpensesEvent(EventData eventData) {
+        return eventService.createBaquitaSharedExpensesEvent(eventData);
     }
 
-    private Party createParty(PartyEventDto partyEventDto) {
-        return eventService.createParty(
-                partyEventDto.getOrganizerEmail(),
-                partyEventDto.getDescription(),
-                partyEventDto.getGuestsEmails(),
-                partyEventDto.getInvitationLimitDate(),
-                partyEventDto.getExpensesIds());
+    PotluckEvent createPotluckEvent(EventData eventData) {
+        return eventService.createPotluckEvent(eventData);
+    }
+
+    Party createParty(EventData eventData, LocalDateTime invitationLimitDate) {
+        return eventService.createParty(eventData, invitationLimitDate);
     }
 
 
