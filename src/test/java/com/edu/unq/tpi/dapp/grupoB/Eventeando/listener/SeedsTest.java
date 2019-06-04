@@ -1,6 +1,8 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.listener;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +33,9 @@ public class SeedsTest {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private EventDao eventDao;
+
     @Test
     public void seedApplicationWithUsers(){
         List<User> users = userDao.findAll();
@@ -44,5 +49,19 @@ public class SeedsTest {
         assertNotNull(user.email());
         assertNotNull(user.password());
         assertNotNull(user.birthday());
+    }
+
+    @Test
+    public void seedApplicationWithEvents(){
+        List<Event> events = eventDao.findAll();
+
+        assertFalse(events.isEmpty());
+
+        Event party = events.get(0);
+
+        assertNotNull(party.organizer());
+        assertNotNull(party.description());
+        assertNotNull(party.guests());
+        assertNotNull(party.expenses());
     }
 }
