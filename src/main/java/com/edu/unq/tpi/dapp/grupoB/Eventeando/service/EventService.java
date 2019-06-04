@@ -5,6 +5,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.ExpensesNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.InvitationDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.EventData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,57 +34,41 @@ public class EventService {
         return eventDao.findAll();
     }
 
-    public Party createParty(String organizerEmail, String description, List<String> guestsEmails, LocalDateTime invitationLimitDate, List<Long> expensesId) {
-        User organizer = userService.findUserByEmail(organizerEmail);
-        List<User> guests = userService.obtainUsersFromEmails(guestsEmails);
-        List<Expense> expenses = getExpenses(expensesId);
-
-        Party party = Party.create(organizer, description, guests, expenses, LocalDateTime.from(invitationLimitDate));
+    public Party createParty(EventData eventData, LocalDateTime invitationLimitDate) {
+        Party party = new EventBuilder(eventData, this).buildParty(invitationLimitDate);
         sendInvitations(party);
 
         return party;
     }
 
-    public PotluckEvent createPotluckEvent(String organizerEmail, String description, List<String> guestsEmails, List<Long> expensesIds) {
-        User organizer = userService.findUserByEmail(organizerEmail);
-        List<User> guests = userService.obtainUsersFromEmails(guestsEmails);
-        List<Expense> expenses = getExpenses(expensesIds);
-
-        PotluckEvent potluckEvent = PotluckEvent.create(organizer, description, guests, expenses);
+    public PotluckEvent createPotluckEvent(EventData eventData) {
+        PotluckEvent potluckEvent = new EventBuilder(eventData, this).buildPotluckEvent();
         sendInvitations(potluckEvent);
 
         return potluckEvent;
     }
 
-    public BaquitaSharedExpensesEvent createBaquitaSharedExpensesEvent(String organizerEmail, String description, List<String> guestsEmails, List<Long> expensesIds) {
-        User organizer = userService.findUserByEmail(organizerEmail);
-        List<User> guests = userService.obtainUsersFromEmails(guestsEmails);
-        List<Expense> expenses = getExpenses(expensesIds);
-
-        BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = BaquitaSharedExpensesEvent.create(organizer, description, guests, expenses);
+    public BaquitaSharedExpensesEvent createBaquitaSharedExpensesEvent(EventData eventData) {
+        BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = new EventBuilder(eventData, this).buildBaquitaSharedExpensesEvent();
         sendInvitations(baquitaSharedExpensesEvent);
 
         return baquitaSharedExpensesEvent;
     }
 
-    public BaquitaCrowdFundingEvent createBaquitaCrowdFundingEvent(String organizerEmail, String description, List<String> guestsEmails, List<Long> expensesIds) {
-        User organizer = userService.findUserByEmail(organizerEmail);
-        List<User> guests = userService.obtainUsersFromEmails(guestsEmails);
-        List<Expense> expenses = getExpenses(expensesIds);
-
-        BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = BaquitaCrowdFundingEvent.create(organizer, description, guests, expenses);
+    public BaquitaCrowdFundingEvent createBaquitaCrowdFundingEvent(EventData eventData) {
+        BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = new EventBuilder(eventData, this).buildBaquitaCrowdFundingEventEvent();
         sendInvitations(baquitaCrowdFundingEvent);
 
         return baquitaCrowdFundingEvent;
     }
 
-    public void sendInvitations(Event event) {
+    void sendInvitations(Event event) {
         List<Invitation> invitations = Invitation.createListOfInvitationsWith(event);
         invitationDao.saveAll(invitations);
         mailSenderService.sendInvitationsEmails(invitations);
     }
 
-    private List<Expense> getExpenses(List<Long> expensesId) {
+    List<Expense> getExpenses(List<Long> expensesId) {
         List<Expense> expenses = expenseDao.findAllById(expensesId);
         if (expenses.size() != expensesId.size()) {
             throw new ExpensesNotFound(messageExpensesNotFound());
@@ -93,5 +78,13 @@ public class EventService {
 
     public static String messageExpensesNotFound() {
         return "Invalid expenses Ids";
+    }
+
+    List<User> obtainUsersFromEmails(List<String> guestsEmails) {
+        return userService.obtainUsersFromEmails(guestsEmails);
+    }
+
+    User findUserByEmail(String organizerEmail) {
+        return userService.findUserByEmail(organizerEmail);
     }
 }
