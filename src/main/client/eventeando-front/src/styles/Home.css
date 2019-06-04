@@ -1,4 +1,11 @@
-.lista-eventos {
+.home {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+
+}
+
+.menu-de-usuario {
+    border-left: 2px groove black;
+    width: 25%;
+    text-align: center
 }

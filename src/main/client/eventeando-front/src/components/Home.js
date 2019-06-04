@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {ListaDeEventos} from "./ListaDeEventos";
+import {MenuUsuario} from "./MenuUsuario";
 
 import '../styles/Home.css';
 
@@ -9,7 +10,8 @@ export class Home extends Component {
         this.state = {
             eventosEnCurso: [],
             misEventos: [],
-            eventosPopulares: []
+            eventosPopulares: [],
+            nombreDeUsuario: props.location.state.nombreDeUsuario
         }
     }
 
@@ -25,10 +27,13 @@ export class Home extends Component {
 
     render() {
         return (
-            <div className="lista-eventos">
+            <div className="home">
                 <ListaDeEventos title="Eventos En Curso" eventos={this.getEventosEnCurso()}/>
                 <ListaDeEventos title="Mis Eventos" eventos={this.getMisEventos()}/>
                 <ListaDeEventos title="Eventos Populares" eventos={this.getEventosPopulares()}/>
+                <div className="menu-de-usuario">
+                    <MenuUsuario nombreDeUsuario={this.state.nombreDeUsuario}/>
+                </div>
             </div>
         )
     }
