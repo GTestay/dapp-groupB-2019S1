@@ -11,8 +11,8 @@ export class Home extends Component {
             eventosEnCurso: [],
             misEventos: [],
             eventosPopulares: [],
-            nombreDeUsuario: props.location.state.nombreDeUsuario
-        }
+            usuario: props.location.state.usuario
+        };
     }
 
     componentDidMount() {
@@ -32,7 +32,7 @@ export class Home extends Component {
                 <ListaDeEventos title="Mis Eventos" eventos={this.getMisEventos()}/>
                 <ListaDeEventos title="Eventos Populares" eventos={this.getEventosPopulares()}/>
                 <div className="menu-de-usuario">
-                    <MenuUsuario nombreDeUsuario={this.state.nombreDeUsuario}/>
+                    <MenuUsuario usuario={this.state.usuario}/>
                 </div>
             </div>
         )

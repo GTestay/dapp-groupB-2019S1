@@ -1,0 +1,8 @@
+.usuario-detalle {
+    text-align: center
+}
+
+.usuario-retrato {
+    display: flex;
+    justify-content: center;
+}
