@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {ListaDeEventos} from "./ListaDeEventos";
+import {EventList} from "./EventList";
 import {UserMenu} from "./UserMenu";
 
 import '../styles/Home.css';
@@ -44,9 +44,9 @@ export class Home extends Component {
     render() {
         return (
             <div className="home">
-                <ListaDeEventos title="Eventos En Curso" eventos={this.getCurrentEvents()}/>
-                <ListaDeEventos title="Mis Eventos" eventos={this.getUserEvents()}/>
-                <ListaDeEventos title="Eventos Populares" eventos={this.getPopularEvents()}/>
+                <EventList title="Eventos En Curso" events={this.getCurrentEvents()}/>
+                <EventList title="Mis Eventos" events={this.getUserEvents()}/>
+                <EventList title="Eventos Populares" events={this.getPopularEvents()}/>
                 <div className="menu-de-user">
                     <UserMenu user={this.getUser()}/>
                 </div>

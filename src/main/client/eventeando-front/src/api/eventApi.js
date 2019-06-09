@@ -1,11 +1,19 @@
+import axios from 'axios';
+
+function fetchEvents() {
+    return axios
+        .get("/events")
+        .then(value => value.data);
+}
+
 export function obtainCurrentsEvent() {
-    return Promise.resolve(["Evento En Curso 1"]);
+    return fetchEvents();
 }
 
 export function obtainEventsMostPopular() {
-    return Promise.resolve(["Un Evento Popular 1", "Un Evento Popular 2", "Un Evento Popular 3"]);
+    return Promise.resolve([]);
 }
 
 export function obtainUserEvents() {
-    return Promise.resolve(["Mi Evento 1", "Mi Evento 2"]);
+    return fetchEvents();
 }
