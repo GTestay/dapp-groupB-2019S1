@@ -29,6 +29,14 @@ public class EventController {
         return eventService.allEvents();
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(baseUrl + "/{id}")
+    @ResponseBody
+    public List<Event> eventsWithOrganizer(@PathVariable(value = "id") Long organizerId) {
+        return eventService.allEventsOf(organizerId);
+    }
+
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(baseUrl)
     @ResponseBody

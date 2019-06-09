@@ -87,4 +87,8 @@ public class EventService {
     User findUserByEmail(String organizerEmail) {
         return userService.findUserByEmail(organizerEmail);
     }
+
+    public List<Event> allEventsOf(Long id) {
+        return eventDao.findAllByOrganizer_Id(id);
+    }
 }
