@@ -1,52 +1,64 @@
 import React, {Component} from "react";
 import {ListaDeEventos} from "./ListaDeEventos";
-import {MenuUsuario} from "./MenuUsuario";
+import {UserMenu} from "./UserMenu";
 
 import '../styles/Home.css';
+import {obtainEventsMostPopular, obtainCurrentsEvent, obtainUserEvents} from "../api/eventApi";
+
 
 export class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            eventosEnCurso: [],
-            misEventos: [],
-            eventosPopulares: [],
-            usuario: props.location.state.usuario
+            currentEvents: [],
+            userEvents: [],
+            popularEvents: [],
+            user: props.location.state.user
         };
     }
 
     componentDidMount() {
-        this.setState(
-            {
-                eventosEnCurso: ["Evento En Curso 1"],
-                misEventos: ["Mi Evento 1", "Mi Evento 2"],
-                eventosPopulares: ["Un Evento Popular 1", "Un Evento Popular 2", "Un Evento Popular 3"]
-            }
-        )
+        this.currentEvents();
+        this.userEvents();
+        this.eventsMostPopular();
+    }
+
+    eventsMostPopular() {
+        obtainEventsMostPopular().then((events) =>
+            this.setState({popularEvents: events})
+        );
+    }
+
+    userEvents() {
+        obtainUserEvents().then((events) =>
+            this.setState({userEvents: events})
+        );
+    }
+
+    currentEvents() {
+        obtainCurrentsEvent().then((events) =>
+            this.setState({currentEvents: events})
+        );
     }
 
     render() {
         return (
             <div className="home">
-                <ListaDeEventos title="Eventos En Curso" eventos={this.getEventosEnCurso()}/>
-                <ListaDeEventos title="Mis Eventos" eventos={this.getMisEventos()}/>
-                <ListaDeEventos title="Eventos Populares" eventos={this.getEventosPopulares()}/>
-                <div className="menu-de-usuario">
-                    <MenuUsuario usuario={this.state.usuario}/>
+                <ListaDeEventos title="Eventos En Curso" eventos={this.getCurrentEvents()}/>
+                <ListaDeEventos title="Mis Eventos" eventos={this.getUserEvents()}/>
+                <ListaDeEventos title="Eventos Populares" eventos={this.getPopularEvents()}/>
+                <div className="menu-de-user">
+                    <UserMenu user={this.getUser()}/>
                 </div>
             </div>
         )
     }
 
-    getMisEventos() {
-        return this.state.misEventos;
-    }
+    getUser() { return this.state.user; }
 
-    getEventosEnCurso() {
-        return this.state.eventosEnCurso;
-    }
+    getUserEvents() { return this.state.userEvents; }
 
-    getEventosPopulares() {
-        return this.state.eventosPopulares;
-    }
+    getCurrentEvents() { return this.state.currentEvents; }
+
+    getPopularEvents() { return this.state.popularEvents; }
 }
