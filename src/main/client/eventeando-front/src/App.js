@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {BrowserRouter, Route} from 'react-router-dom'
 
 import './styles/App.css';
-import {Home} from "./components/Home";
 import {UserLogin} from "./components/UserLogin";
+import {Home} from "./components/Home";
 
 class App extends Component {
     render() {

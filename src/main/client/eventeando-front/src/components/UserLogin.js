@@ -26,7 +26,7 @@ export class UserLogin extends Component {
     redirectWithGoogleResponse = (response) => {
         this.props.history.push( {
             pathname: "/home",
-            state: { usuario: response.profileObj }
+            state: { user: response.profileObj }
         });
     };
 
