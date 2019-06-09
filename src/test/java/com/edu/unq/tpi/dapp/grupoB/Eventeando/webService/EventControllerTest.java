@@ -278,6 +278,29 @@ public class EventControllerTest extends ControllerTest {
                 .andReturn();
     }
 
+    @Test
+    public void givenAnUserIdAllEventOfTheUserAreRetrieved() throws Exception {
+        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(organizer), organizer);
+        eventDao.save(anEvent);
+
+        ResultActions perform = getAllEventsFrom(organizer.id());
+
+        MvcResult mvcResult = assertStatusIsOkAndMediaType(perform);
+
+        String eventsRequest = getBodyOfTheRequest(mvcResult);
+
+        JSONArray actual = assertThatHasBroughtOneEvent(eventsRequest);
+
+        JSONObject jsonObject = actual.getJSONObject(0);
+        Party eventRetrievedFromApi = parseJson(jsonObject, Party.class);
+
+        assertThatIsAValidEvent(anEvent, eventRetrievedFromApi);
+    }
+
+    private ResultActions getAllEventsFrom(Long userId) throws Exception {
+        return clientRest.perform(get(url().concat("/" + userId)));
+    }
+
 
     private JSONObject eventToJson(Event anEvent) throws JSONException {
         return createJson(anEvent.getClass().getSimpleName(), anEvent.description(), anEvent.organizer(), anEvent.guests(), anEvent.expenses());

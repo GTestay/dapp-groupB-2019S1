@@ -1,19 +1,21 @@
 import axios from 'axios';
 
-function fetchEvents() {
+const url = "/events";
+
+function fetchEvents(url) {
     return axios
-        .get("/events")
+        .get(url)
         .then(value => value.data);
 }
 
 export function obtainCurrentsEvent() {
-    return fetchEvents();
+    return fetchEvents(url);
 }
 
 export function obtainEventsMostPopular() {
     return Promise.resolve([]);
 }
 
-export function obtainUserEvents() {
-    return fetchEvents();
+export function obtainUserEvents(organizerId) {
+    return fetchEvents(`${url}/${organizerId}`);
 }

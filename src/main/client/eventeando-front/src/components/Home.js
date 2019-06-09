@@ -3,7 +3,7 @@ import {EventList} from "./EventList";
 import {UserMenu} from "./UserMenu";
 
 import '../styles/Home.css';
-import {obtainEventsMostPopular, obtainCurrentsEvent, obtainUserEvents} from "../api/eventApi";
+import {obtainCurrentsEvent, obtainEventsMostPopular, obtainUserEvents} from "../api/eventApi";
 
 
 export class Home extends Component {
@@ -30,7 +30,7 @@ export class Home extends Component {
     }
 
     userEvents() {
-        obtainUserEvents().then((events) =>
+        obtainUserEvents(2).then((events) =>
             this.setState({userEvents: events})
         );
     }
