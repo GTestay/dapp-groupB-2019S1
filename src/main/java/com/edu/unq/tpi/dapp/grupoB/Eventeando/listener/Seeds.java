@@ -4,6 +4,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.*;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -21,12 +22,14 @@ public class Seeds implements ApplicationRunner {
 
     private UserDao userDao;
     private UserFactory userFactory;
+    private ExpenseDao expenseDao;
     private EventDao eventDao;
     private EventFactory eventFactory;
 
     @Autowired
-    public Seeds(UserDao userDao, EventDao eventDao) {
+    public Seeds(UserDao userDao, ExpenseDao expenseDao, EventDao eventDao) {
         this.userDao = userDao;
+        this.expenseDao = expenseDao;
         this.eventDao = eventDao;
         eventFactory = new EventFactory();
         userFactory = new UserFactory();
@@ -40,44 +43,50 @@ public class Seeds implements ApplicationRunner {
 
     public void saveEvents() {
 
-        seedPartyTable();
-        saveBaquitaSharedTable();
-        saveCrowdFundingTable();
-        savePotluckTable();
+        List<Expense> expenses = eventFactory.expenses();
+        expenseDao.saveAll(expenses);
+
+        seedPartyTable(expenses);
+        saveBaquitaSharedTable(expenses);
+        saveCrowdFundingTable(expenses);
+        savePotluckTable(expenses);
     }
 
-    public void savePotluckTable() {
-        User user = userFactory.user();
+    public void savePotluckTable(List<Expense> expenses) {
         List<User> guests = userFactory.someUsers();
+        userDao.saveAll(guests);
 
-        PotluckEvent potluckEvent = eventFactory.potluckWithGuests(guests, user);
+        PotluckEvent potluckEvent = eventFactory.potluckWithGuests(guests, seedUsersTable(), expenses);
         eventDao.save(potluckEvent);
     }
 
-    public void saveCrowdFundingTable() {
-        User user = userFactory.user();
+    public void saveCrowdFundingTable(List<Expense> expenses) {
         List<User> guests = userFactory.someUsers();
+        userDao.saveAll(guests);
 
-        BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = eventFactory.baquitaCrowfunding(user, guests);
+        BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = eventFactory.baquitaCrowfunding(seedUsersTable(), guests, expenses);
         eventDao.save(baquitaCrowdFundingEvent);
     }
 
-    public void saveBaquitaSharedTable() {
-        User user = userFactory.user();
+    public void saveBaquitaSharedTable(List<Expense> expenses) {
         List<User> guests = userFactory.someUsers();
-        BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = eventFactory.baquitaSharedExpenses(user, guests);
+        userDao.saveAll(guests);
+
+        BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = eventFactory.baquitaSharedExpenses(seedUsersTable(), guests, expenses);
         eventDao.save(baquitaSharedExpensesEvent);
     }
 
-    private void seedPartyTable() {
-        User user = userFactory.user();
+    private void seedPartyTable(List<Expense> expenses) {
         List<User> guests = userFactory.someUsers();
-        Party party = eventFactory.partyWithGuests(guests, user);
+        userDao.saveAll(guests);
+
+        Party party = eventFactory.partyWithGuests(guests, seedUsersTable(), expenses);
         eventDao.save(party);
     }
 
-    private void seedUsersTable() {
+    private User seedUsersTable() {
         User newUser = userFactory.user();
         userDao.save(newUser);
+        return newUser;
     }
 }

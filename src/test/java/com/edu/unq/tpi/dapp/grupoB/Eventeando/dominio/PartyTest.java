@@ -103,7 +103,7 @@ public class PartyTest extends EventTest {
 
     @Test
     public void anInvitedUserCanNotConfirmAssistanceBecauseTheDateTimeLimit() {
-        Party party = partyWithGuestsAndCostPerAssistance(pricePerAssistant);
+        Party party = partyWithGuestsAndCostPerAssistance();
         List<User> guests = party.guests();
         User invitedUser = guests.get(0);
         try {
@@ -118,7 +118,7 @@ public class PartyTest extends EventTest {
     @Test
     public void thePartyCanCalculateTheCostWithSuppliesAndConfirmations() {
         List<User> guests = guests();
-        Party party = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests, pricePerAssistant, eventFactory.expenses(), organizer);
+        Party party = eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests, eventFactory.expenses(), organizer);
         User aUserThatIsInvited = guests.get(0);
         User anotherUserThatIsInvited = guests.get(1);
 
@@ -128,8 +128,8 @@ public class PartyTest extends EventTest {
         assertThatTheFullCostOfThePartyIs(party, 400.00);
     }
 
-    private Party partyWithGuestsAndCostPerAssistance(Double pricePerAssistant) {
-        return eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests(), pricePerAssistant, eventFactory.expenses(), organizer);
+    private Party partyWithGuestsAndCostPerAssistance() {
+        return eventFactory.partyWithGuestsExpensesAndAPricePerAssistant(guests(), eventFactory.expenses(), organizer);
     }
 
     private void assertThatTheFullCostOfThePartyIs(Party party, double totalCostOfTheParty) {

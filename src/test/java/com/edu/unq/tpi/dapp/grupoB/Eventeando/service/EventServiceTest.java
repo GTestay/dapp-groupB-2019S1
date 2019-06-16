@@ -1,10 +1,12 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Expense;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +35,8 @@ public class EventServiceTest {
     @Autowired
     private EventDao eventDao;
     @Autowired
+    private ExpenseDao expenseDao;
+    @Autowired
     private EventService eventService;
     private UserFactory userFactory;
     private EventFactory eventFactory;
@@ -43,7 +47,7 @@ public class EventServiceTest {
     public void setUp() {
         userFactory = new UserFactory();
         eventFactory = new EventFactory();
-        organizer = userFactory.user();
+        organizer = persistedUser();
     }
 
     @Test
@@ -54,7 +58,7 @@ public class EventServiceTest {
 
     @Test
     public void anEventIsRetrieved() {
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(userFactory.user()), organizer);
+        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(persistedUser()), organizer, savedExpenses());
         eventDao.save(anEvent);
 
         List<Event> events = eventService.allEvents();
@@ -65,8 +69,6 @@ public class EventServiceTest {
 
     @Test
     public void givenAnUserIdAndUserHasNoEvents() {
-        userDao.save(organizer);
-
         List<Event> events = eventService.allEventsOf(organizer.id());
 
         assertThat(events).isEmpty();
@@ -74,12 +76,10 @@ public class EventServiceTest {
 
     @Test
     public void givenAnUserIdAllEventOfTheUserAreRetrieved() {
-        organizer = userFactory.user();
-
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(userFactory.user()), organizer);
+        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(persistedUser()), organizer, savedExpenses());
         eventDao.save(anEvent);
 
-        Event anEventWithTheUserThatIsNotTheOrganizer = eventFactory.partyWithGuests(Collections.singletonList(organizer), userFactory.user());
+        Event anEventWithTheUserThatIsNotTheOrganizer = eventFactory.partyWithGuests(Collections.singletonList(organizer), persistedUser(), savedExpenses());
         eventDao.save(anEventWithTheUserThatIsNotTheOrganizer);
 
         List<Event> events = eventService.allEventsOf(organizer.id());
@@ -89,11 +89,10 @@ public class EventServiceTest {
 
     @Test
     public void givenAnUserIdAllEventOfTheUserAreRetrievedThatAreOnlyAnOrganizer() {
-        organizer = userFactory.user();
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(userFactory.user()), organizer);
+        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(persistedUser()), organizer, savedExpenses());
         eventDao.save(anEvent);
 
-        Event anEventWithTheUserThatIsNotTheOrganizer = eventFactory.partyWithGuests(Collections.singletonList(organizer), userFactory.user());
+        Event anEventWithTheUserThatIsNotTheOrganizer = eventFactory.partyWithGuests(Collections.singletonList(organizer), persistedUser(), savedExpenses());
         eventDao.save(anEventWithTheUserThatIsNotTheOrganizer);
 
         List<Event> events = eventService.allEventsOf(organizer.id());
@@ -103,14 +102,24 @@ public class EventServiceTest {
 
     @Test
     public void whenTheEventIsCreatedItSendsMailsToTheGuests() {
-        organizer = userFactory.user();
-        User guest = userFactory.user();
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(guest), organizer);
+        User guest = persistedUser();
+
+        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(guest), organizer, savedExpenses());
 
         eventService.sendInvitations(anEvent);
 
         assertThat(guest.invitations()).isNotEmpty();
     }
 
+    public User persistedUser() {
+        User user = userFactory.user();
+        userDao.save(user);
+        return user;
+    }
 
+    public List<Expense> savedExpenses() {
+        List<Expense> expenses = eventFactory.expenses();
+        expenseDao.saveAll(expenses);
+        return expenses;
+    }
 }
