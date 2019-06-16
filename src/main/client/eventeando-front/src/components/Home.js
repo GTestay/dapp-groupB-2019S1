@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {EventList} from "./EventList";
-import {UserMenu} from "./UserMenu";
 
 import '../styles/Home.css';
 import {obtainCurrentsEvent, obtainEventsMostPopular, obtainUserEvents} from "../api/eventApi";
+import UserMenu from "./UserMenu";
 
 
 export class Home extends Component {

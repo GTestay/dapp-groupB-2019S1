@@ -1,17 +1,23 @@
 import React, {Component} from 'react';
-import {BrowserRouter, Route} from 'react-router-dom'
+import {BrowserRouter, NavLink, Route, Switch} from 'react-router-dom'
 
 import './styles/App.css';
 import {UserLogin} from "./components/UserLogin";
 import {Home} from "./components/Home";
+import {Page404} from "./components/Page404";
+import NewEvent from "./components/NewEvent";
 
 class App extends Component {
     render() {
         return (
             <BrowserRouter>
                 <div>
-                    <Route exact path="/" component={UserLogin}/>
-                    <Route exact path="/home" component={Home}/>
+                    <Switch>
+                        <Route exact path="/" component={UserLogin}/>
+                        <Route exact path="/home" component={Home}/>
+                        <Route exact path="/new-event" component={NewEvent}/>
+                        <Route component={Page404}/>
+                    </Switch>
                 </div>
             </BrowserRouter>
         );
