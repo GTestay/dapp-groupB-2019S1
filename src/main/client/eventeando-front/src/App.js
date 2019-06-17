@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {BrowserRouter, NavLink, Route, Switch} from 'react-router-dom'
-
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import 'semantic-ui-css/semantic.min.css'
 import './styles/App.css';
 import {UserLogin} from "./components/UserLogin";
 import {Home} from "./components/Home";

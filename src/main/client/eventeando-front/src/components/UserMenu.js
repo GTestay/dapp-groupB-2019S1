@@ -1,7 +1,8 @@
 import React, {Component} from "react";
-import ExampleComponent from "react-rounded-image";
+import ImageRounded from "react-rounded-image";
 import '../styles/MenuUsuario.css'
 import {withRouter} from "react-router-dom";
+import {Button} from "semantic-ui-react";
 
 class UserMenu extends Component {
     render() {
@@ -11,14 +12,14 @@ class UserMenu extends Component {
                     <h4>{this.getUser().name}</h4>
                 </div>
                 <div className="usuario-retrato">
-                    <ExampleComponent
+                    <ImageRounded
                         image={this.getUser().imageUrl}
                         roundedSize="0"
                         imageWidth="75"
                         imageHeight="75"
                     />
                 </div>
-                <button onClick={this.handleClick} type="button">{"Add new event!"}</button>
+                <Button onClick={this.handleClick} type="button">{"Add new event!"}</Button>
 
             </div>
         )
