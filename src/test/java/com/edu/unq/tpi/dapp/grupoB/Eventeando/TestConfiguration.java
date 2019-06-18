@@ -9,7 +9,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 @Profile("test")
 public class TestConfiguration {
 
-
     @Bean
     public JavaMailSender mailSender() {
         return new FakeMailSender();

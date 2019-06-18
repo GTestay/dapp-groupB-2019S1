@@ -16,7 +16,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Component
-@Profile({"prod"})
+@Profile("dev")
 @Transactional
 public class Seeds implements ApplicationRunner {
 

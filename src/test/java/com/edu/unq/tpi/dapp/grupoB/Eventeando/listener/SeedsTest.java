@@ -24,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration
 @AutoConfigureTestDatabase
 @Transactional
-@ActiveProfiles("prod")
+@ActiveProfiles("dev")
 public class SeedsTest {
 
     @Autowired
