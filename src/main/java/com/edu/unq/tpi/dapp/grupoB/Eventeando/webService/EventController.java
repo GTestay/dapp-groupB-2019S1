@@ -41,7 +41,6 @@ public class EventController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(baseUrl)
     @ResponseBody
-    @Transactional
     public Event createEvent(@RequestBody EventDto eventDto) {
         return deserializeEventDto(eventDto);
     }

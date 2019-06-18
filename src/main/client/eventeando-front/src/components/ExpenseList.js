@@ -14,10 +14,11 @@ export class ExpenseList extends Component {
     }
 
     showExpenses() {
-        return (this.expenses().length === 0) ?
-            <h4>There are no expenses to show!</h4>
-            :
-            this.renderExpenses();
+        return (this.expenses().length === 0) ? this.renderNoExpenses() : this.renderExpenses();
+    }
+
+    renderNoExpenses() {
+        return <h4>There are no expenses to show!</h4>;
     }
 
     renderExpenses() {

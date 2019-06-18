@@ -37,54 +37,54 @@ public class Seeds implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        seedUsersTable();
-        saveEvents();
+        seedUsers();
+        seedEvents();
     }
 
-    public void saveEvents() {
+    public void seedEvents() {
 
         List<Expense> expenses = eventFactory.expenses();
         expenseDao.saveAll(expenses);
 
-        seedPartyTable(expenses);
-        saveBaquitaSharedTable(expenses);
-        saveCrowdFundingTable(expenses);
-        savePotluckTable(expenses);
+        seedParties(expenses);
+        seedBaquitasShared(expenses);
+        seedCrowdFundings(expenses);
+        seedPotlucks(expenses);
     }
 
-    public void savePotluckTable(List<Expense> expenses) {
+    public void seedPotlucks(List<Expense> expenses) {
         List<User> guests = userFactory.someUsers();
         userDao.saveAll(guests);
 
-        PotluckEvent potluckEvent = eventFactory.potluckWithGuests(guests, seedUsersTable(), expenses);
+        PotluckEvent potluckEvent = eventFactory.potluckWithGuests(guests, seedUsers(), expenses);
         eventDao.save(potluckEvent);
     }
 
-    public void saveCrowdFundingTable(List<Expense> expenses) {
+    public void seedCrowdFundings(List<Expense> expenses) {
         List<User> guests = userFactory.someUsers();
         userDao.saveAll(guests);
 
-        BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = eventFactory.baquitaCrowfunding(seedUsersTable(), guests, expenses);
+        BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = eventFactory.baquitaCrowfunding(seedUsers(), guests, expenses);
         eventDao.save(baquitaCrowdFundingEvent);
     }
 
-    public void saveBaquitaSharedTable(List<Expense> expenses) {
+    public void seedBaquitasShared(List<Expense> expenses) {
         List<User> guests = userFactory.someUsers();
         userDao.saveAll(guests);
 
-        BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = eventFactory.baquitaSharedExpenses(seedUsersTable(), guests, expenses);
+        BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = eventFactory.baquitaSharedExpenses(seedUsers(), guests, expenses);
         eventDao.save(baquitaSharedExpensesEvent);
     }
 
-    private void seedPartyTable(List<Expense> expenses) {
+    private void seedParties(List<Expense> expenses) {
         List<User> guests = userFactory.someUsers();
         userDao.saveAll(guests);
 
-        Party party = eventFactory.partyWithGuests(guests, seedUsersTable(), expenses);
+        Party party = eventFactory.partyWithGuests(guests, seedUsers(), expenses);
         eventDao.save(party);
     }
 
-    private User seedUsersTable() {
+    private User seedUsers() {
         User newUser = userFactory.user();
         userDao.save(newUser);
         return newUser;

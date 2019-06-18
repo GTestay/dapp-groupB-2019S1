@@ -22,14 +22,18 @@ public class User {
     private Long id;
     private String name;
     private String lastname;
-    @Column(unique = true)
-    private String email;
     private String password;
     private LocalDate birthday;
+
+    @Column(unique = true)
+    private String email;
+
     @Transient
     private AccountManager accountManager;
+
     @Transient
     private Moneylender moneyLender;
+
     @OneToMany
     private List<Invitation> invitations;
 

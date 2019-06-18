@@ -47,7 +47,7 @@ export default class NewEvent extends Component {
 
     renderError() {
         return <Message error hidden={this.showError()} onDismiss={this.closeError}>
-            <MessageHeader content={this.showError() || this.state.errorMessage.name}/>
+            <MessageHeader content={this.showError() || JSON.stringify(this.state.errorMessage)}/>
         </Message>;
     }
 
@@ -55,13 +55,15 @@ export default class NewEvent extends Component {
         return !this.state.error;
     }
 
-    handleChange = (e, {name, value}) => this.setState({[name]: value});
+    handleChange = (event, {name, value}) => this.setState({[name]: value});
 
     renderEventForm() {
         const {description, selectedEventType, searchEmail} = this.state;
 
         return <Form onSubmit={this.handleSubmit}>
-            <FormInput required placeholder='Description' label={"Add a description!"} name='description'
+            <FormInput required placeholder='Description'
+                       label={"Add a description!"}
+                       name='description'
                        value={description}
                        onChange={this.handleChange}
             />
