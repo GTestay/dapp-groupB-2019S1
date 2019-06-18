@@ -1,10 +1,8 @@
 import React, {Component} from "react";
 import {EventList} from "./EventList";
-
 import '../styles/Home.css';
 import {obtainCurrentsEvent, obtainEventsMostPopular, obtainUserEvents} from "../api/eventApi";
 import UserMenu from "./UserMenu";
-
 
 export class Home extends Component {
     constructor(props) {

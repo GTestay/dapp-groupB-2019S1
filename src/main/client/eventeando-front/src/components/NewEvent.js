@@ -1,13 +1,14 @@
 import React, {Component} from "react";
 import {allExpenses} from "../api/expensesApi";
 import {ExpenseList} from "./ExpenseList";
-import {Dropdown, Form, FormButton, FormInput, FormSelect, Message, MessageHeader} from "semantic-ui-react";
+import {Container, Dropdown, Form, FormButton, FormInput, FormSelect, Message, MessageHeader} from "semantic-ui-react";
 import {createNewEvent} from '../api/eventApi'
 import {searchEmails} from "../api/userApi";
 import {eventTypes, optionOf} from "../utils/utils";
 import moment from "moment";
 import {DateInput} from "semantic-ui-calendar-react";
 
+import '../styles/Event.css';
 
 export default class NewEvent extends Component {
     constructor(props) {
@@ -38,11 +39,12 @@ export default class NewEvent extends Component {
     }
 
     render() {
-        return <div>
+        return <Container>
             <h3> Creating event!</h3>
+
             {this.renderEventForm()}
             {this.renderError()}
-        </div>
+        </Container>
     }
 
     renderError() {
@@ -68,25 +70,40 @@ export default class NewEvent extends Component {
                        onChange={this.handleChange}
             />
             {this.selectTypeEvent(selectedEventType)}
-            {this.selectPartyInvitation()}
+            {this.showDayPickerIfNeeded()}
             {this.selectGuestEmails(searchEmail)}
-            <ExpenseList onItemClick={this.selectExpense} expenses={this.expenses()}/>
-            {this.totalCost()}
+            {this.getExpenseList()}
             <FormButton circular content='Create Event!'/>
         </Form>
     }
 
+    getExpenseList() {
+        return <Form.Field>
+            <label>
+                <div className="total-cost">
+                    <text>Expenses:</text>
+                    <text>{this.totalCost()}</text>
+                </div>
+            </label>
+            <ExpenseList onItemClick={this.selectExpense} expenses={this.expenses()}/>
+        </Form.Field>;
+    }
+
     selectGuestEmails(searchEmail) {
-        return <Dropdown fluid
-                         required
-                         multiple
-                         search
-                         selection
-                         name='searchEmail'
-                         value={searchEmail}
-                         onChange={this.addEmail}
-                         options={this.state.guestsEmails}
-        />;
+        return <Form.Field>
+            <label>Invite Friends!</label>
+            <Dropdown
+                fluid
+                required
+                multiple
+                search
+                selection
+                name='searchEmail'
+                value={searchEmail}
+                onChange={this.addEmail}
+                options={this.state.guestsEmails}
+            />
+        </Form.Field>;
     }
 
     selectTypeEvent(selectedEventType) {
@@ -159,21 +176,32 @@ export default class NewEvent extends Component {
     };
 
     totalCost() {
-        return <div>
+        return <React.Fragment>
             ${this.selectedExpenses()
             .map(expense => expense.cost)
             .reduce(((previousValue, currentValue) => previousValue + currentValue), 0)}
-        </div>
+        </React.Fragment>
     }
 
-    selectPartyInvitation() {
-        return this.state.selectedEventType === "Party" ? <div>
-            <DateInput
-                name='selectedInvitationLimitDate'
-                value={this.state.selectedInvitationLimitDate}
-                onChange={this.handleChange}
-            />
-        </div> : <React.Fragment/>;
+    showDayPickerIfNeeded() {
+        return this.needsDayPicker() ?
+            <Form.Field>
+                <label>Invitation Limit Date</label>
+                <DateInput
+                    name='selectedInvitationLimitDate'
+                    value={this.state.selectedInvitationLimitDate}
+                    onChange={this.handleChange}
+                    minDate={moment()}
+                    popupPosition={"center"}
+                    closable
+                />
+            </Form.Field>
+            :
+            <React.Fragment/>;
+    }
+
+    needsDayPicker() {
+        return this.state.selectedEventType === "Party";
     }
 }
 

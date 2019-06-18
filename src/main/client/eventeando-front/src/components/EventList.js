@@ -35,6 +35,6 @@ export class EventList extends Component {
 }
 
 EventList.propTypes = {
-    events: PropTypes.arrayOf(PropTypes.oneOfType([EventType])),
+    events: PropTypes.arrayOf(EventType),
     title: PropTypes.string.isRequired
 };

@@ -6,11 +6,7 @@ import {ListItem, List , ListContent, ListIcon} from 'semantic-ui-react'
 
 export class ExpenseList extends Component {
     render() {
-        return (
-            <div>
-                {this.showExpenses()}
-            </div>
-        )
+        return this.showExpenses()
     }
 
     showExpenses() {
@@ -22,8 +18,8 @@ export class ExpenseList extends Component {
     }
 
     renderExpenses() {
-        return <div>
-            <List divided selection className="evento-listado">
+        return <div className="border-list">
+            <List divided selection>
                 {this.listExpenses()}
             </List>
         </div>;
@@ -39,7 +35,7 @@ export class ExpenseList extends Component {
                          value={expense} key={expense.id}>
             <ListContent>
                 {`${expense.name} $${expense.cost}`}
-                {expense.selected ? <ListIcon color={"red"}  name={"close circle"}/> : <ListIcon color={"green"} name={"plus circle"}/>}
+                {expense.selected ? <ListIcon color={"red"}  name={"close"}/> : <ListIcon color={"green"} name={"plus circle"}/>}
             </ListContent>
         </ListItem>;
     }
@@ -50,5 +46,5 @@ export class ExpenseList extends Component {
 }
 
 ExpenseList.propTypes = {
-    expenses: PropTypes.arrayOf(PropTypes.oneOfType([ExpenseType])),
+    expenses: PropTypes.arrayOf(ExpenseType),
 };

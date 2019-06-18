@@ -7,3 +7,8 @@
     list-style: none;
     padding: 0;
 }
+
+.border-list {
+    border: 1px groove #e0e0e0;
+    border-radius: 5px;
+}
