@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
 
 @Configuration
-@Profile("test")
+@Profile({"test", "dev"})
 public class TestConfiguration {
 
     @Bean

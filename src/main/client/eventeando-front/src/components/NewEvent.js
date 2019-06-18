@@ -6,7 +6,7 @@ import {createNewEvent} from '../api/eventApi'
 import {searchEmails} from "../api/userApi";
 import {eventTypes, optionOf} from "../utils/utils";
 import moment from "moment";
-import {DateInput} from "semantic-ui-calendar-react";
+import {DateTimeInput} from "semantic-ui-calendar-react";
 
 import '../styles/Event.css';
 
@@ -62,7 +62,7 @@ export default class NewEvent extends Component {
     renderEventForm() {
         const {description, selectedEventType, searchEmail} = this.state;
 
-        return <Form onSubmit={this.handleSubmit}>
+        return <Form onSubmit={this.createEvent}>
             <FormInput required placeholder='Description'
                        label={"Add a description!"}
                        name='description'
@@ -125,12 +125,16 @@ export default class NewEvent extends Component {
         return this.state.user;
     }
 
-    handleSubmit = () => {
-        this.setState({submitted: true}, () => this.createEvent())
+    createEvent = () => {
+        this.setState({submitted: true}, () => this.newEvent())
     };
 
-    createEvent = () => {
+    newEvent = () => {
         createNewEvent(this.getJsonEvent())
+            .then(event => this.props.history.push({
+                pathname: "/home",
+                state: {user: this.getUser()}
+                }))
             .catch(error => this.setState({error: true, errorMessage: error}))
     };
 
@@ -150,10 +154,14 @@ export default class NewEvent extends Component {
             guestsEmails: this.selectedEmails(),
             expensesIds: this.selectedExpenses().map(expense => expense.id),
         };
-        if (jsonEventBody.type === "Party") {
+        this.addFieldsForParty(jsonEventBody);
+        return jsonEventBody;
+    }
+
+    addFieldsForParty(jsonEventBody) {
+        if (this.needsDayPicker()) {
             jsonEventBody["invitationLimitDate"] = this.state.selectedInvitationLimitDate;
         }
-        return jsonEventBody;
     }
 
     selectedExpenses() {
@@ -187,7 +195,7 @@ export default class NewEvent extends Component {
         return this.needsDayPicker() ?
             <Form.Field>
                 <label>Invitation Limit Date</label>
-                <DateInput
+                <DateTimeInput
                     name='selectedInvitationLimitDate'
                     value={this.state.selectedInvitationLimitDate}
                     onChange={this.handleChange}
