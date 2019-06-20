@@ -76,7 +76,7 @@ public abstract class ControllerTest {
     }
 
     protected MvcResult assertThatRequestIsBadRequest(ResultActions perform) throws Exception {
-        return perform
+        return perform.andExpect(status().isBadRequest())
                 .andReturn();
     }
 }
