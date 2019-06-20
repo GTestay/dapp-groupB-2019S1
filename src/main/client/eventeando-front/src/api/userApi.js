@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios from 'axios'
 
-const url = "/users";
+const url = '/users'
 
-export function searchEmails(searchEmail) {
-    return axios.get(`${url}/emails?email${searchEmail}`)
-        .then((response) => response.data);
+export function searchEmails (searchEmail) {
+  return axios.get(`${url}/emails?email${searchEmail}`)
+    .then((response) => response.data)
 }

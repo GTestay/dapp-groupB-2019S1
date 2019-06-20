@@ -1,8 +1,8 @@
-.usuario-detalle {
+.user-details {
     text-align: center
 }
 
-.usuario-retrato {
+.user-picture {
     display: flex;
     justify-content: center;
 }

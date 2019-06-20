@@ -1,9 +1,9 @@
-.titulo-evento {
+.event-title {
     text-align: center;
     width: 25%;
 }
 
-.evento-listado {
+.listed-event {
     list-style: none;
     padding: 0;
 }
