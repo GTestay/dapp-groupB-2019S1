@@ -6,6 +6,6 @@ export default PropTypes.propTypes = {
     type: PropTypes.string.isRequired,
     organizer: UserType.isRequired,
     description: PropTypes.string.isRequired,
-    guests: PropTypes.arrayOf(PropTypes.oneOfType([UserType])),
+    guests: PropTypes.arrayOf(UserType),
     expenses: PropTypes.array.isRequired
 };

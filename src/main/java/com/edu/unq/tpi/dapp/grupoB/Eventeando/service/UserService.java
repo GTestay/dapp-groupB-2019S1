@@ -54,4 +54,8 @@ public class UserService {
     public static String usersNotFoundFromEmails() {
         return "There are no users with the emails given";
     }
+
+    public List<String> allEmailsContaining(String email) {
+        return userDao.findAllByEmailContaining(email);
+    }
 }

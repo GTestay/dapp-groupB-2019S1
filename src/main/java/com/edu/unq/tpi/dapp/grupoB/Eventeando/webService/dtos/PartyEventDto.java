@@ -1,12 +1,14 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class PartyEventDto extends EventDto {
 
+    @JsonProperty
     private LocalDateTime invitationLimitDate;
 
     @JsonCreator

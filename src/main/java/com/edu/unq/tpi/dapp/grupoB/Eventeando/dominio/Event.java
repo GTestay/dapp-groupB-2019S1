@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.stream.DoubleStream;
 
 import static com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator.ERROR_THE_USER_WAS_NOT_INVITED;
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.PERSIST;
 
 
 @Entity
@@ -40,15 +38,15 @@ public abstract class Event {
     @JsonProperty
     protected String description;
 
-    @ManyToOne(cascade = ALL)
+    @ManyToOne
     @JsonProperty
     protected User organizer;
 
-    @OneToMany(cascade = ALL)
+    @ManyToMany
     @JsonProperty
     protected List<Expense> expenses = new ArrayList<>();
 
-    @OneToMany(cascade = ALL)
+    @ManyToMany
     @JsonProperty
     protected List<User> guests = new ArrayList<>();
 

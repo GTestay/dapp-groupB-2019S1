@@ -14,7 +14,7 @@ import java.io.IOException;
 public class ControllerExceptionHandler {
 
     @ExceptionHandler
-    public void badRequestUserCreation(HttpServletResponse response, InvalidCreation exception) throws IOException {
+    public void badRequestObjectCreation(HttpServletResponse response, InvalidCreation exception) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
     }
 

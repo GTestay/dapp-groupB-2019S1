@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Expense;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Party;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.EventFactory;
@@ -22,9 +23,12 @@ public class EventDaoTest {
 
     @Autowired
     private EventDao eventDao;
+    @Autowired
+    private ExpenseDao expenseDao;
+    @Autowired
+    private UserDao userDao;
     private UserFactory userFactory;
     private EventFactory eventFactory;
-    private User organizer;
 
 
     @Before
@@ -41,11 +45,23 @@ public class EventDaoTest {
 
     @Test
     public void anEventIsRetrieved() throws Exception {
-        organizer = userFactory.user();
-        Party anEvent = eventFactory.partyWithGuests(userFactory.someUsers(), organizer);
+        User organizer = userFactory.user();
+        userDao.save(organizer);
+
+        List<User> guests = userFactory.someUsers();
+        userDao.saveAll(guests);
+
+        Party anEvent = eventFactory.partyWithGuests(guests, organizer, savedExpenses());
         eventDao.save(anEvent);
         List<Event> events = eventDao.findAll();
 
         assertThat(events).containsOnlyOnce(anEvent);
+    }
+
+    public List<Expense> savedExpenses() {
+
+        List<Expense> expenses = eventFactory.expenses();
+        expenseDao.saveAll(expenses);
+        return expenses;
     }
 }

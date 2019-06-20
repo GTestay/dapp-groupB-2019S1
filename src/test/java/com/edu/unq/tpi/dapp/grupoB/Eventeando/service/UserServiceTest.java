@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 import static com.edu.unq.tpi.dapp.grupoB.Eventeando.service.UserService.messageUserNotFound;
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,13 +28,13 @@ public class UserServiceTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         userFactory = new UserFactory();
         userService = new UserService(userDao);
     }
 
     @Test
-    public void aUserIsCreated() throws Exception {
+    public void aUserIsCreated() {
         User newUserToCreate = userFactory.user();
 
         User createdUser = userService.createUser(newUserToCreate);
@@ -41,7 +43,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void aSavedUserIsRetrieved() throws Exception {
+    public void aSavedUserIsRetrieved() {
         User newUserToCreate = userFactory.user();
         userService.createUser(newUserToCreate);
         User searchedUser = userService.searchUser(newUserToCreate.id());
@@ -60,4 +62,23 @@ public class UserServiceTest {
         }
 
     }
+
+    @Test
+    public void whenThereAreNoUsersNoneEmailIsRetrieved() {
+        assertThat(userService.allEmailsContaining("")).isEmpty();
+    }
+
+    @Test
+    public void canBringAllUsersEmailsRegistered() {
+        User newUser = userFactory.user();
+        User otherUser = userFactory.user();
+        User createdUser1 = userService.createUser(newUser);
+        User createdUser2 = userService.createUser(otherUser);
+
+
+        List<String> emails = userService.allEmailsContaining("");
+        assertThat(emails).isNotEmpty();
+        assertThat(emails).containsExactlyInAnyOrder(createdUser1.email(), createdUser2.email());
+    }
+
 }

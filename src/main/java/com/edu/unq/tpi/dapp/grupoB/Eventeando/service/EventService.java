@@ -57,12 +57,14 @@ public class EventService {
 
     public BaquitaCrowdFundingEvent createBaquitaCrowdFundingEvent(EventData eventData) {
         BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = new EventBuilder(eventData, this).buildBaquitaCrowdFundingEventEvent();
+
         sendInvitations(baquitaCrowdFundingEvent);
 
         return baquitaCrowdFundingEvent;
     }
 
     void sendInvitations(Event event) {
+        this.eventDao.save(event);
         List<Invitation> invitations = Invitation.createListOfInvitationsWith(event);
         invitationDao.saveAll(invitations);
         mailSenderService.sendInvitationsEmails(invitations);

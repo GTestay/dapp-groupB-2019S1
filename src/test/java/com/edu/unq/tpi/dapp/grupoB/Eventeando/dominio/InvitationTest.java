@@ -39,7 +39,7 @@ public class InvitationTest {
     @Test
     public void aUserIsInvitedToAnEvent() {
         User guest = userFactory.user();
-        Party party = eventFactory.partyWithGuests(Collections.singletonList(guest), organizer);
+        Party party = eventFactory.partyWithGuests(Collections.singletonList(guest), organizer, eventFactory.expenses());
 
         Invitation invitation = new Invitation(party, guest);
 
@@ -50,7 +50,7 @@ public class InvitationTest {
 
     @Test
     public void aUserInvitedToAnEventConfirmTheInvitation() {
-        Party party = eventFactory.partyWithGuests(Collections.singletonList(guest), organizer);
+        Party party = eventFactory.partyWithGuests(Collections.singletonList(guest), organizer, eventFactory.expenses());
 
         Invitation invitation = new Invitation(party, guest);
         invitation.confirm(confirmationDate);
@@ -63,7 +63,7 @@ public class InvitationTest {
     public void aListOfInvitationIsCreatedWithTheUsersInvitedInAnEvent() {
 
         List<User> usersInvitedInEvent = this.userFactory.someUsers();
-        Party party = eventFactory.partyWithGuests(usersInvitedInEvent, organizer);
+        Party party = eventFactory.partyWithGuests(usersInvitedInEvent, organizer, eventFactory.expenses());
         List<Invitation> invitations = Invitation.createListOfInvitationsWith(party);
 
         assertEquals(usersInvitedInEvent.size(), invitations.size());

@@ -9,6 +9,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.EventService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.UserService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator;
 import org.assertj.core.api.Assertions;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,8 +53,20 @@ public class EventControllerTest extends ControllerTest {
         userFactory = new UserFactory();
         eventFactory = new EventFactory();
 
-        organizer = userFactory.user();
-        guests = userFactory.someUsers();
+        organizer = savedUser();
+        guests = savedGuests();
+    }
+
+    public List<User> savedGuests() {
+        List<User> users = userFactory.someUsers();
+        userDao.saveAll(users);
+        return users;
+    }
+
+    public User savedUser() {
+        User user = userFactory.user();
+        userDao.save(user);
+        return user;
     }
 
     @Test
@@ -68,7 +81,7 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void partiesAreRetrieved() throws Exception {
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(organizer), organizer);
+        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(organizer), organizer, savedExpenses());
         eventDao.save(anEvent);
 
         ResultActions perform = getAllEvents();
@@ -87,7 +100,7 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void potLucksAreRetrieved() throws Exception {
-        Event anEvent = eventFactory.potluckWithGuests(userFactory.someUsers(), this.organizer);
+        Event anEvent = eventFactory.potluckWithGuests(savedGuests(), this.organizer, savedExpenses());
         eventDao.save(anEvent);
 
         ResultActions perform = getAllEvents();
@@ -105,7 +118,7 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void baquitasSharedExpensesAreRetrieved() throws Exception {
-        Event anEvent = eventFactory.baquitaSharedExpenses(organizer, userFactory.someUsers());
+        Event anEvent = eventFactory.baquitaSharedExpenses(organizer, savedGuests(), savedExpenses());
         eventDao.save(anEvent);
 
         ResultActions perform = getAllEvents();
@@ -128,7 +141,7 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void baquitasCrowfundingAreRetrieved() throws Exception {
-        Event anEvent = eventFactory.baquitaCrowfunding(organizer, userFactory.someUsers());
+        Event anEvent = eventFactory.baquitaCrowfunding(organizer, savedGuests(), savedExpenses());
         eventDao.save(anEvent);
         ResultActions perform = getAllEvents();
 
@@ -147,9 +160,8 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void canNotCreateAnEventBecauseTheGivenOrganizerEmailDontExist() throws Exception {
-        userDao.saveAll(guests);
 
-        Party anEvent = eventFactory.partyWithGuests(guests, organizer);
+        Party anEvent = eventFactory.partyWithGuests(guests, userFactory.user(), savedExpenses());
         expenseDao.saveAll(anEvent.expenses());
 
         JSONObject jsonObject = eventToJson(anEvent);
@@ -163,10 +175,26 @@ public class EventControllerTest extends ControllerTest {
     }
 
     @Test
-    public void canNotCreateAnEventBecauseTheGivenGuestsEmailsDontExists() throws Exception {
-        userDao.save(organizer);
+    public void canNotCreateAnEventWithNoGuestEmails() throws Exception {
 
-        Party anEvent = eventFactory.partyWithGuests(guests, organizer);
+        Party anEvent = eventFactory.partyWithGuests(userFactory.someUsers(), organizer, savedExpenses());
+        expenseDao.saveAll(anEvent.expenses());
+
+        JSONObject jsonObject = eventToJson(anEvent);
+        jsonObject.put("guestsEmails", new JSONArray());
+
+        ResultActions perform = performPost(jsonObject, url());
+
+        MvcResult mvcResult = assertThatRequestIsBadRequest(perform);
+
+        assertThat(mvcResult.getResolvedException())
+                .hasMessageContaining(EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
+    }
+
+    @Test
+    public void canNotCreateAnEventBecauseTheGivenGuestsEmailsDontExists() throws Exception {
+
+        Party anEvent = eventFactory.partyWithGuests(userFactory.someUsers(), organizer, savedExpenses());
         expenseDao.saveAll(anEvent.expenses());
 
         JSONObject jsonObject = eventToJson(anEvent);
@@ -183,7 +211,7 @@ public class EventControllerTest extends ControllerTest {
     public void canNotCreateAnEventBecauseTheGivenExpensesDontExists() throws Exception {
         userDao.saveAll(guests);
         userDao.save(organizer);
-        Party anEvent = eventFactory.partyWithGuests(guests, organizer);
+        Party anEvent = eventFactory.partyWithGuests(guests, organizer, eventFactory.expenses());
         anEvent.expenses().forEach(expense -> expense.setId(0L));
 
         JSONObject jsonObject = eventToJson(anEvent);
@@ -198,7 +226,7 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void canCreateAPartyEvent() throws Exception {
-        Party anEvent = eventFactory.partyWithGuests(guests, organizer);
+        Party anEvent = eventFactory.partyWithGuests(guests, organizer, savedExpenses());
         persistExpensesAndUsers(anEvent);
 
         JSONObject jsonObject = eventToJson(anEvent);
@@ -212,7 +240,7 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void canCreateAPotluckEvent() throws Exception {
-        PotluckEvent anEvent = eventFactory.potluckWithGuests(guests, organizer);
+        PotluckEvent anEvent = eventFactory.potluckWithGuests(guests, organizer, savedExpenses());
         persistExpensesAndUsers(anEvent);
 
         JSONObject jsonObject = eventToJson(anEvent);
@@ -234,7 +262,7 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void canCreateABaquitaSharedExpensesEvent() throws Exception {
-        BaquitaSharedExpensesEvent anEvent = eventFactory.baquitaSharedExpenses(organizer, guests);
+        BaquitaSharedExpensesEvent anEvent = eventFactory.baquitaSharedExpenses(organizer, guests, savedExpenses());
         persistExpensesAndUsers(anEvent);
 
         JSONObject jsonObject = eventToJson(anEvent);
@@ -251,7 +279,7 @@ public class EventControllerTest extends ControllerTest {
     @Test
     public void canCreateABaquitaCrowfundingEvent() throws Exception {
 
-        BaquitaCrowdFundingEvent anEvent = eventFactory.baquitaCrowfunding(organizer, guests);
+        BaquitaCrowdFundingEvent anEvent = eventFactory.baquitaCrowfunding(organizer, guests, savedExpenses());
         persistExpensesAndUsers(anEvent);
 
         JSONObject jsonObject = eventToJson(anEvent);
@@ -268,7 +296,7 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void aBadRequestIsGivenWhenSendingAnInvalidEventType() throws Exception {
-        BaquitaCrowdFundingEvent anEvent = eventFactory.baquitaCrowfunding(organizer, guests);
+        BaquitaCrowdFundingEvent anEvent = eventFactory.baquitaCrowfunding(organizer, guests, savedExpenses());
 
         JSONObject jsonObject = eventToJson(anEvent);
         jsonObject.put("type", "InvalidType");
@@ -280,7 +308,7 @@ public class EventControllerTest extends ControllerTest {
 
     @Test
     public void givenAnUserIdAllEventOfTheUserAreRetrieved() throws Exception {
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(organizer), organizer);
+        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(organizer), organizer, savedExpenses());
         eventDao.save(anEvent);
 
         ResultActions perform = getAllEventsFrom(organizer.id());
@@ -340,5 +368,11 @@ public class EventControllerTest extends ControllerTest {
 
     private String url() {
         return "/events";
+    }
+
+    public List<Expense> savedExpenses() {
+        List<Expense> expenses = eventFactory.expenses();
+        expenseDao.saveAll(expenses);
+        return expenses;
     }
 }

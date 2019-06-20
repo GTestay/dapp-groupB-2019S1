@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventInvalidCreationException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator;
@@ -30,14 +30,14 @@ public class BaquitaSharedExpensesEventTest extends EventTest {
         try {
             BaquitaSharedExpensesEvent.create(userFactory.user(), description, null, twoExpenses());
             fail();
-        } catch (EventException error) {
+        } catch (EventInvalidCreationException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
         }
 
         try {
             BaquitaSharedExpensesEvent.create(organizer(), description, new ArrayList<>(), twoExpenses());
             fail();
-        } catch (EventException error) {
+        } catch (EventInvalidCreationException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
         }
     }
@@ -46,7 +46,7 @@ public class BaquitaSharedExpensesEventTest extends EventTest {
         try {
             BaquitaSharedExpensesEvent.create(null, description, oneGuest(), twoExpenses());
             fail();
-        } catch (EventException error) {
+        } catch (EventInvalidCreationException error) {
             assertEquals(error.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_ORGANIZER);
         }
     }
