@@ -7,11 +7,11 @@ import { Button } from 'semantic-ui-react'
 class UserMenu extends Component {
   render () {
     return (
-      <div className="usuario-detalle">
+      <div className="user-details">
         <div>
           <h4>{this.getUser().name}</h4>
         </div>
-        <div className="usuario-retrato">
+        <div className="user-picture">
           <ImageRounded
             image={this.getUser().imageUrl}
             roundedSize="0"

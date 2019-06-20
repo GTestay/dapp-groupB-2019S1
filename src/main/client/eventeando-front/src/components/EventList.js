@@ -8,7 +8,7 @@ import EventType from '../Types/EventType'
 export class EventList extends Component {
   render () {
     return (
-      <div className="titulo-evento">
+      <div className="event-title">
         <h3>{this.props.title}</h3>
         {this.showEvents()}
       </div>
@@ -19,7 +19,7 @@ export class EventList extends Component {
     if (this.events().length === 0) {
       return <h4>There are no events to show!</h4>
     }
-    return <ul className="evento-listado">
+    return <ul className="listed-event">
       {this.listEvents()}
     </ul>
   }

@@ -45,7 +45,7 @@ export class Home extends Component {
         <EventList title="Eventos En Curso" events={this.getCurrentEvents()}/>
         <EventList title="Mis Eventos" events={this.getUserEvents()}/>
         <EventList title="Eventos Populares" events={this.getPopularEvents()}/>
-        <div className="menu-de-user">
+        <div className="user-menu">
           <UserMenu user={this.getUser()}/>
         </div>
       </div>
