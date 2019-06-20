@@ -70,8 +70,13 @@ public abstract class ControllerTest {
                 .andReturn();
     }
 
-    public MvcResult assertThatRequestIsNotFound(ResultActions perform) throws Exception {
+    protected MvcResult assertThatRequestIsNotFound(ResultActions perform) throws Exception {
         return perform.andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+    protected MvcResult assertThatRequestIsBadRequest(ResultActions perform) throws Exception {
+        return perform
                 .andReturn();
     }
 }

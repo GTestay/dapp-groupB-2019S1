@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventInvalidCreationException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.EventFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator;
@@ -50,7 +51,7 @@ public class PartyTest extends EventTest {
         try {
             Party.create(organizer, description, new ArrayList<>(), new ArrayList<>(), anInvitationLimitDate);
             fail();
-        } catch (EventException e) {
+        } catch (EventInvalidCreationException e) {
             assertEquals(e.getMessage(), EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
         }
 

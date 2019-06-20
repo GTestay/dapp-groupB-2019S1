@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.validator;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventException;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventInvalidCreationException;
 
 import java.util.List;
 
@@ -19,11 +19,11 @@ public class EventValidator extends Validator {
     public static final String ERROR_THE_AMOUNT_IS_INVALID = "Error, the amount given is negative or zero";
 
     public User validateOrganizer(User organizer) {
-        return validateNullityOf(organizer, new EventException(EVENT_IS_INVALID_WITHOUT_ORGANIZER));
+        return validateNullityOf(organizer, new EventInvalidCreationException(EVENT_IS_INVALID_WITHOUT_ORGANIZER));
     }
 
     public List<User> validateGuests(List<User> guests) {
-        return validateEmptinessOf(guests, new EventException(EVENT_IS_INVALID_WITHOUT_GUESTS));
+        return validateEmptinessOf(guests, new EventInvalidCreationException(EVENT_IS_INVALID_WITHOUT_GUESTS));
     }
 
 }

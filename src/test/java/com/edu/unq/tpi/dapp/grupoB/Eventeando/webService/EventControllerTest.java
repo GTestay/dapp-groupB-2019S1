@@ -9,6 +9,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.EventService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.UserService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator;
 import org.assertj.core.api.Assertions;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -171,6 +172,23 @@ public class EventControllerTest extends ControllerTest {
 
         assertThat(mvcResult.getResolvedException())
                 .hasMessageContaining(UserService.messageUserNotFound());
+    }
+
+    @Test
+    public void canNotCreateAnEventWithNoGuestEmails() throws Exception {
+
+        Party anEvent = eventFactory.partyWithGuests(userFactory.someUsers(), organizer, savedExpenses());
+        expenseDao.saveAll(anEvent.expenses());
+
+        JSONObject jsonObject = eventToJson(anEvent);
+        jsonObject.put("guestsEmails", new JSONArray());
+
+        ResultActions perform = performPost(jsonObject, url());
+
+        MvcResult mvcResult = assertThatRequestIsBadRequest(perform);
+
+        assertThat(mvcResult.getResolvedException())
+                .hasMessageContaining(EventValidator.EVENT_IS_INVALID_WITHOUT_GUESTS);
     }
 
     @Test

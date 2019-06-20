@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {allExpenses} from "../api/expensesApi";
 import {ExpenseList} from "./ExpenseList";
-import {Container, Dropdown, Form, FormButton, FormInput, FormSelect, Message, MessageHeader} from "semantic-ui-react";
+import {Container, Dropdown, Form, FormButton, FormInput, FormSelect} from "semantic-ui-react";
 import {createNewEvent} from '../api/eventApi'
 import {searchEmails} from "../api/userApi";
 import {eventTypes, optionOf} from "../utils/utils";
@@ -9,6 +9,8 @@ import moment from "moment";
 import {DateTimeInput} from "semantic-ui-calendar-react";
 
 import '../styles/Event.css';
+import {RenderWhen} from "./utilComponents/RenderWhen";
+import {ErrorMessage} from "./utilComponents/ErrorMessage";
 
 export default class NewEvent extends Component {
     constructor(props) {
@@ -17,7 +19,6 @@ export default class NewEvent extends Component {
             user: props.location.state.user,
             submitted: false,
             expenses: [],
-            searchEmail: "",
             guestsEmails: [],
             selectedEventType: null,
             description: '',
@@ -48,9 +49,7 @@ export default class NewEvent extends Component {
     }
 
     renderError() {
-        return <Message error hidden={this.showError()} onDismiss={this.closeError}>
-            <MessageHeader content={this.showError() || JSON.stringify(this.state.errorMessage)}/>
-        </Message>;
+        return <ErrorMessage hidden={this.showError()} onDismiss={this.closeError} value={this.state.errorMessage}/>;
     }
 
     showError() {
@@ -60,21 +59,25 @@ export default class NewEvent extends Component {
     handleChange = (event, {name, value}) => this.setState({[name]: value});
 
     renderEventForm() {
-        const {description, selectedEventType, searchEmail} = this.state;
+        const {description, selectedEventType, selectedGuestsEmails} = this.state;
 
         return <Form onSubmit={this.createEvent}>
-            <FormInput required placeholder='Description'
-                       label={"Add a description!"}
-                       name='description'
-                       value={description}
-                       onChange={this.handleChange}
-            />
+            {this.addDescription(description)}
             {this.selectTypeEvent(selectedEventType)}
             {this.showDayPickerIfNeeded()}
-            {this.selectGuestEmails(searchEmail)}
+            {this.selectGuestEmails(selectedGuestsEmails)}
             {this.getExpenseList()}
             <FormButton circular content='Create Event!'/>
         </Form>
+    }
+
+    addDescription(description) {
+        return <FormInput required placeholder='Description'
+                          label={"Add a description!"}
+                          name='description'
+                          value={description}
+                          onChange={this.handleChange}
+        />;
     }
 
     getExpenseList() {
@@ -89,7 +92,7 @@ export default class NewEvent extends Component {
         </Form.Field>;
     }
 
-    selectGuestEmails(searchEmail) {
+    selectGuestEmails(selectedGuestsEmails) {
         return <Form.Field>
             <label>Invite Friends!</label>
             <Dropdown
@@ -98,9 +101,9 @@ export default class NewEvent extends Component {
                 multiple
                 search
                 selection
-                name='searchEmail'
-                value={searchEmail}
-                onChange={this.addEmail}
+                name='selectedGuestsEmails'
+                value={selectedGuestsEmails}
+                onChange={this.handleChange}
                 options={this.state.guestsEmails}
             />
         </Form.Field>;
@@ -134,7 +137,7 @@ export default class NewEvent extends Component {
             .then(event => this.props.history.push({
                 pathname: "/home",
                 state: {user: this.getUser()}
-                }))
+            }))
             .catch(error => this.setState({error: true, errorMessage: error}))
     };
 
@@ -159,8 +162,9 @@ export default class NewEvent extends Component {
     }
 
     addFieldsForParty(jsonEventBody) {
+        let dateToSend = moment(this.state.selectedInvitationLimitDate, "DD-MM-YYYY HH:mm");
         if (this.needsDayPicker()) {
-            jsonEventBody["invitationLimitDate"] = this.state.selectedInvitationLimitDate;
+            jsonEventBody["invitationLimitDate"] = dateToSend;
         }
     }
 
@@ -172,15 +176,8 @@ export default class NewEvent extends Component {
         return this.state.selectedGuestsEmails;
     }
 
-    addEmail = (event, data) => {
-        this.setState({
-            [data.name]: data.value,
-            selectedGuestsEmails: data.value
-        });
-    };
-
     closeError = (e, data) => {
-        this.setState({error: false, errorMessage: null})
+        this.setState({error: false, errorMessage: ""})
     };
 
     totalCost() {
@@ -192,20 +189,26 @@ export default class NewEvent extends Component {
     }
 
     showDayPickerIfNeeded() {
-        return this.needsDayPicker() ?
-            <Form.Field>
-                <label>Invitation Limit Date</label>
-                <DateTimeInput
-                    name='selectedInvitationLimitDate'
-                    value={this.state.selectedInvitationLimitDate}
-                    onChange={this.handleChange}
-                    minDate={moment()}
-                    popupPosition={"center"}
-                    closable
-                />
-            </Form.Field>
-            :
-            <React.Fragment/>;
+        return <RenderWhen condition={() => this.needsDayPicker()}
+                           whenTrueRender={() => this.dayPickerForInvitationLimitDate()}
+        />;
+    }
+
+    dayPickerForInvitationLimitDate() {
+        let initialDate = moment();
+        return <Form.Field>
+            <label>Invitation Limit Date</label>
+            <DateTimeInput
+                name='selectedInvitationLimitDate'
+                value={this.state.selectedInvitationLimitDate}
+                initialDate={initialDate}
+                onChange={this.handleChange}
+                minDate={initialDate}
+                popupPosition={"center"}
+                localization={moment().locale()}
+                closable
+            />
+        </Form.Field>;
     }
 
     needsDayPicker() {
