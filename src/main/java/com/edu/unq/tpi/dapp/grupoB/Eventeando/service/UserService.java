@@ -1,8 +1,10 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,14 @@ public class UserService {
     }
 
     public User createUser(User newUserToCreate) {
+        validateIfEmailWasNotTaken(newUserToCreate);
         return userDao.save(newUserToCreate);
+    }
+
+    public void validateIfEmailWasNotTaken(User newUserToCreate) {
+        if (userDao.findByEmailEquals(newUserToCreate.email()).isPresent()) {
+            throw new UserException(UserValidator.USER_EMAIL_IS_ALREADY_TAKEN);
+        }
     }
 
     public User searchUser(Long id) {
@@ -35,7 +44,7 @@ public class UserService {
     }
 
     public User findUserByEmail(String email) {
-        return userDao.findByEmail(email)
+        return userDao.findByEmailEquals(email)
                 .orElseThrow(this::notFound);
     }
 

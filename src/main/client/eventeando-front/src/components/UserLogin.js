@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import GoogleLogin from 'react-google-login'
 
 import '../styles/Login.css'
+import {loginUser} from "../api/userApi"
 
 export class UserLogin extends Component {
   render () {
@@ -23,11 +24,15 @@ export class UserLogin extends Component {
     </div>
   }
 
+
     redirectWithGoogleResponse = (response) => {
-      this.props.history.push({
-        pathname: '/home',
-        state: { user: response.profileObj }
-      })
+      loginUser(response.profileObj).then((user) => {
+        this.props.history.push({
+          pathname: '/home',
+          state: { user: user }
+        })
+      }
+    )
     };
 
     invalidLoginWithGoogleResponse = (response) => {
