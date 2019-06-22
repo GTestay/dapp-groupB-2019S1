@@ -44,7 +44,9 @@ public class InvitationService {
     }
 
     public void confirmInvitation(Long invitationId) {
-        findInvitation(invitationId).confirm(LocalDateTime.now());
+        Invitation invitation = findInvitation(invitationId);
+        invitation.confirm(LocalDateTime.now());
+        invitationDao.save(invitation);
     }
 
     private Invitation findInvitation(Long invitationId) {

@@ -4,6 +4,8 @@ import '../styles/Home.css'
 import { obtainCurrentsEvent, obtainEventsMostPopular, obtainUserEvents } from '../api/eventApi'
 import UserMenu from './UserMenu'
 import { injectIntl, intlShape } from 'react-intl'
+import { PendingInvitations } from './PendingInvitations'
+import { Dropdown, DropdownItem, DropdownMenu, Icon, Menu, MenuItem } from 'semantic-ui-react'
 
 export class Home extends Component {
   constructor (props) {
@@ -54,9 +56,21 @@ export class Home extends Component {
       id: 'home.popularEvents',
       defaultMessage: 'Popular Events'
     })
+    const invitations = intl.formatMessage({
+      id: 'home.invitations',
+      defaultMessage: 'Invitations!'
+    })
 
     return (
       <div className="home">
+        <Menu>
+          <Dropdown item text={invitations}>
+            <Dropdown.Menu>
+              <PendingInvitations user={this.getUser()}/>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Menu>
+
         <EventList title={ongoingEventsTitle} events={this.getCurrentEvents()}/>
         <EventList title={myEventsTitle} events={this.getUserEvents()}/>
         <EventList title={popularEventsTitle} events={this.getPopularEvents()}/>

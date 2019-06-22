@@ -36,3 +36,12 @@ export function loginUser (googleUser) {
   }
   return postUser(`/login`, jsonUser, googleUser)
 }
+
+export function getInvitationsOf (user) {
+  return axios.get(`${url}/${user.id}/invitations`)
+    .then((response) => response.data)
+}
+
+export function confirmAssistance (invitationId) {
+  return axios.get('/invitations/' + invitationId + '/confirm')
+}

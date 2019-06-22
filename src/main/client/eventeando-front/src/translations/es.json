@@ -2,15 +2,16 @@
   "home.ongoingEvents": "Eventos en Curso",
   "home.myEvents": "Mis Eventos",
   "home.popularEvents": "Eventos Populares",
+  "home.invitations": "¡Invitaciones!",
 
   "newEvent.header": "Creando Evento",
-  "newEvent.createEventButton": "Crear Evento!",
+  "newEvent.createEventButton": "¡Crear Evento!",
   "newEvent.description": "Agregar Descripcion",
   "newEvent.chooseEventType": "Elegir Tipo de Evento",
   "newEvent.expenses": "Gastos:",
-  "newEvent.guestEmails": "Invita Amigos!",
+  "newEvent.guestEmails": "¡Invita Amigos!",
 
-  "page404.errorMessage": "Ooops... La pagina no ha sido encontrada!",
+  "page404.errorMessage": "Ooops... ¡La página no ha sido encontrada!",
 
   "userMenu.newEventButton": "Agregar nuevo evento"
 }

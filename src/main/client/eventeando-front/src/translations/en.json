@@ -2,6 +2,7 @@
   "home.ongoingEvents": "Ongoing Events",
   "home.myEvents": "My Events",
   "home.popularEvents": "Popular Events",
+  "home.invitations": "Invitations!",
 
   "newEvent.header": "Creating Event",
   "newEvent.createEventButton": "Create Event!",
