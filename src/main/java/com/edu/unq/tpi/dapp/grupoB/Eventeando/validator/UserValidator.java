@@ -17,6 +17,7 @@ public class UserValidator extends Validator {
     public static final String USER_IS_INVALID_WITHOUT_PASSWORD = "User Is Invalid Without Password";
     public static final String USER_IS_INVALID_WITHOUT_BIRTHDAY = "User Is Invalid Without Birthday";
     public static final String USER_PASSWORD_IS_INVALID = "The Password Has An Invalid Format";
+    public static final String USER_EMAIL_IS_ALREADY_TAKEN = "The email is already used";
 
     public String validateName(String name) {
         validateNullityOf(name, new UserException(USER_IS_INVALID_WITHOUT_NAME));

@@ -28,7 +28,7 @@ export class Home extends Component {
   }
 
   userEvents () {
-    obtainUserEvents(2).then((events) =>
+    obtainUserEvents(this.getUser().id).then((events) =>
       this.setState({ userEvents: events })
     )
   }

@@ -1,8 +1,10 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.UserValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,6 +45,19 @@ public class UserServiceTest {
     }
 
     @Test
+    public void canNotCreateAnUserIfTheEmailWasTaken() {
+        User newUserToCreate = userFactory.user();
+        userService.createUser(newUserToCreate);
+        try {
+            userService.createUser(newUserToCreate);
+            fail();
+        } catch (UserException e) {
+            assertThat(e.getMessage()).isEqualTo(UserValidator.USER_EMAIL_IS_ALREADY_TAKEN);
+        }
+    }
+
+
+    @Test
     public void aSavedUserIsRetrieved() {
         User newUserToCreate = userFactory.user();
         userService.createUser(newUserToCreate);
@@ -51,6 +66,15 @@ public class UserServiceTest {
         assertThat(searchedUser).isEqualTo(newUserToCreate);
     }
 
+
+    @Test
+    public void aSavedUserIsRetrievedByEmail() {
+        User newUserToCreate = userFactory.user();
+        userService.createUser(newUserToCreate);
+        User searchedUser = userService.findUserByEmail(newUserToCreate.email());
+
+        assertThat(searchedUser).isEqualTo(newUserToCreate);
+    }
 
     @Test
     public void whenCouldNotFindAUserAnExceptionIsThrow() throws Exception {

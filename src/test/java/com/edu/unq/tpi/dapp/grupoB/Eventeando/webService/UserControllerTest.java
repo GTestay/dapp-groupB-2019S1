@@ -54,6 +54,33 @@ public class UserControllerTest extends ControllerTest {
     }
 
     @Test
+    public void canLoginWithTheEmailOfAnExistingUser() throws Exception {
+        userDao.save(newUser);
+        JSONObject bodyRequest = new JSONObject();
+        bodyRequest.put("email", newUser.email());
+
+        ResultActions perform = performPost(bodyRequest, "/login");
+
+        MvcResult result = assertStatusIsOkAndMediaType(perform);
+
+        String responseString = getBodyOfTheRequest(result);
+        JSONObject jsonResponse = new JSONObject(responseString);
+        JSONObject userBody = this.getUserBody(newUser);
+
+        JSONAssert.assertEquals(jsonResponse, userBody, true);
+    }
+
+    @Test
+    public void couldNotLoginWithAnInexistentEmail() throws Exception {
+        JSONObject bodyRequest = new JSONObject();
+        bodyRequest.put("email", newUser.email());
+
+        ResultActions perform = performPost(bodyRequest, "/login");
+
+        assertThatRequestIsNotFound(perform);
+    }
+
+    @Test
     public void whenThereAreNoUsersNoneEmailIsRetrieved() throws Exception {
         ResultActions perform = getAllUsersEmails();
 
