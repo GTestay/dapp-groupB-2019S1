@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.UnsupportedEncodingException;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,6 +53,10 @@ public abstract class ControllerTest {
         return clientRest.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(jsonObject.toString()));
+    }
+
+    protected ResultActions performGet(String url) throws Exception {
+        return clientRest.perform(get(url).contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     protected MvcResult assertStatusIsOkAndMediaType(ResultActions perform) throws Exception {

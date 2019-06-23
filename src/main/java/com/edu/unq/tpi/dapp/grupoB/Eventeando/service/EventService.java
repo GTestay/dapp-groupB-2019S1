@@ -4,7 +4,6 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.*;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.ExpensesNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.InvitationDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.EventData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,17 +16,15 @@ public class EventService {
 
     private final EventDao eventDao;
     private final UserService userService;
-    private final MailSenderService mailSenderService;
     private final ExpenseDao expenseDao;
-    private final InvitationDao invitationDao;
+    private final InvitationService invitationService;
 
     @Autowired
-    public EventService(UserService userService, EventDao eventDao, MailSenderService mailSenderService, ExpenseDao expenseDao, InvitationDao invitationDao) {
+    public EventService(UserService userService, EventDao eventDao, ExpenseDao expenseDao, InvitationService invitationService) {
         this.userService = userService;
         this.eventDao = eventDao;
-        this.mailSenderService = mailSenderService;
         this.expenseDao = expenseDao;
-        this.invitationDao = invitationDao;
+        this.invitationService = invitationService;
     }
 
     public List<Event> allEvents() {
@@ -36,21 +33,21 @@ public class EventService {
 
     public Party createParty(EventData eventData, LocalDateTime invitationLimitDate) {
         Party party = new EventBuilder(eventData, this).buildParty(invitationLimitDate);
-        sendInvitations(party);
+        saveEvent(party);
 
         return party;
     }
 
     public PotluckEvent createPotluckEvent(EventData eventData) {
         PotluckEvent potluckEvent = new EventBuilder(eventData, this).buildPotluckEvent();
-        sendInvitations(potluckEvent);
+        saveEvent(potluckEvent);
 
         return potluckEvent;
     }
 
     public BaquitaSharedExpensesEvent createBaquitaSharedExpensesEvent(EventData eventData) {
         BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = new EventBuilder(eventData, this).buildBaquitaSharedExpensesEvent();
-        sendInvitations(baquitaSharedExpensesEvent);
+        saveEvent(baquitaSharedExpensesEvent);
 
         return baquitaSharedExpensesEvent;
     }
@@ -58,16 +55,14 @@ public class EventService {
     public BaquitaCrowdFundingEvent createBaquitaCrowdFundingEvent(EventData eventData) {
         BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = new EventBuilder(eventData, this).buildBaquitaCrowdFundingEventEvent();
 
-        sendInvitations(baquitaCrowdFundingEvent);
+        saveEvent(baquitaCrowdFundingEvent);
 
         return baquitaCrowdFundingEvent;
     }
 
-    void sendInvitations(Event event) {
+    void saveEvent(Event event) {
         this.eventDao.save(event);
-        List<Invitation> invitations = Invitation.createListOfInvitationsWith(event);
-        invitationDao.saveAll(invitations);
-        mailSenderService.sendInvitationsEmails(invitations);
+        invitationService.sendInvitations(event);
     }
 
     List<Expense> getExpenses(List<Long> expensesId) {

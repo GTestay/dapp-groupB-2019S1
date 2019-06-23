@@ -100,17 +100,6 @@ public class EventServiceTest {
         assertThat(events).containsOnlyOnce(anEvent);
     }
 
-    @Test
-    public void whenTheEventIsCreatedItSendsMailsToTheGuests() {
-        User guest = persistedUser();
-
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(guest), organizer, savedExpenses());
-
-        eventService.sendInvitations(anEvent);
-
-        assertThat(guest.invitations()).isNotEmpty();
-    }
-
     public User persistedUser() {
         User user = userFactory.user();
         userDao.save(user);

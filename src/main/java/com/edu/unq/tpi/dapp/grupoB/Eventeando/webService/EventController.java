@@ -24,14 +24,12 @@ public class EventController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(baseUrl)
-    @ResponseBody
     public List<Event> events() {
         return eventService.allEvents();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(baseUrl + "/{id}")
-    @ResponseBody
     public List<Event> eventsWithOrganizer(@PathVariable(value = "id") Long organizerId) {
         return eventService.allEventsOf(organizerId);
     }
@@ -39,7 +37,6 @@ public class EventController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(baseUrl)
-    @ResponseBody
     public Event createEvent(@RequestBody EventDto eventDto) {
         return deserializeEventDto(eventDto);
     }

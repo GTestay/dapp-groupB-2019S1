@@ -1,5 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,10 +12,13 @@ public class Invitation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonProperty
     private Long id;
     @ManyToOne
+    @JsonProperty
     private Event event;
     @ManyToOne
+    @JsonProperty
     private User guest;
 
     private Invitation() {
@@ -54,5 +59,9 @@ public class Invitation {
 
     public String guestFullName() {
         return guest.fullName();
+    }
+
+    public Long id() {
+        return this.id;
     }
 }
