@@ -43,4 +43,11 @@ public class UserController {
         return userService.allEmailsContaining(email);
     }
 
+    @GetMapping("/users/{id}/balance")
+    @ResponseStatus(HttpStatus.OK)
+    public double userBalance(@PathVariable("id") Long id) {
+        User user = userService.searchUser(id);
+
+        return user.balance();
+    }
 }

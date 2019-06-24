@@ -128,7 +128,6 @@ public class UserControllerTest extends ControllerTest {
         return clientRest.perform(get(url).contentType(MediaType.APPLICATION_JSON));
     }
 
-
     @Test
     public void anUserCanNotBeCreatedBecauseTheRequestIsInvalid() throws Exception {
 
@@ -140,7 +139,6 @@ public class UserControllerTest extends ControllerTest {
                 .andReturn();
         assertThat(mvcResult.getResolvedException()).hasMessageContaining(UserValidator.USER_EMAIL_IS_INVALID);
     }
-
 
     @Test
     public void anUserIsRetrieved() throws Exception {
@@ -182,6 +180,7 @@ public class UserControllerTest extends ControllerTest {
         jsonObject.put("lastname", user.lastname());
         jsonObject.put("name", user.name());
         jsonObject.put("id", user.id());
+
         return jsonObject;
     }
 
@@ -189,4 +188,21 @@ public class UserControllerTest extends ControllerTest {
         return "/users";
     }
 
+    @Test
+    public void canBringTheBalanceForAnUser() throws Exception {
+        User user = userFactory.userWithCash(1000);
+        userDao.save(user);
+
+        ResultActions perform = getUserBalance(user);
+
+        MvcResult result = assertStatusIsOkAndMediaType(perform);
+
+        String responseString = getBodyOfTheRequest(result);
+
+        assertThat("1000.0").isEqualTo(responseString);
+    }
+
+    public ResultActions getUserBalance(User user) throws Exception {
+        return getUsers(url() + "/" + user.id() + "/balance");
+    }
 }
