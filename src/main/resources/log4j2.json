@@ -1,0 +1,34 @@
+{
+  "configuration": {
+    "name": "Logger4j2",
+    "appenders": {
+      "Console": {
+        "name": "Console",
+        "target": "SYSTEM_OUT",
+        "PatternLayout": {
+          "pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"        }
+      },
+      "File": {
+        "name": "File",
+        "fileName": "../dapp-groupB-2019S1/log/services.log",
+        "PatternLayout": {
+          "pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"        }
+      }
+    },
+    "loggers": {
+      "logger": {
+        "level": "debug",
+        "name": "com.edu.unq.tpi.dapp.grupoB.Eventeando.aspect",
+        "appender-ref": {
+          "ref": "File"
+        }
+      },
+      "root": {
+        "level": "debug",
+        "appender-ref": {
+          "ref": "Console"
+        }
+      }
+    }
+  }
+}
