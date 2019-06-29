@@ -1,0 +1,16 @@
+{
+  "home.ongoingEvents": "Ongoing Events",
+  "home.myEvents": "My Events",
+  "home.popularEvents": "Popular Events",
+
+  "newEvent.header": "Creating Event",
+  "newEvent.createEventButton": "Create Event!",
+  "newEvent.description": "Add Description",
+  "newEvent.chooseEventType": "Choose Event Type",
+  "newEvent.expenses": "Expenses:",
+  "newEvent.guestEmails": "Invite Friends!",
+
+  "page404.errorMessage": "Ooops... Page Not Found!",
+
+  "userMenu.newEventButton": "Add New Event"
+}
