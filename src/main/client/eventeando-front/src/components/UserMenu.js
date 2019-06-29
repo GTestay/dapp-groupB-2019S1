@@ -21,7 +21,7 @@ class UserMenu extends Component {
           />
         </div>
         <Button onClick={this.handleClick} type="button">
-          <FormattedMessage id="userMenu.newEventButton" defaultMessage='Add new event!'/>
+          <FormattedMessage id="userMenu.newEventButton" defaultMessage='Add New Event'/>
         </Button>
 
       </div>

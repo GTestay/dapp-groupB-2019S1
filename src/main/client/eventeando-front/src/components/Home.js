@@ -3,6 +3,7 @@ import { EventList } from './EventList'
 import '../styles/Home.css'
 import { obtainCurrentsEvent, obtainEventsMostPopular, obtainUserEvents } from '../api/eventApi'
 import UserMenu from './UserMenu'
+import { injectIntl, intlShape } from 'react-intl'
 
 export class Home extends Component {
   constructor (props) {
@@ -40,11 +41,25 @@ export class Home extends Component {
   }
 
   render () {
+    const intl = this.props.intl
+    const ongoingEventsTitle = intl.formatMessage({
+      id: 'home.ongoingEvents',
+      defaultMessage: 'Ongoing Events'
+    })
+    const myEventsTitle = intl.formatMessage({
+      id: 'home.myEvents',
+      defaultMessage: 'My Events'
+    })
+    const popularEventsTitle = intl.formatMessage({
+      id: 'home.popularEvents',
+      defaultMessage: 'Popular Events'
+    })
+
     return (
       <div className="home">
-        <EventList title="Eventos En Curso" events={this.getCurrentEvents()}/>
-        <EventList title="Mis Eventos" events={this.getUserEvents()}/>
-        <EventList title="Eventos Populares" events={this.getPopularEvents()}/>
+        <EventList title={ongoingEventsTitle} events={this.getCurrentEvents()}/>
+        <EventList title={myEventsTitle} events={this.getUserEvents()}/>
+        <EventList title={popularEventsTitle} events={this.getPopularEvents()}/>
         <div className="user-menu">
           <UserMenu user={this.getUser()}/>
         </div>
@@ -60,3 +75,9 @@ export class Home extends Component {
 
   getPopularEvents () { return this.state.popularEvents }
 }
+
+Home.propTypes = {
+  intl: intlShape.isRequired
+}
+
+Home = injectIntl(Home)

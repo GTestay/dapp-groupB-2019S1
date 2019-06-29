@@ -11,6 +11,7 @@ import { DateTimeInput } from 'semantic-ui-calendar-react'
 import '../styles/Event.css'
 import { RenderWhen } from './utilComponents/RenderWhen'
 import { ErrorMessage } from './utilComponents/ErrorMessage'
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl'
 
 export default class NewEvent extends Component {
   constructor (props) {
@@ -40,12 +41,18 @@ export default class NewEvent extends Component {
   }
 
   render () {
-    return <Container>
-      <h3> Creating event!</h3>
+    const intl = this.props.intl
 
-      {this.renderEventForm()}
-      {this.renderError()}
-    </Container>
+    return (
+      <Container>
+        <h3>
+          <FormattedMessage id="newEvent.header" defaultMessage='Creating Event'/>
+        </h3>
+
+        {this.renderEventForm(intl)}
+        {this.renderError()}
+      </Container>
+    )
   }
 
   renderError () {
@@ -58,33 +65,48 @@ export default class NewEvent extends Component {
 
     handleChange = (event, { name, value }) => this.setState({ [name]: value });
 
-    renderEventForm () {
+    renderEventForm (intl) {
       const { description, selectedEventType, selectedGuestsEmails } = this.state
+      const buttonContent = intl.formatMessage({
+        id: 'newEvent.createEventButton',
+        defaultMessage: 'Create Event!'
+      })
 
       return <Form onSubmit={this.createEvent}>
-        {this.addDescription(description)}
-        {this.selectTypeEvent(selectedEventType)}
+        {this.addDescription(description, intl)}
+        {this.selectTypeEvent(selectedEventType, intl)}
         {this.showDayPickerIfNeeded()}
         {this.selectGuestEmails(selectedGuestsEmails)}
         {this.getExpenseList()}
-        <FormButton circular content='Create Event!'/>
+
+        <FormButton circular content={buttonContent}/>
       </Form>
     }
 
-    addDescription (description) {
-      return <FormInput required placeholder='Description'
-        label={'Add a description!'}
-        name='description'
-        value={description}
-        onChange={this.handleChange}
-      />
+    addDescription (description, intl) {
+      const label = intl.formatMessage({
+        id: 'newEvent.description',
+        defaultMessage: 'Add Description'
+      })
+
+      return (
+        <FormInput required
+          name='description'
+          placeholder='Description'
+          label={label}
+          value={description}
+          onChange={this.handleChange}
+        />
+      )
     }
 
     getExpenseList () {
       return <Form.Field>
         <label>
           <div className="total-cost">
-            <text>Expenses:</text>
+            <text>
+              <FormattedMessage id="newEvent.expenses" defaultMessage='Expenses:'/>
+            </text>
             <text>{this.totalCost()}</text>
           </div>
         </label>
@@ -94,7 +116,9 @@ export default class NewEvent extends Component {
 
     selectGuestEmails (selectedGuestsEmails) {
       return <Form.Field>
-        <label>Invite Friends!</label>
+        <label>
+          <FormattedMessage id="newEvent.guestEmails" defaultMessage='Invite Friends!'/>
+        </label>
         <Dropdown
           fluid
           required
@@ -109,15 +133,23 @@ export default class NewEvent extends Component {
       </Form.Field>
     }
 
-    selectTypeEvent (selectedEventType) {
-      return <FormSelect required label="Choose the event type"
-        placeholder='Choose'
-        selection
-        name='selectedEventType'
-        value={selectedEventType}
-        onChange={this.handleChange}
-        options={eventTypes()}
-      />
+    selectTypeEvent (selectedEventType, intl) {
+      const label = intl.formatMessage({
+        id: 'newEvent.chooseEventType',
+        defaultMessage: 'Choose Event Type'
+      })
+
+      return (
+        <FormSelect required
+          label={label}
+          placeholder='Choose'
+          selection
+          name='selectedEventType'
+          value={selectedEventType}
+          onChange={this.handleChange}
+          options={eventTypes()}
+        />
+      )
     }
 
     expenses () {
@@ -219,3 +251,9 @@ export default class NewEvent extends Component {
 function unique (anArray) {
   return Array.from(new Set(anArray))
 }
+
+NewEvent.propTypes = {
+  intl: intlShape.isRequired
+}
+
+NewEvent = injectIntl(NewEvent)

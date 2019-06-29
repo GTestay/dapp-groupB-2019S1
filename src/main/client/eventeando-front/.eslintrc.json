@@ -21,6 +21,7 @@
     "react"
   ],
   "rules": {
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "no-class-assign": "off"
   }
 }
