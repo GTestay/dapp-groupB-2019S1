@@ -3,6 +3,7 @@ import ImageRounded from 'react-rounded-image'
 import '../styles/MenuUsuario.css'
 import { withRouter } from 'react-router-dom'
 import { Button } from 'semantic-ui-react'
+import { FormattedMessage } from 'react-intl'
 
 class UserMenu extends Component {
   render () {
@@ -19,7 +20,9 @@ class UserMenu extends Component {
             imageHeight="75"
           />
         </div>
-        <Button onClick={this.handleClick} type="button">{'Add new event!'}</Button>
+        <Button onClick={this.handleClick} type="button">
+          <FormattedMessage id="userMenu.newEventButton" defaultMessage='Add new event!'/>
+        </Button>
 
       </div>
     )
