@@ -26,7 +26,8 @@ export class PendingInvitations extends Component {
   }
 
   showInvitation (invitation) {
-    return <InvitationDescription invitation={invitation}
+    return <InvitationDescription
+      invitation={invitation}
       goToEvent={this.goToEvent}
       confirmAssistance={this.confirmAssistance}/>
   };

@@ -1,11 +1,13 @@
 {
+  "eventList.noEventsMessage": "No hay Eventos que Mostrar",
+
   "home.ongoingEvents": "Eventos en Curso",
   "home.myEvents": "Mis Eventos",
   "home.popularEvents": "Eventos Populares",
   "home.invitations": "¡Invitaciones!",
 
   "newEvent.header": "Creando Evento",
-  "newEvent.creating": "¡Creando el nuevo evento!",
+  "newEvent.creating": "¡Creando Nuevo Evento!",
   "newEvent.createEventButton": "¡Crear Evento!",
   "newEvent.description": "Agregar Descripción",
   "newEvent.chooseEventType": "Elegir Tipo de Evento",

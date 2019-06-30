@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
 import '../styles/EventList.css'
 import { ElementListEventDescription } from './ElementListEventDescription'
 import EventType from '../Types/EventType'
+import { FormattedMessage } from 'react-intl'
 
 export class EventList extends Component {
   render () {
@@ -17,7 +17,11 @@ export class EventList extends Component {
 
   showEvents () {
     if (this.events().length === 0) {
-      return <h4>There are no events to show!</h4>
+      return (
+        <h4>
+          <FormattedMessage id="eventList.noEventsMessage" defaultMessage="There aren't Events to Show!"/>
+        </h4>
+      )
     }
     return <ul className="listed-event">
       {this.listEvents()}

@@ -7,7 +7,6 @@ import { searchEmails } from '../api/userApi'
 import { eventTypes, optionOf } from '../utils/utils'
 import moment from 'moment'
 import { DateTimeInput } from 'semantic-ui-calendar-react'
-
 import '../styles/Event.css'
 import { RenderWhen } from './utilComponents/RenderWhen'
 import { ErrorMessage } from './utilComponents/ErrorMessage'
@@ -44,7 +43,8 @@ export default class NewEvent extends Component {
 
   render () {
     const intl = this.props.intl
-    const creatingEvent = intl.formatMessage({ id: 'newEvent.creating' })
+    const creatingEvent = intl.formatMessage({ id: 'newEvent.creating', defaultMessage: 'Creating New Event!' })
+
     return (
       <Container>
         <h3>
@@ -168,6 +168,7 @@ export default class NewEvent extends Component {
 
     newEvent = () => {
       this.setState({ loading: true })
+
       createNewEvent(this.getJsonEvent())
         .then(event => this.props.history.push({
           pathname: '/home',

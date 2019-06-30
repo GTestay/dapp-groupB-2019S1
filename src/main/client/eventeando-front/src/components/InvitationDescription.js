@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Container, DropdownItem, Grid, GridColumn, GridRow, HeaderContent, Icon, ItemDescription } from 'semantic-ui-react'
+import { Button, Container, GridColumn, GridRow, HeaderContent, Icon, ItemDescription } from 'semantic-ui-react'
 import * as PropTypes from 'prop-types'
 import InvitationType from '../Types/InvitationType'
 

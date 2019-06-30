@@ -7,7 +7,7 @@ class Loading extends Component {
     return (
       <div>
         <Dimmer active>
-          <Loader size='massive'> {this.props.message}</Loader>
+          <Loader size='massive'> {this.props.message} </Loader>
         </Dimmer>
       </div>
     )
