@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManager;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;

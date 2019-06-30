@@ -1,8 +1,8 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManager;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Loan;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.Moneylender;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.UserService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos.UserLogin;

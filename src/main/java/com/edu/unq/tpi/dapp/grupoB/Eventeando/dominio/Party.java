@@ -17,6 +17,10 @@ public class Party extends Event {
     @JsonProperty
     protected LocalDateTime invitationLimitDate;
 
+    private Party(){
+
+    }
+
     @JsonCreator
     public static Party create(User organizer, String description, List<User> guests, List<Expense> expenses, LocalDateTime invitationLimitDate) {
         Party instance = validateEvent(new Party(), organizer, description, expenses, guests);

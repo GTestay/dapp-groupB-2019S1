@@ -1,8 +1,8 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.*;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.MoneyAccountException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,8 +13,11 @@ import java.util.List;
 public class AccountManager {
     public static final String USER_LOW_BALANCE = "Not Enough Money For This Transaction";
 
-    @Autowired
-    private MoneyTransactionDao moneyTransactionDao;
+    private final MoneyTransactionDao moneyTransactionDao;
+
+    public AccountManager(MoneyTransactionDao moneyTransactionDao) {
+        this.moneyTransactionDao = moneyTransactionDao;
+    }
 
     public Loan giveLoan(User user) {
         Loan newLoan = Loan.create(user);
@@ -28,15 +31,21 @@ public class AccountManager {
 
     // Por ahora estos dos son iguales, pero en teoria deberian ser distintos ya que uno necesita datos de la tarjeta
     public void takeCash(User user, double amount) {
-        if (validateBalance(user, amount)) { throw new MoneyAccountException(USER_LOW_BALANCE); }
+        validateUserBalance(user, amount);
 
         moneyTransactionDao.save(Extraction.create(user, LocalDate.now(), amount));
     }
 
     public void requireCredit(User user, double amount) {
-        if (validateBalance(user, amount)) { throw new MoneyAccountException(USER_LOW_BALANCE); }
+        validateUserBalance(user, amount);
 
         moneyTransactionDao.save(Extraction.create(user, LocalDate.now(), amount));
+    }
+
+    private void validateUserBalance(User user, double amount) {
+        if (validateBalance(user, amount)) {
+            throw new MoneyAccountException(USER_LOW_BALANCE);
+        }
     }
 
     private boolean validateBalance(User user, double amount) { return balance(user) < amount; }
@@ -56,6 +65,6 @@ public class AccountManager {
     public void payLoan(User user, Moneylender moneyLender) { moneyTransactionDao.save(LoanPayment.create(user, moneyLender.getLoan(user))); }
 
     public Integer amountOfPaymentsDone(Loan userLoan) {
-        return moneyTransactionDao.findAllLoanPaymentByUser(userLoan.user).size();
+        return moneyTransactionDao.findAllLoanPaymentByUser(userLoan.user()).size();
     }
 }

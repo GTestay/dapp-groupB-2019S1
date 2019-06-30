@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.scheduler;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManager;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.Moneylender;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.task.LoanPaymentsTask;
 import org.junit.Test;
@@ -33,12 +33,13 @@ public class LoanPaymentsSchedulerTest {
     private MoneyTransactionDao moneyTransactionDao;
 
     @Autowired
+    private LoanPaymentsScheduler job;
+
+    @Autowired
     private Moneylender moneyLender;
 
     @Test
     public void ifTodayIsTheFifthDayOfTheMonthExecutesTheService() {
-        LoanPaymentsScheduler job = new LoanPaymentsScheduler();
-
         Clock clock = Clock.fixed(Instant.parse("2019-05-05T01:01:01.00Z"), ZoneId.of("UTC"));
         LocalDate date = LocalDate.now(clock);
         LoanPaymentsTask service = Mockito.spy(new LoanPaymentsTask());
@@ -51,8 +52,6 @@ public class LoanPaymentsSchedulerTest {
 
     @Test
     public void ifTodayIsNotTheFifthDayOfTheMonthDoNotExecutesTheService() {
-        LoanPaymentsScheduler job = new LoanPaymentsScheduler();
-
         Clock clock = Clock.fixed(Instant.parse("2001-01-01T01:01:01.00Z"), ZoneId.of("UTC"));
         LocalDate date = LocalDate.now(clock);
         LoanPaymentsTask service = Mockito.spy(new LoanPaymentsTask());

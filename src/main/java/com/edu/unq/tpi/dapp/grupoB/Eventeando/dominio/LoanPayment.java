@@ -1,5 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.Moneylender;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 

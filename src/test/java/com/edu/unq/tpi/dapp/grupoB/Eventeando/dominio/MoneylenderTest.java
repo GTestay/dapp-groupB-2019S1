@@ -3,6 +3,8 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManager;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.Moneylender;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

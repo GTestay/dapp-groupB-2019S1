@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -14,7 +13,7 @@ import java.util.Arrays;
 @Component
 public class LoggerAspect {
 
-    Logger logger = LogManager.getLogger(LoggerAspect.class);
+    private Logger logger = LogManager.getLogger(LoggerAspect.class);
 
     @Around("execution(public * com.edu.unq.tpi.dapp.grupoB.Eventeando.service.*.*(..)))")
     public Object log(ProceedingJoinPoint pjp) throws Throwable {

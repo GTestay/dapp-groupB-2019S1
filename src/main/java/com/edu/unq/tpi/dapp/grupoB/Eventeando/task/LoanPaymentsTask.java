@@ -1,8 +1,8 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.task;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManager;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Loan;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.Moneylender;
 
 public class LoanPaymentsTask {
     public void execute(Moneylender moneyLender, AccountManager accountManager) {

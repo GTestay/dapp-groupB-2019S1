@@ -1,6 +1,9 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.aspect.LoggerAspect;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Invitation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -14,6 +17,7 @@ import java.util.List;
 public class MailSenderService {
 
     private final JavaMailSender sender;
+    private Logger logger = LogManager.getLogger(LoggerAspect.class);
 
     @Autowired
     public MailSenderService(JavaMailSender mailSender) {
@@ -40,7 +44,8 @@ public class MailSenderService {
         try {
             this.sendEmail(invitation.guestEmail(), bodyDelMail(invitation), subjectDelMail(invitation));
         } catch (Exception exception) {
-            exception.printStackTrace();
+            logger.error(exception);
+            logger.error("Fails to send emails");
         }
     }
 
@@ -52,6 +57,5 @@ public class MailSenderService {
         return "Hola! " + invitation.guestFullName() + ". Venite a mi evento! \n" +
                 invitation.eventDescription();
     }
-
 
 }

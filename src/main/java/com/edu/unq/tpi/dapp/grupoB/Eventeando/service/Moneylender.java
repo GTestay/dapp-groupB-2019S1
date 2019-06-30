@@ -1,5 +1,7 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Loan;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.MoneylenderException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,11 @@ public class Moneylender {
 
     private HashMap<User, Integer> unpaidFees = new HashMap<>();
 
-    @Autowired
-    private MoneyTransactionDao moneyTransactionDao;
+    private final MoneyTransactionDao moneyTransactionDao;
+
+    public Moneylender(MoneyTransactionDao moneyTransactionDao) {
+        this.moneyTransactionDao = moneyTransactionDao;
+    }
 
     public Loan giveLoan(User user, AccountManager accountManager) {
         validateUser(user);
@@ -101,7 +106,7 @@ public class Moneylender {
 
     public Loan getLoan(User user) {
         List<Loan> userLoans = loansOf(user);
-        userLoans.sort(Comparator.comparing(loan -> loan.date));
+        userLoans.sort(Comparator.comparing(loan -> loan.date()));
         Collections.reverse(userLoans);
 
         Optional<Loan> userLoan = userLoans.stream().findFirst();
