@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import ExpenseType from '../Types/ExpenseType'
 import { ListItem, List, ListContent, ListIcon } from 'semantic-ui-react'
 
-export class ExpenseList extends Component {
+export class ExpenseListForm extends Component {
   render () {
     return this.showExpenses()
   }
@@ -45,11 +45,11 @@ export class ExpenseList extends Component {
   }
 }
 
-ExpenseList.defaultProps ={
+ExpenseListForm.defaultProps ={
   expenses: [],
   onItemClick: () => {}
 }
 
-ExpenseList.propTypes = {
+ExpenseListForm.propTypes = {
   expenses: PropTypes.arrayOf(ExpenseType)
 }

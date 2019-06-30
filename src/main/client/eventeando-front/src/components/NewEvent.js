@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { allExpenses } from '../api/expensesApi'
-import { ExpenseList } from './ExpenseList'
+import { ExpenseListForm } from './ExpenseListForm'
 import { Container, Dropdown, Form, FormButton, FormInput, FormSelect } from 'semantic-ui-react'
 import { createNewEvent } from '../api/eventApi'
 import { searchEmails } from '../api/userApi'
@@ -112,7 +112,7 @@ export default class NewEvent extends Component {
             <text>{this.totalCost()}</text>
           </div>
         </label>
-        <ExpenseList onItemClick={this.selectExpense} expenses={this.expenses()}/>
+        <ExpenseListForm onItemClick={this.selectExpense} expenses={this.expenses()}/>
       </Form.Field>
     }
 

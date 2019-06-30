@@ -7,6 +7,7 @@ import Home from './components/Home'
 import { Page404 } from './components/Page404'
 import NewEvent from './components/NewEvent'
 import ViewEvent from "./components/ViewEvent";
+import 'moment/locale/es'
 
 class App extends Component {
   render () {
