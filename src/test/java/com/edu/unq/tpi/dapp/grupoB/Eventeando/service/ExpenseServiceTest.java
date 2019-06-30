@@ -2,10 +2,10 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Expense;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -18,11 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
+@AutoConfigureDataJpa
 @ActiveProfiles("test")
 public class ExpenseServiceTest {
-
-    @Autowired
-    private ExpenseDao expenseDao;
 
     @Autowired
     private ExpenseService expenseService;

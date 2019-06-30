@@ -9,9 +9,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 public class LoanPaymentsSchedulerTest {
 
