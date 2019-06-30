@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import UserType from '../Types/UserType'
-import {confirmAssistance, getInvitationsOf} from '../api/userApi'
-import {InvitationDescription} from "./InvitationDescription";
+import { confirmAssistance, getInvitationsOf } from '../api/userApi'
+import { InvitationDescription } from './InvitationDescription'
 
 export class PendingInvitations extends Component {
   constructor (props) {

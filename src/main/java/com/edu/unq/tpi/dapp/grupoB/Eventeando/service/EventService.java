@@ -33,21 +33,21 @@ public class EventService {
 
     public Party createParty(EventData eventData, LocalDateTime invitationLimitDate) {
         Party party = new EventBuilder(eventData, this).buildParty(invitationLimitDate);
-        saveEvent(party);
+        confirmEvent(party);
 
         return party;
     }
 
     public PotluckEvent createPotluckEvent(EventData eventData) {
         PotluckEvent potluckEvent = new EventBuilder(eventData, this).buildPotluckEvent();
-        saveEvent(potluckEvent);
+        confirmEvent(potluckEvent);
 
         return potluckEvent;
     }
 
     public BaquitaSharedExpensesEvent createBaquitaSharedExpensesEvent(EventData eventData) {
         BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = new EventBuilder(eventData, this).buildBaquitaSharedExpensesEvent();
-        saveEvent(baquitaSharedExpensesEvent);
+        confirmEvent(baquitaSharedExpensesEvent);
 
         return baquitaSharedExpensesEvent;
     }
@@ -55,12 +55,12 @@ public class EventService {
     public BaquitaCrowdFundingEvent createBaquitaCrowdFundingEvent(EventData eventData) {
         BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = new EventBuilder(eventData, this).buildBaquitaCrowdFundingEventEvent();
 
-        saveEvent(baquitaCrowdFundingEvent);
+        confirmEvent(baquitaCrowdFundingEvent);
 
         return baquitaCrowdFundingEvent;
     }
 
-    void saveEvent(Event event) {
+    void confirmEvent(Event event) {
         this.eventDao.save(event);
         invitationService.sendInvitations(event);
     }

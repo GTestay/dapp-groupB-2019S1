@@ -1,20 +1,10 @@
-import React, {Component} from "react";
-import {
-  Button,
-  Container,
-  DropdownItem,
-  Grid,
-  GridColumn,
-  GridRow,
-  HeaderContent,
-  Icon,
-  ItemDescription
-} from "semantic-ui-react";
-import * as PropTypes from "prop-types";
-import InvitationType from "../Types/InvitationType";
+import React, { Component } from 'react'
+import { Button, Container, DropdownItem, Grid, GridColumn, GridRow, HeaderContent, Icon, ItemDescription } from 'semantic-ui-react'
+import * as PropTypes from 'prop-types'
+import InvitationType from '../Types/InvitationType'
 
 export class InvitationDescription extends Component {
-  render() {
+  render () {
     return <DropdownItem>
       <Grid columns={2} celled>
         <GridRow>
@@ -39,11 +29,11 @@ export class InvitationDescription extends Component {
     </DropdownItem>
   }
 
-  evenDescription() {
+  evenDescription () {
     return `${this.props.invitation.event.type} ${this.props.invitation.event.description}`
   }
 
-  fullName(organizer) {
+  fullName (organizer) {
     return `${organizer.name} ${organizer.lastname} `
   }
 }
