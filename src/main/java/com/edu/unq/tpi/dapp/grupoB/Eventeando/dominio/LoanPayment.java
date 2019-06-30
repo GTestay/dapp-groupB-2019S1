@@ -1,9 +1,13 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@DiscriminatorValue("LoanPayment")
 public class LoanPayment extends MoneyTransaction {
 
+    @ManyToOne
     private Loan referenceLoan;
 
     public static LoanPayment create(User user, Loan referenceLoan) {
