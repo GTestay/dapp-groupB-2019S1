@@ -10,7 +10,7 @@
       },
       "File": {
         "name": "File",
-        "fileName": "../dapp-groupB-2019S1/log/services.log",
+        "fileName": "../log/services.log",
         "PatternLayout": {
           "pattern": "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"        }
       }
