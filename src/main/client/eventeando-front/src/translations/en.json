@@ -5,6 +5,7 @@
   "home.invitations": "Invitations!",
 
   "newEvent.header": "Creating Event",
+  "newEvent.creating": "Creating the new Event!",
   "newEvent.createEventButton": "Create Event!",
   "newEvent.description": "Add Description",
   "newEvent.chooseEventType": "Choose Event Type",

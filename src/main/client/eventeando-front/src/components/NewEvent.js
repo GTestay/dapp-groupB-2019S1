@@ -12,11 +12,13 @@ import '../styles/Event.css'
 import { RenderWhen } from './utilComponents/RenderWhen'
 import { ErrorMessage } from './utilComponents/ErrorMessage'
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl'
+import Loading from './utilComponents/Loading'
 
 export default class NewEvent extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      loading: false,
       user: props.location.state.user,
       submitted: false,
       expenses: [],
@@ -42,14 +44,14 @@ export default class NewEvent extends Component {
 
   render () {
     const intl = this.props.intl
-
+    const creatingEvent = intl.formatMessage({ id: 'newEvent.creating' })
     return (
       <Container>
         <h3>
           <FormattedMessage id="newEvent.header" defaultMessage='Creating Event'/>
         </h3>
 
-        {this.renderEventForm(intl)}
+        {this.state.loading ? <Loading message={creatingEvent}/> : this.renderEventForm(intl)}
         {this.renderError()}
       </Container>
     )
@@ -165,12 +167,14 @@ export default class NewEvent extends Component {
     };
 
     newEvent = () => {
+      this.setState({ loading: true })
       createNewEvent(this.getJsonEvent())
         .then(event => this.props.history.push({
           pathname: '/home',
           state: { user: this.getUser() }
         }))
         .catch(error => this.setState({ error: true, errorMessage: error }))
+        .then(() => this.setState({ loading: false }))
     };
 
     selectExpense = (event, data) => {

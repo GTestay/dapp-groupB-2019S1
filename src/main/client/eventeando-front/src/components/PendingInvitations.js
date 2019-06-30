@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import UserType from '../Types/UserType'
 import { confirmAssistance, getInvitationsOf } from '../api/userApi'
 import { InvitationDescription } from './InvitationDescription'
+import { Grid } from 'semantic-ui-react'
 
 export class PendingInvitations extends Component {
   constructor (props) {
@@ -18,7 +19,9 @@ export class PendingInvitations extends Component {
 
   render () {
     return <React.Fragment>
-      {this.invitations().map(invitation => this.showInvitation(invitation))}
+      <Grid columns={2} celled={'internally'}>
+        {this.invitations().map(invitation => this.showInvitation(invitation))}
+      </Grid>
     </React.Fragment>
   }
 

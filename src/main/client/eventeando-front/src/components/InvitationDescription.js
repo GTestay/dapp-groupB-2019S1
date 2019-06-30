@@ -5,28 +5,24 @@ import InvitationType from '../Types/InvitationType'
 
 export class InvitationDescription extends Component {
   render () {
-    return <DropdownItem>
-      <Grid columns={2} celled>
-        <GridRow>
-          <GridColumn>
-            <Container>
-              <HeaderContent content={this.fullName(this.props.invitation.event.organizer)}/>
-              <ItemDescription content={this.evenDescription()}/>
-            </Container>
-          </GridColumn>
-          <GridColumn stretched>
-            <Button.Group>
-              <Button onClick={() => this.props.confirmAssistance(this.props.invitation)}>
-                <Icon name={'telegram'}/>
-              </Button>
-              <Button onClick={this.props.goToEvent}>
-                <Icon name={'eye'}/>
-              </Button>
-            </Button.Group>
-          </GridColumn>
-        </GridRow>
-      </Grid>
-    </DropdownItem>
+    return <GridRow >
+      <GridColumn >
+        <Container text>
+          <HeaderContent content={this.fullName(this.props.invitation.event.organizer)}/>
+          <ItemDescription content={this.evenDescription()}/>
+        </Container>
+      </GridColumn>
+      <GridColumn stretched>
+        <Button.Group>
+          <Button onClick={() => this.props.confirmAssistance(this.props.invitation)}>
+            <Icon name={'telegram'}/>
+          </Button>
+          <Button onClick={this.props.goToEvent}>
+            <Icon name={'eye'}/>
+          </Button>
+        </Button.Group>
+      </GridColumn>
+    </GridRow>
   }
 
   evenDescription () {

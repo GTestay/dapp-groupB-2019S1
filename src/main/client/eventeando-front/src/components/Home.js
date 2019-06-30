@@ -5,7 +5,7 @@ import { obtainCurrentsEvent, obtainEventsMostPopular, obtainUserEvents } from '
 import UserMenu from './UserMenu'
 import { injectIntl, intlShape } from 'react-intl'
 import { PendingInvitations } from './PendingInvitations'
-import { Dropdown, DropdownItem, DropdownMenu, Icon, Menu, MenuItem } from 'semantic-ui-react'
+import { Dropdown, Menu } from 'semantic-ui-react'
 
 export class Home extends Component {
   constructor (props) {
@@ -62,22 +62,24 @@ export class Home extends Component {
     })
 
     return (
-      <div className="home">
+      <React.Fragment>
         <Menu>
-          <Dropdown item text={invitations}>
+          <Dropdown scrolling item text={invitations}>
             <Dropdown.Menu>
               <PendingInvitations user={this.getUser()}/>
             </Dropdown.Menu>
           </Dropdown>
         </Menu>
+        <div className="home">
 
-        <EventList title={ongoingEventsTitle} events={this.getCurrentEvents()}/>
-        <EventList title={myEventsTitle} events={this.getUserEvents()}/>
-        <EventList title={popularEventsTitle} events={this.getPopularEvents()}/>
-        <div className="user-menu">
-          <UserMenu user={this.getUser()}/>
+          <EventList title={ongoingEventsTitle} events={this.getCurrentEvents()}/>
+          <EventList title={myEventsTitle} events={this.getUserEvents()}/>
+          <EventList title={popularEventsTitle} events={this.getPopularEvents()}/>
+          <div className="user-menu">
+            <UserMenu user={this.getUser()}/>
+          </div>
         </div>
-      </div>
+      </React.Fragment>
     )
   }
 
