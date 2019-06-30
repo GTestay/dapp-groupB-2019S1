@@ -45,6 +45,11 @@ export class ExpenseList extends Component {
   }
 }
 
+ExpenseList.defaultProps ={
+  expenses: [],
+  onItemClick: () => {}
+}
+
 ExpenseList.propTypes = {
   expenses: PropTypes.arrayOf(ExpenseType)
 }

@@ -4,10 +4,11 @@ import '../styles/Home.css'
 import { obtainCurrentsEvent, obtainEventsMostPopular, obtainUserEvents } from '../api/eventApi'
 import UserMenu from './UserMenu'
 import { injectIntl, intlShape } from 'react-intl'
-import { PendingInvitations } from './PendingInvitations'
+import {PendingInvitations} from './PendingInvitations'
 import { Dropdown, Menu } from 'semantic-ui-react'
+import {withRouter} from "react-router-dom";
 
-export class Home extends Component {
+class Home extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -66,15 +67,15 @@ export class Home extends Component {
         <Menu>
           <Dropdown scrolling item text={invitations}>
             <Dropdown.Menu>
-              <PendingInvitations user={this.getUser()}/>
+              <PendingInvitations onClick={this.viewEvent} user={this.getUser()}/>
             </Dropdown.Menu>
           </Dropdown>
         </Menu>
         <div className="home">
 
-          <EventList title={ongoingEventsTitle} events={this.getCurrentEvents()}/>
-          <EventList title={myEventsTitle} events={this.getUserEvents()}/>
-          <EventList title={popularEventsTitle} events={this.getPopularEvents()}/>
+          <EventList onClick={this.viewEvent} title={ongoingEventsTitle} events={this.getCurrentEvents()}/>
+          <EventList onClick={this.viewEvent} title={myEventsTitle} events={this.getUserEvents()}/>
+          <EventList onClick={this.viewEvent} title={popularEventsTitle} events={this.getPopularEvents()}/>
           <div className="user-menu">
             <UserMenu user={this.getUser()}/>
           </div>
@@ -90,6 +91,13 @@ export class Home extends Component {
   getCurrentEvents () { return this.state.currentEvents }
 
   getPopularEvents () { return this.state.popularEvents }
+
+  viewEvent = event => {
+    this.props.history.push({
+      pathname: '/view-event',
+      state: { user: this.getUser(), event }
+    })
+  };
 }
 
 Home.propTypes = {
@@ -97,3 +105,5 @@ Home.propTypes = {
 }
 
 Home = injectIntl(Home)
+
+export default withRouter(Home)
