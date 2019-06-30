@@ -3,6 +3,13 @@ sudo: required
 jdk:
   - oraclejdk8
 install:
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -q
+  - mvn -N io.takari:maven:wrapper
+  - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -q
+script:
+  - ./travis-script.sh
 before_install:
   - chmod +x mvnw
+  - chmod +x travis-script.sh
+cache:
+  directories:
+    - $HOME/.m2
