@@ -25,4 +25,7 @@
   "noExpenses": "There are no expenses to show!",
   "partyDescription.invitationLimitDate": "Confirmation Date"
 
+  "userMenu.newEventButton": "Add Event",
+  "userMenu.balance": "Balance:",
+  "userMenu.newLoanButton": "Take Loan"
 }

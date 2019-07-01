@@ -23,7 +23,10 @@
   "viewEvent.eventExpenses": "Bienes",
 
   "noExpenses": "¡No hay bienes para mostrar!",
-  "partyDescription.invitationLimitDate": "Fecha de confirmación"
+  "partyDescription.invitationLimitDate": "Fecha de confirmación",
 
 
+  "userMenu.newEventButton": "Agregar Evento",
+  "userMenu.balance": "Saldo:",
+  "userMenu.newLoanButton": "Tomar Prestamo"
 }
