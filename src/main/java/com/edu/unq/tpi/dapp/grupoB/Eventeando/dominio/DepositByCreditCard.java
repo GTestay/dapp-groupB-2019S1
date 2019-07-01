@@ -2,9 +2,13 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.MoneyTransactionValidator;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
+@Entity
+@DiscriminatorValue("DepositByCreditCard")
 public class DepositByCreditCard extends Deposit {
     public YearMonth dueDate;
     public String cardNumber;

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,13 +37,22 @@ public class MoneyTransactionDaoTest {
         User user = userFactory.user();
         userDao.save(user);
 
-        Loan transaction = Loan.create(user);
-        moneyTransactionDao.save(transaction);
+        Loan loan = Loan.create(user);
+        moneyTransactionDao.save(loan);
 
-        LoanPayment anotherTransaction = LoanPayment.create(user, transaction);
-        moneyTransactionDao.save(anotherTransaction);
+        LoanPayment loanPayment = LoanPayment.create(user, loan);
+        moneyTransactionDao.save(loanPayment);
+
+        Extraction extraction = Extraction.create(user, LocalDate.now(), 100.00);
+        moneyTransactionDao.save(extraction);
+
+        DepositByCreditCard depositByCreditCard = DepositByCreditCard.create(user, LocalDate.of(2019, 7, 1), 100.00, YearMonth.of(2019, 10), "4242424242424242");
+        moneyTransactionDao.save(depositByCreditCard);
+
+        DepositByCash depositByCash = DepositByCash.create(user, LocalDate.now(), 500.00);
+        moneyTransactionDao.save(depositByCash);
 
         List<MoneyTransaction> transactions = moneyTransactionDao.findAllByUser(user);
-        assertThat(transactions).containsExactlyInAnyOrder(transaction, anotherTransaction);
+        assertThat(transactions).containsExactlyInAnyOrder(loan, loanPayment, extraction, depositByCreditCard, depositByCash);
     }
 }
