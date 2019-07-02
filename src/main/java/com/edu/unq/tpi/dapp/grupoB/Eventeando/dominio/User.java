@@ -67,7 +67,10 @@ public class User {
 
     public void creditDeposit(double amount, YearMonth dueDate, String cardNumber, AccountManager accountManager) { accountManager.creditDeposit(this, amount, dueDate, cardNumber) ; }
 
-    public void takeOutALoan(Moneylender moneyLender, AccountManager accountManager) { moneyLender.giveLoan(this, accountManager); }
+    public Loan takeOutALoan(Moneylender moneyLender, AccountManager accountManager) {
+
+        return moneyLender.giveLoan(this, accountManager);
+    }
 
     public boolean isDefaulter(Moneylender moneyLender) { return moneyLender.isDefaulter(this); }
 

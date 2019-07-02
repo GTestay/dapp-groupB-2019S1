@@ -4,14 +4,25 @@ import '../styles/MenuUsuario.css'
 import { withRouter } from 'react-router-dom'
 import { Button } from 'semantic-ui-react'
 import { FormattedMessage } from 'react-intl'
+import {balance, newLoanFor} from "../api/userApi";
 
 class UserMenu extends Component {
+  constructor(props) {
+    super(props);
+    this.state ={
+      balance :0
+    }
+  }
+  componentDidMount() {
+    this.userBalance()
+  }
+
   render () {
-    const intl = this.props.intl
+    const intl = this.props.intl;
     const balance = intl.formatMessage({
       id: 'userMenu.balance',
       defaultMessage: 'Balance: $'
-    })
+    });
 
     return (
       <div className="user-details">
@@ -45,6 +56,10 @@ class UserMenu extends Component {
     )
   }
 
+  userBalance () {
+    balance(this.getUser()).then((balance) => this.setState({ balance }))
+  }
+
   getFullName () {
     return this.getUser().name + ' ' + this.getUser().lastname
   }
@@ -61,14 +76,11 @@ class UserMenu extends Component {
     }
 
     getUserBalance () {
-      return 0
+      return this.state.balance;
     }
 
     newLoan = () => {
-      this.props.history.push({
-        pathname: '/home',
-        state: { user: this.getUser() }
-      })
+      newLoanFor(this.getUser()).then(() => this.userBalance())
     };
 }
 

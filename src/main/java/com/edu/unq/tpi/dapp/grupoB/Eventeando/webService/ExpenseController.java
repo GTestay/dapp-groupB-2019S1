@@ -5,11 +5,13 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Expense;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Transactional
 public class ExpenseController {
 
     private static final String baseUrl = "/expenses";

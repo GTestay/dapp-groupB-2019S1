@@ -34,7 +34,7 @@ export function loginUser (googleUser) {
   const jsonUser = {
     email: googleUser.email
   }
-  return postUser(`/login`, jsonUser, googleUser)
+  return postUser('/login', jsonUser, googleUser)
 }
 
 export function getInvitationsOf (user) {
@@ -44,4 +44,12 @@ export function getInvitationsOf (user) {
 
 export function confirmAssistance (invitationId) {
   return axios.get('/invitations/' + invitationId + '/confirm')
+}
+
+export function balance (user) {
+  return axios.get(`${url}/${user.id}/balance`).then((response) => response.data)
+}
+
+export function newLoanFor(user) {
+  return axios.post(`${url}/${user.id}/takeOutLoan`, { headers: headers }).then((response) => response.data)
 }

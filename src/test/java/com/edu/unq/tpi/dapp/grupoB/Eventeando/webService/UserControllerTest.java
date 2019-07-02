@@ -209,4 +209,22 @@ public class UserControllerTest extends ControllerTest {
     public ResultActions getUserBalance(User user) throws Exception {
         return getUsers(url() + "/" + user.id() + "/balance");
     }
+
+    @Test
+    public void userCanTakeOutLoan() throws Exception {
+        User user = userFactory.userWithCash(0, accountManager);
+        userDao.save(user);
+
+        JSONObject bodyRequest = new JSONObject();
+
+        ResultActions perform = performPost(bodyRequest, "/users/" + user.id() + "/takeOutLoan");
+
+        MvcResult result = assertThatResponseIsCreated(perform);
+
+        String responseString = getBodyOfTheRequest(result);
+        JSONObject jsonResponse = new JSONObject(responseString);
+        JSONObject loanBody = new JSONObject();
+
+        JSONAssert.assertEquals(jsonResponse, loanBody, true);
+    }
 }

@@ -21,10 +21,10 @@ public class Moneylender {
     @Autowired
     private MoneyTransactionDao moneyTransactionDao;
 
-    public void giveLoan(User user, AccountManager accountManager) {
+    public Loan giveLoan(User user, AccountManager accountManager) {
         validateUser(user);
 
-        accountManager.giveLoan(user);
+        return accountManager.giveLoan(user);
     }
 
     private void validateUser(User user) {

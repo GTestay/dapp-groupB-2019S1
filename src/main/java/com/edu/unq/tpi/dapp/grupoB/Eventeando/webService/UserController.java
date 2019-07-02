@@ -1,22 +1,29 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Loan;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.UserService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController()
+@RestController
+@Transactional
 public class UserController {
 
     private final UserService userService;
 
     @Autowired
     private AccountManager accountManager;
+
+    @Autowired
+    private Moneylender moneyLender;
 
     @Autowired
     public UserController(UserService userService) {
@@ -53,5 +60,13 @@ public class UserController {
         User user = userService.searchUser(id);
 
         return user.balance(accountManager);
+    }
+
+    @PostMapping("/users/{id}/takeOutLoan")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Loan takeOutLoan(@PathVariable Long id) {
+        User owner = userService.searchUser(id);
+
+        return owner.takeOutALoan(moneyLender,accountManager);
     }
 }
