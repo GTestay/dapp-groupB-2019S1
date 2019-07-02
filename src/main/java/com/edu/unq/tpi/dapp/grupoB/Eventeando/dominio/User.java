@@ -71,7 +71,7 @@ public class User {
 
     public boolean isDefaulter(Moneylender moneyLender) { return moneyLender.isDefaulter(this); }
 
-    public void payLoan(AccountManager accountManager, Moneylender moneyLender) { moneyLender.payLoan(this, accountManager, moneyLender); }
+    public void payLoan(Moneylender moneyLender, AccountManager accountManager) { moneyLender.payLoan(this, moneyLender, accountManager); }
 
     public boolean hasThisEmail(String anEmail) {
         return email.equals(anEmail);
@@ -101,7 +101,7 @@ public class User {
         return this.indebt;
     }
 
-    public void payOffDebt() {
+    public void payDebt() {
         indebt = false;
     }
 }

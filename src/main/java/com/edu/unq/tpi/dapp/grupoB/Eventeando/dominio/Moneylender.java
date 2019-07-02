@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
@@ -42,8 +41,8 @@ public class Moneylender {
 
     public void indebt(User user) { user.withDebt(); }
 
-    public void payLoan(User user, AccountManager accountManager, Moneylender moneyLender) {
-        if (isDefaulter(user)) { checkPayments(user, accountManager, moneyLender); }
+    public void payLoan(User user, Moneylender moneyLender, AccountManager accountManager) {
+        if (isDefaulter(user)) { checkPayments(user, moneyLender, accountManager); }
 
         if (user.balance(accountManager) > LOAN_PAYMENT_COST) {
             accountManager.payLoan(user, moneyLender);
@@ -54,16 +53,16 @@ public class Moneylender {
     }
 
     public void checkIfLoanIsOver(AccountManager accountManager) {
-        actualLoans().removeIf(loan -> remainingPayments(loan.user, accountManager) == 0);
+        actualLoans().removeIf(loan -> remainingPayments(loan, accountManager) == 0);
     }
 
-    private void checkPayments(User user, AccountManager accountManager, Moneylender moneyLender) {
-        IntStream.rangeClosed(1, unpaidFees.get(user)).forEach(fun -> checkPayment(user, accountManager, moneyLender));
+    private void checkPayments(User user, Moneylender moneyLender, AccountManager accountManager) {
+        IntStream.rangeClosed(1, unpaidFees.get(user)).forEach(fun -> checkPayment(user, moneyLender, accountManager));
 
-        if (unpaidFees.get(user) == 0) { user.payOffDebt(); }
+        if (unpaidFees.get(user) == 0) { user.payDebt(); }
     }
 
-    private void checkPayment(User user, AccountManager accountManager, Moneylender moneyLender) {
+    private void checkPayment(User user, Moneylender moneyLender, AccountManager accountManager) {
         if (user.balance(accountManager) > LOAN_PAYMENT_COST) {
             unpaidFees.put(user, unpaidFees.get(user) - 1);
             accountManager.payLoan(user, moneyLender);
@@ -80,6 +79,12 @@ public class Moneylender {
 
     public List<Loan> actualLoans() {
         return moneyTransactionDao.findAllLoan();
+    }
+
+    public int remainingPayments(Loan loan, AccountManager accountManager) {
+        Integer actualPayments = accountManager.amountOfPaymentsDone(loan);
+
+        return 6 - actualPayments;
     }
 
     public int remainingPayments(User user, AccountManager accountManager) {
@@ -101,14 +106,10 @@ public class Moneylender {
 
         Optional<Loan> userLoan = userLoans.stream().findFirst();
 
-        if(userLoan.isPresent()){
-            return userLoan.get();
-        } else {
-            throw new MoneylenderException(USER_WITHOUT_LOAN);
-        }
+        return userLoan.orElseThrow(() -> new MoneylenderException(USER_WITHOUT_LOAN));
     }
 
     private List<Loan> loansOf(User user) {
-        return actualLoans().stream().filter(loan -> loan.isOwner(user)).collect(Collectors.toList());
+        return moneyTransactionDao.findAllLoanByUser(user);
     }
 }

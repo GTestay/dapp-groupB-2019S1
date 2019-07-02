@@ -5,6 +5,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.MoneylenderException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.UserValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +35,9 @@ public class UserTest {
 
     @Autowired
     private MoneyTransactionDao moneyTransactionDao;
+
+    @Autowired
+    private UserDao userDao;
 
     @Autowired
     private Moneylender moneyLender;
@@ -231,6 +235,7 @@ public class UserTest {
     @Test
     public void userCanNotTakeALoanHavingAnotherLoanInProgress(){
         User user = userFactory.user();
+        userDao.save(user);
 
         user.takeOutALoan(moneyLender, accountManager);
 
@@ -245,6 +250,7 @@ public class UserTest {
     @Test
     public void userCanTakeALoanBeenDutiful(){
         User user = userFactory.user();
+        userDao.save(user);
 
         user.takeOutALoan(moneyLender, accountManager);
 
@@ -257,7 +263,7 @@ public class UserTest {
         user.takeOutALoan(moneyLender, accountManager);
         user.takeCash(1000.00, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
 
         assertFalse(user.isDefaulter(moneyLender));
         assertEquals(200.00, user.balance(accountManager), 0);
@@ -267,7 +273,7 @@ public class UserTest {
     public void haveToPayLoanAndDoNotHaveMoney() {
         User user = userFactory.userWithCash(100.00, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
 
         assertTrue(user.isDefaulter(moneyLender));
         assertEquals(100.00, user.balance(accountManager), 0);
@@ -279,14 +285,14 @@ public class UserTest {
         user.takeOutALoan(moneyLender, accountManager);
         user.takeCash(1000.00, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
 
         assertTrue(user.isDefaulter(moneyLender));
         assertEquals(100.00, user.balance(accountManager), 0);
 
         user.cashDeposit(400.00, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
 
         assertFalse(user.isDefaulter(moneyLender));
         assertEquals(100.00, user.balance(accountManager), 0);
@@ -298,15 +304,15 @@ public class UserTest {
         user.takeOutALoan(moneyLender, accountManager);
         user.takeCash(1000.00, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
 
         assertTrue(user.isDefaulter(moneyLender));
         assertEquals(100.00, user.balance(accountManager), 0);
 
         user.cashDeposit(200.00, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManager);
 
         assertTrue(user.isDefaulter(moneyLender));
         assertEquals(100.00, user.balance(accountManager), 0);

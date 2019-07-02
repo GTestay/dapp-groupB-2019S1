@@ -46,8 +46,7 @@ public class UserFactory {
     public User userIndebt() {
         User user = user();
 
-        Moneylender moneylender = new Moneylender();
-        moneylender.indebt(user);
+        user.withDebt();
 
         return user;
     }

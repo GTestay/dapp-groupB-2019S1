@@ -5,6 +5,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,13 @@ public class LoanPaymentsTaskTest {
     @Autowired
     private Moneylender moneyLender;
 
+    @Autowired
+    private UserDao userDao;
+
     @Test
     public void forUsersWithALoanInProgressChargeTheLoan(){
-        User user = userFactory.user();
-        User anotherUser = userFactory.user();
+        User user = getUser();
+        User anotherUser = getUser();
         anotherUser.cashDeposit(500.00, accountManager);
 
         user.takeOutALoan(moneyLender, accountManager);
@@ -49,21 +53,29 @@ public class LoanPaymentsTaskTest {
 
     @Test
     public void forUsersWhoAlreadyPayedTheLoanDoNotDoAnything(){
-        User user = userFactory.user();
+        User user = getUser();
         user.cashDeposit(600.00, accountManager);
-        User anotherUser = userFactory.user();
+        User anotherUser = getUser();
 
         user.takeOutALoan(moneyLender, accountManager);
         anotherUser.takeOutALoan(moneyLender, accountManager);
 
         int i;
         for (i = 0; i < 6; i++) {
-            user.payLoan(accountManager, moneyLender);
+            user.payLoan(moneyLender, accountManager);
         }
 
         service.execute(moneyLender, accountManager);
 
         assertEquals(400, user.balance(accountManager), 0);
         assertEquals(800, anotherUser.balance(accountManager), 0);
+    }
+
+    protected User getUser() {
+        User newUser = userFactory.user();
+
+        userDao.save(newUser);
+
+        return newUser;
     }
 }

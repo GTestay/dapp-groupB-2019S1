@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AccountManager {
@@ -47,25 +44,18 @@ public class AccountManager {
     public double balance(User user) { return transactions(user).stream().mapToDouble(MoneyTransaction::transactionalValue).sum(); }
 
     public void cashDeposit(User user, double amount) {
-        makeDeposit(user, DepositByCash.create(user, LocalDate.now(), amount));
+        makeDeposit(DepositByCash.create(user, LocalDate.now(), amount));
     }
 
     public void creditDeposit(User user, double amount, YearMonth dueDate, String cardNumber) {
-        makeDeposit(user, DepositByCreditCard.create(user, LocalDate.now(), amount, dueDate, cardNumber));
+        makeDeposit(DepositByCreditCard.create(user, LocalDate.now(), amount, dueDate, cardNumber));
     }
 
-    private void makeDeposit(User user, Deposit deposit) { moneyTransactionDao.save(deposit); }
+    private void makeDeposit(Deposit deposit) { moneyTransactionDao.save(deposit); }
 
     public void payLoan(User user, Moneylender moneyLender) { moneyTransactionDao.save(LoanPayment.create(user, moneyLender.getLoan(user))); }
 
     public Integer amountOfPaymentsDone(Loan userLoan) {
-        List<LoanPayment> userPayments = transactions(userLoan.user).stream()
-                .filter(transaction -> transaction instanceof LoanPayment)
-                .map(transaction -> (LoanPayment) transaction)
-                .collect(Collectors.toList());
-
-        userPayments.stream().filter(payment -> payment.belongsTo(userLoan)).collect(Collectors.toList());
-
-        return userPayments.size();
+        return moneyTransactionDao.findAllLoanPaymentByUser(userLoan.user).size();
     }
 }

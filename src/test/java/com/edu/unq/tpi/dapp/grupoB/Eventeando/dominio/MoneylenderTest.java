@@ -2,6 +2,7 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,9 @@ public class MoneylenderTest {
     @Autowired
     private Moneylender moneyLender;
 
+    @Autowired
+    private UserDao userDao;
+
     @Before
     public void setUp() {
         userFactory = new UserFactory();
@@ -40,8 +44,8 @@ public class MoneylenderTest {
 
     @Test
     public void getActualLoansForAllTheUsers() {
-        User arya = userFactory.user();
-        User sansa = userFactory.user();
+        User arya = getUser();
+        User sansa = getUser();
 
         arya.takeOutALoan(moneyLender, accountManager);
         sansa.takeOutALoan(moneyLender, accountManager);
@@ -56,11 +60,11 @@ public class MoneylenderTest {
 
     @Test
     public void loanInformationOffAnUserWithFiveRemainingPayments() {
-        User user = userFactory.user();
+        User user = getUser();
 
         user.takeOutALoan(moneyLender, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
 
         assertEquals(moneyLender.remainingPayments(user, accountManager), 5);
         assertEquals(moneyLender.unpaidPayments(user), 0);
@@ -68,46 +72,54 @@ public class MoneylenderTest {
 
     @Test
     public void loanInformationOffAnUserWithFiveRemainingPaymentsAndTwoUnpaids() {
-        User user = userFactory.user();
+        User user = getUser();
 
         user.takeOutALoan(moneyLender, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
 
         assertEquals(moneyLender.remainingPayments(user, accountManager), 5);
         assertEquals(moneyLender.unpaidPayments(user), 0);
 
         user.takeCash(700.00, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManager);
 
         assertEquals(moneyLender.remainingPayments(user, accountManager), 5);
         assertEquals(moneyLender.unpaidPayments(user), 2);
     }
 
+    protected User getUser() {
+        User newUser = userFactory.user();
+
+        userDao.save(newUser);
+
+        return newUser;
+    }
+
     @Test
     public void loanInformationOffAnUserWithSomeActivity() {
-        User user = userFactory.user();
+        User user = getUser();
         user.takeOutALoan(moneyLender, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManager);
 
         assertEquals(moneyLender.remainingPayments(user, accountManager), 4);
         assertEquals(moneyLender.unpaidPayments(user), 0);
 
         user.takeCash(500.00, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
 
         assertEquals(moneyLender.remainingPayments(user, accountManager), 4);
         assertEquals(moneyLender.unpaidPayments(user), 1);
 
         user.cashDeposit(1500.00, accountManager);
 
-        user.payLoan(accountManager, moneyLender);
-        user.payLoan(accountManager, moneyLender);
+        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManager);
 
         assertEquals(moneyLender.remainingPayments(user, accountManager), 1);
         assertEquals(moneyLender.unpaidPayments(user), 0);
