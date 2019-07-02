@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.MoneyTransactionValidator;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ public abstract class MoneyTransaction {
     protected Long id;
 
     @ManyToOne
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     protected User user;
 
     protected LocalDate date;

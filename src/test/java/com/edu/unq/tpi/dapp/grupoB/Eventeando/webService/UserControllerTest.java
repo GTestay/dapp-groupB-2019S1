@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
@@ -28,6 +29,9 @@ public class UserControllerTest extends ControllerTest {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private AccountManager accountManager;
 
     private UserFactory userFactory;
     private User newUser;
@@ -190,7 +194,7 @@ public class UserControllerTest extends ControllerTest {
 
     @Test
     public void canBringTheBalanceForAnUser() throws Exception {
-        User user = userFactory.userWithCash(1000);
+        User user = userFactory.userWithCash(1000, accountManager);
         userDao.save(user);
 
         ResultActions perform = getUserBalance(user);

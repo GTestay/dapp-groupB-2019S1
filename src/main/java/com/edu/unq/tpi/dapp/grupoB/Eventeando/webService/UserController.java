@@ -1,5 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.UserService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos.UserLogin;
@@ -13,6 +14,9 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    @Autowired
+    private AccountManager accountManager;
 
     @Autowired
     public UserController(UserService userService) {
@@ -48,6 +52,6 @@ public class UserController {
     public double userBalance(@PathVariable("id") Long id) {
         User user = userService.searchUser(id);
 
-        return user.balance();
+        return user.balance(accountManager);
     }
 }
