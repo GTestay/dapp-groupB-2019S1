@@ -3,6 +3,7 @@ import UserType from '../Types/UserType'
 import { confirmAssistance, getInvitationsOf } from '../api/userApi'
 import { InvitationDescription } from './InvitationDescription'
 import { Grid } from 'semantic-ui-react'
+import PropTypes from 'prop-types'
 
 export class PendingInvitations extends Component {
   constructor (props) {
@@ -36,8 +37,8 @@ export class PendingInvitations extends Component {
     return this.state.invitations
   }
 
-  goToEvent = () => {
-    console.log('IR A EVENTO!')
+  goToEvent = (event) => {
+    this.props.onClick(event)
   };
 
   confirmAssistance = (invitation) => {
@@ -55,4 +56,4 @@ export class PendingInvitations extends Component {
   }
 }
 
-PendingInvitations.propTypes = { user: UserType.isRequired }
+PendingInvitations.propTypes = { user: UserType.isRequired, onClick: PropTypes.func }

@@ -1,6 +1,6 @@
 {
   "eventList.noEventsMessage": "No hay Eventos que Mostrar",
-
+  "defaultMessageForLoading": "¡Cargando!",
   "home.ongoingEvents": "Eventos en Curso",
   "home.myEvents": "Mis Eventos",
   "home.popularEvents": "Eventos Populares",
@@ -16,5 +16,14 @@
 
   "page404.errorMessage": "Ooops... ¡La página no ha sido encontrada!",
 
-  "userMenu.newEventButton": "Agregar Nuevo Evento"
+  "userMenu.newEventButton": "Agregar Nuevo Evento",
+
+  "viewEvent.eventOrganizer": "Organizador: ",
+  "viewEvent.eventGuests": "Invitados",
+  "viewEvent.eventExpenses": "Bienes",
+
+  "noExpenses": "¡No hay bienes para mostrar!",
+  "partyDescription.invitationLimitDate": "Fecha de confirmación"
+
+
 }

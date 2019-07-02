@@ -14,6 +14,6 @@ class Loading extends Component {
   }
 }
 
-Loading.propTypes = { message: PropTypes.string }
+Loading.propTypes = { message: PropTypes.any }
 
 export default Loading

@@ -3,8 +3,9 @@ import '../styles/EventList.css'
 import PropTypes from 'prop-types'
 import ExpenseType from '../Types/ExpenseType'
 import { ListItem, List, ListContent, ListIcon } from 'semantic-ui-react'
+import { FormattedMessage } from 'react-intl'
 
-export class ExpenseList extends Component {
+export class ExpenseListForm extends Component {
   render () {
     return this.showExpenses()
   }
@@ -14,7 +15,7 @@ export class ExpenseList extends Component {
   }
 
   renderNoExpenses () {
-    return <h4>There are no expenses to show!</h4>
+    return <h4><FormattedMessage id={'noExpenses'} defaultMessage="There are no expenses to show!"/></h4>
   }
 
   renderExpenses () {
@@ -31,8 +32,8 @@ export class ExpenseList extends Component {
 
   describeExpense (expense) {
     return <ListItem active={expense.selected}
-      onClick={(event, data) => this.props.onItemClick(event, data)}
-      value={expense} key={expense.id}>
+      onClick={() => this.props.onItemClick(expense)}
+      value={expense.id.toString()} key={expense.id}>
       <ListContent>
         {`${expense.name} $${expense.cost}`}
         {expense.selected ? <ListIcon color={'red'} name={'close'}/> : <ListIcon color={'green'} name={'plus circle'}/>}
@@ -45,6 +46,11 @@ export class ExpenseList extends Component {
   }
 }
 
-ExpenseList.propTypes = {
+ExpenseListForm.defaultProps = {
+  expenses: [],
+  onItemClick: () => {}
+}
+
+ExpenseListForm.propTypes = {
   expenses: PropTypes.arrayOf(ExpenseType)
 }

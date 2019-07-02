@@ -1,6 +1,6 @@
 {
   "eventList.noEventsMessage": "There aren't Events to Show!",
-
+  "defaultMessageForLoading": "Loading!",
   "home.ongoingEvents": "Ongoing Events",
   "home.myEvents": "My Events",
   "home.popularEvents": "Popular Events",
@@ -16,5 +16,13 @@
 
   "page404.errorMessage": "Ooops... Page Not Found!",
 
-  "userMenu.newEventButton": "Add New Event"
+  "userMenu.newEventButton": "Add New Event",
+
+  "viewEvent.eventOrganizer": "Organizer: ",
+  "viewEvent.eventGuests": "Guests",
+  "viewEvent.eventExpenses": "Expenses",
+
+  "noExpenses": "There are no expenses to show!",
+  "partyDescription.invitationLimitDate": "Confirmation Date"
+
 }

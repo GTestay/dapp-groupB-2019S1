@@ -17,7 +17,7 @@ export class InvitationDescription extends Component {
           <Button onClick={() => this.props.confirmAssistance(this.props.invitation)}>
             <Icon name={'telegram'}/>
           </Button>
-          <Button onClick={this.props.goToEvent}>
+          <Button onClick={() => this.props.goToEvent(this.props.invitation.event)}>
             <Icon name={'eye'}/>
           </Button>
         </Button.Group>
