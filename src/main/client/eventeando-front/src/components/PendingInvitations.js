@@ -3,7 +3,7 @@ import UserType from '../Types/UserType'
 import { confirmAssistance, getInvitationsOf } from '../api/userApi'
 import { InvitationDescription } from './InvitationDescription'
 import { Grid } from 'semantic-ui-react'
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types'
 
 export class PendingInvitations extends Component {
   constructor (props) {

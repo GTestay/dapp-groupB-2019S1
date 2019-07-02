@@ -1,22 +1,22 @@
-import React, {Component} from "react";
-import * as PropTypes from "prop-types";
-import {List, ListContent, ListIcon, ListItem} from "semantic-ui-react";
+import React, { Component } from 'react'
+import * as PropTypes from 'prop-types'
+import { List, ListContent, ListIcon, ListItem } from 'semantic-ui-react'
+import EventType from '../Types/EventType'
 
 export class EventViewExpenses extends Component {
-
-  render() {
+  render () {
     return (this.props.expenses.length === 0) ? this.renderNoExpenses() : this.renderExpenses()
   }
 
-  renderNoExpenses() {
+  renderNoExpenses () {
     const intl = this.props.intl
     const noExpenses = intl.formatMessage({
-      id: 'eventViewExpenses.noExpenses'
+      id: 'noExpenses'
     })
     return <h4>{noExpenses}</h4>
   }
 
-  renderExpenses() {
+  renderExpenses () {
     return <React.Fragment>
       <List divided horizontal>
         {this.listExpenses()}
@@ -24,18 +24,16 @@ export class EventViewExpenses extends Component {
     </React.Fragment>
   }
 
-
-  listExpenses() {
+  listExpenses () {
     return (this.props.expenses.map(expense => this.describeExpense(expense)))
   }
 
-  describeExpense(expense) {
-    return <ListItem>
+  describeExpense (expense) {
+    return <ListItem key={expense.id}>
       <ListContent header={`${expense.name} $${expense.cost}`}>
       </ListContent>
     </ListItem>
   }
-
 }
 
-EventViewExpenses.propTypes = {event: PropTypes.any};
+EventViewExpenses.propTypes = { event: EventType }

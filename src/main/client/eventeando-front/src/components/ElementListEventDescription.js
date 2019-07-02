@@ -1,7 +1,7 @@
 import React from 'react'
 import EventType from '../Types/EventType'
-import {ListItem} from "semantic-ui-react";
-import PropTypes from "prop-types";
+import { ListItem } from 'semantic-ui-react'
+import PropTypes from 'prop-types'
 
 export function ElementListEventDescription (props) {
   function evenDescription () {

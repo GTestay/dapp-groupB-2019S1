@@ -1,26 +1,25 @@
-import React, {Component} from 'react'
-import {Container, Icon, Segment} from "semantic-ui-react";
-import {injectIntl} from "react-intl";
-import {EventViewGuests} from "./EventViewGuests";
-import {EventViewExpenses} from "./EventViewExpenses";
-import {SubEventDescription} from "./SubEventDescription";
-import {HighDivider} from "./utilComponents/HighDivider";
+import React, { Component } from 'react'
+import { Container, Icon, Segment } from 'semantic-ui-react'
+import { injectIntl } from 'react-intl'
+import { EventViewGuests } from './EventViewGuests'
+import { EventViewExpenses } from './EventViewExpenses'
+import { SubEventDescription } from './SubEventDescription'
+import { HighDivider } from './utilComponents/HighDivider'
 
-
-class ViewEvent extends Component {
-  constructor(props, context) {
-    super(props, context);
+class EventView extends Component {
+  constructor (props, context) {
+    super(props, context)
     this.state = {
       event: null
     }
   }
 
-  componentDidMount() {
-    const {event, user} = this.props.location.state;
-    this.setState({event, user})
+  componentDidMount () {
+    const { event, user } = this.props.location.state
+    this.setState({ event, user })
   }
 
-  render() {
+  render () {
     return this.state.event ? (
       <Container>
         <Segment>
@@ -34,12 +33,12 @@ class ViewEvent extends Component {
     ) : <div/>
   }
 
-  getEvent() {
-    return this.state.event;
+  getEvent () {
+    return this.state.event
   }
 
-  showEventOrganizer() {
-    const {lastname, name} = this.getEvent().organizer;
+  showEventOrganizer () {
+    const { lastname, name } = this.getEvent().organizer
     const intl = this.props.intl
     const eventOrganizerTitle = intl.formatMessage({
       id: 'viewEvent.eventOrganizer'
@@ -47,11 +46,11 @@ class ViewEvent extends Component {
     return HighDivider(<Icon name="user"/>, `${eventOrganizerTitle} ${name} ${lastname}`, React.Fragment)
   }
 
-  showEventDescription() {
+  showEventDescription () {
     return <p> {this.getEvent().description}</p>
   }
 
-  showEventGuests() {
+  showEventGuests () {
     const intl = this.props.intl
     const eventGuestTitle = intl.formatMessage({
       id: 'viewEvent.eventGuests'
@@ -59,7 +58,7 @@ class ViewEvent extends Component {
     return HighDivider(<Icon name="user"/>, `${eventGuestTitle}`, this.showGuests())
   }
 
-  showEventExpensesDetail() {
+  showEventExpensesDetail () {
     const intl = this.props.intl
     const eventGuestTitle = intl.formatMessage({
       id: 'viewEvent.eventExpenses'
@@ -67,20 +66,20 @@ class ViewEvent extends Component {
     return HighDivider(<Icon name="clipboard list"/>, `${eventGuestTitle}`, this.showExpenses())
   }
 
-  showGuests() {
-    const guests = this.getEvent().guests;
+  showGuests () {
+    const guests = this.getEvent().guests
     return <EventViewGuests guests={guests}/>
   }
 
-  showExpenses() {
+  showExpenses () {
     return <EventViewExpenses expenses={this.getEvent().expenses}/>
   }
 
-  showEventExtras() {
+  showEventExtras () {
     return <SubEventDescription event={this.getEvent()}/>
   }
 }
 
-ViewEvent = injectIntl(ViewEvent)
+EventView = injectIntl(EventView)
 
-export default ViewEvent;
+export default EventView

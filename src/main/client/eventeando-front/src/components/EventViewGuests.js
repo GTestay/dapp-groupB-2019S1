@@ -1,14 +1,14 @@
-import React, {Component} from "react";
-import {List, ListItem} from "semantic-ui-react";
+import React, { Component } from 'react'
+import { List, ListItem } from 'semantic-ui-react'
 
 export class EventViewGuests extends Component {
-  render() {
+  render () {
     return <List horizontal>
       {this.props.guests.map(guest => this.showGuest(guest))}
-    </List>;
+    </List>
   }
 
-  showGuest(guest) {
+  showGuest (guest) {
     return <ListItem>{`${guest.name} ${guest.lastname}`}</ListItem>
   }
 }

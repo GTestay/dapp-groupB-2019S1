@@ -178,8 +178,8 @@ export default class NewEvent extends Component {
         .then(() => this.setState({ loading: false }))
     };
 
-    selectExpense = (event, data) => {
-      let expenseToReplace = this.expenses().find(expense => expense.id === data.value.id)
+    selectExpense = (anExpense) => {
+      let expenseToReplace = this.expenses().find(expense => expense.id === anExpense.id)
       expenseToReplace.selected = !expenseToReplace.selected
       this.setState({
         expenses: unique([...this.expenses(), expenseToReplace])

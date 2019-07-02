@@ -4,7 +4,7 @@ import '../styles/EventList.css'
 import { ElementListEventDescription } from './ElementListEventDescription'
 import EventType from '../Types/EventType'
 import { FormattedMessage } from 'react-intl'
-import {List} from "semantic-ui-react";
+import { List } from 'semantic-ui-react'
 
 export class EventList extends Component {
   render () {
@@ -30,7 +30,7 @@ export class EventList extends Component {
   }
 
   listEvents () {
-    return (this.events().map(event => <ElementListEventDescription onClick={this.props.onClick} event={event}/>))
+    return (this.events().map(event => <ElementListEventDescription key={event.id} onClick={this.props.onClick} event={event}/>))
   }
 
   events () {

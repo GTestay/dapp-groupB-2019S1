@@ -1,7 +1,7 @@
-import React from "react";
-import {Divider, Header} from "semantic-ui-react";
+import React from 'react'
+import { Divider, Header } from 'semantic-ui-react'
 
-export function HighDivider(Icon, HeaderTitle, Body) {
+export function HighDivider (Icon, HeaderTitle, Body) {
   return <React.Fragment>
     <Divider horizontal>
       <Header>
@@ -10,5 +10,5 @@ export function HighDivider(Icon, HeaderTitle, Body) {
       </Header>
     </Divider>
     {Body}
-  </React.Fragment>;
+  </React.Fragment>
 }

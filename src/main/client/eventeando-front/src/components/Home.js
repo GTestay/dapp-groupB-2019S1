@@ -4,9 +4,9 @@ import '../styles/Home.css'
 import { obtainCurrentsEvent, obtainEventsMostPopular, obtainUserEvents } from '../api/eventApi'
 import UserMenu from './UserMenu'
 import { injectIntl, intlShape } from 'react-intl'
-import {PendingInvitations} from './PendingInvitations'
+import { PendingInvitations } from './PendingInvitations'
 import { Dropdown, Menu } from 'semantic-ui-react'
-import {withRouter} from "react-router-dom";
+import { withRouter } from 'react-router-dom'
 
 class Home extends Component {
   constructor (props) {

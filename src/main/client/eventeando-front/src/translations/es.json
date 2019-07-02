@@ -1,6 +1,6 @@
 {
   "eventList.noEventsMessage": "No hay Eventos que Mostrar",
-
+  "defaultMessageForLoading": "¡Cargando!",
   "home.ongoingEvents": "Eventos en Curso",
   "home.myEvents": "Mis Eventos",
   "home.popularEvents": "Eventos Populares",
@@ -22,9 +22,8 @@
   "viewEvent.eventGuests": "Invitados",
   "viewEvent.eventExpenses": "Bienes",
 
-  "eventViewExpenses.noExpenses": "¡No hay bienes para mostrar!",
-
-  "partyDescription.invitationLimitDate": "Fecha de la confirmación"
+  "noExpenses": "¡No hay bienes para mostrar!",
+  "partyDescription.invitationLimitDate": "Fecha de confirmación"
 
 
 }

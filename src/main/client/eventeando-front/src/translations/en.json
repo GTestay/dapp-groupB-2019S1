@@ -1,6 +1,6 @@
 {
   "eventList.noEventsMessage": "There aren't Events to Show!",
-
+  "defaultMessageForLoading": "Loading!",
   "home.ongoingEvents": "Ongoing Events",
   "home.myEvents": "My Events",
   "home.popularEvents": "Popular Events",
@@ -20,9 +20,9 @@
 
   "viewEvent.eventOrganizer": "Organizer: ",
   "viewEvent.eventGuests": "Guests",
-  "viewEvent.eventExpenses": "Goods",
+  "viewEvent.eventExpenses": "Expenses",
 
-  "eventViewExpenses.noExpenses": "There are no expenses to show!",
+  "noExpenses": "There are no expenses to show!",
   "partyDescription.invitationLimitDate": "Confirmation Date"
 
 }
