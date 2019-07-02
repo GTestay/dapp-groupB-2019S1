@@ -1,5 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.factory;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.github.javafaker.Faker;
@@ -17,10 +18,10 @@ public class UserFactory {
         return faker.internet().emailAddress();
     }
 
-    public User userWithCash(double cash) {
+    public User userWithCash(double cash, AccountManager accountManager) {
         User user = user();
 
-        user.cashDeposit(cash);
+        user.cashDeposit(cash, accountManager);
 
         return user;
     }
@@ -45,7 +46,7 @@ public class UserFactory {
     public User userIndebt() {
         User user = user();
 
-        Moneylender.get().indebt(user);
+        user.withDebt();
 
         return user;
     }

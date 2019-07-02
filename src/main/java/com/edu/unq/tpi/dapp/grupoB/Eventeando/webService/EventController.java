@@ -5,12 +5,14 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.EventService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos.EventDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@Transactional
 public class EventController {
 
     private static final String baseUrl = "/events";

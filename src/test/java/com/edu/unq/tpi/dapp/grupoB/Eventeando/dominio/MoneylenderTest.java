@@ -1,17 +1,41 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@Transactional
+@ActiveProfiles("test")
 public class MoneylenderTest {
 
     private UserFactory userFactory;
+
+    @Autowired
+    private AccountManager accountManager;
+
+    @Autowired
+    private MoneyTransactionDao moneyTransactionDao;
+
+    @Autowired
+    private Moneylender moneyLender;
+
+    @Autowired
+    private UserDao userDao;
 
     @Before
     public void setUp() {
@@ -20,81 +44,84 @@ public class MoneylenderTest {
 
     @Test
     public void getActualLoansForAllTheUsers() {
-        User arya = userFactory.user();
-        User sansa = userFactory.user();
+        User arya = getUser();
+        User sansa = getUser();
 
-        Moneylender moneylender = Moneylender.get();
+        arya.takeOutALoan(moneyLender, accountManager);
+        sansa.takeOutALoan(moneyLender, accountManager);
 
-        arya.takeOutALoan();
-        sansa.takeOutALoan();
-
-        assertHasLoanFrom(moneylender, arya);
-        assertHasLoanFrom(moneylender, sansa);
+        assertHasLoanFrom(moneyLender, arya);
+        assertHasLoanFrom(moneyLender, sansa);
     }
 
-    private void assertHasLoanFrom(Moneylender moneylender, User user) { assertTrue(containLoan(moneylender.actualLoans(), user)); }
+    private void assertHasLoanFrom(Moneylender moneylender, User user) { assertTrue(containLoan((ArrayList<Loan>) moneylender.actualLoans(), user)); }
 
     private boolean containLoan(ArrayList<Loan> actualLoans, User owner) { return actualLoans.stream().anyMatch(loan -> loan.isOwner(owner)); }
 
     @Test
     public void loanInformationOffAnUserWithFiveRemainingPayments() {
-        User user = userFactory.user();
-        Moneylender moneylender = Moneylender.get();
+        User user = getUser();
 
-        user.takeOutALoan();
+        user.takeOutALoan(moneyLender, accountManager);
 
-        user.payLoan();
+        user.payLoan(moneyLender, accountManager);
 
-        assertEquals(moneylender.remainingPayments(user), 5);
-        assertEquals(moneylender.unpaidPayments(user), 0);
+        assertEquals(moneyLender.remainingPayments(user, accountManager), 5);
+        assertEquals(moneyLender.unpaidPayments(user), 0);
     }
 
     @Test
     public void loanInformationOffAnUserWithFiveRemainingPaymentsAndTwoUnpaids() {
-        User user = userFactory.user();
-        Moneylender moneylender = Moneylender.get();
+        User user = getUser();
 
-        user.takeOutALoan();
+        user.takeOutALoan(moneyLender, accountManager);
 
-        user.payLoan();
+        user.payLoan(moneyLender, accountManager);
 
-        assertEquals(moneylender.remainingPayments(user), 5);
-        assertEquals(moneylender.unpaidPayments(user), 0);
+        assertEquals(moneyLender.remainingPayments(user, accountManager), 5);
+        assertEquals(moneyLender.unpaidPayments(user), 0);
 
-        user.takeCash(700.00);
+        user.takeCash(700.00, accountManager);
 
-        user.payLoan();
-        user.payLoan();
+        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManager);
 
-        assertEquals(moneylender.remainingPayments(user), 5);
-        assertEquals(moneylender.unpaidPayments(user), 2);
+        assertEquals(moneyLender.remainingPayments(user, accountManager), 5);
+        assertEquals(moneyLender.unpaidPayments(user), 2);
+    }
+
+    protected User getUser() {
+        User newUser = userFactory.user();
+
+        userDao.save(newUser);
+
+        return newUser;
     }
 
     @Test
     public void loanInformationOffAnUserWithSomeActivity() {
-        User user = userFactory.user();
-        Moneylender moneylender = Moneylender.get();
-        user.takeOutALoan();
+        User user = getUser();
+        user.takeOutALoan(moneyLender, accountManager);
 
-        user.payLoan();
-        user.payLoan();
+        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManager);
 
-        assertEquals(moneylender.remainingPayments(user), 4);
-        assertEquals(moneylender.unpaidPayments(user), 0);
+        assertEquals(moneyLender.remainingPayments(user, accountManager), 4);
+        assertEquals(moneyLender.unpaidPayments(user), 0);
 
-        user.takeCash(500.00);
+        user.takeCash(500.00, accountManager);
 
-        user.payLoan();
+        user.payLoan(moneyLender, accountManager);
 
-        assertEquals(moneylender.remainingPayments(user), 4);
-        assertEquals(moneylender.unpaidPayments(user), 1);
+        assertEquals(moneyLender.remainingPayments(user, accountManager), 4);
+        assertEquals(moneyLender.unpaidPayments(user), 1);
 
-        user.cashDeposit(1500.00);
+        user.cashDeposit(1500.00, accountManager);
 
-        user.payLoan();
-        user.payLoan();
+        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManager);
 
-        assertEquals(moneylender.remainingPayments(user), 1);
-        assertEquals(moneylender.unpaidPayments(user), 0);
+        assertEquals(moneyLender.remainingPayments(user, accountManager), 1);
+        assertEquals(moneyLender.unpaidPayments(user), 0);
     }
 }

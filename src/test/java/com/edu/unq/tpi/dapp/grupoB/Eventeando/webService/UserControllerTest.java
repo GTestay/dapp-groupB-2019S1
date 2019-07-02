@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
@@ -28,6 +29,9 @@ public class UserControllerTest extends ControllerTest {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private AccountManager accountManager;
 
     private UserFactory userFactory;
     private User newUser;
@@ -128,7 +132,6 @@ public class UserControllerTest extends ControllerTest {
         return clientRest.perform(get(url).contentType(MediaType.APPLICATION_JSON));
     }
 
-
     @Test
     public void anUserCanNotBeCreatedBecauseTheRequestIsInvalid() throws Exception {
 
@@ -140,7 +143,6 @@ public class UserControllerTest extends ControllerTest {
                 .andReturn();
         assertThat(mvcResult.getResolvedException()).hasMessageContaining(UserValidator.USER_EMAIL_IS_INVALID);
     }
-
 
     @Test
     public void anUserIsRetrieved() throws Exception {
@@ -182,6 +184,7 @@ public class UserControllerTest extends ControllerTest {
         jsonObject.put("lastname", user.lastname());
         jsonObject.put("name", user.name());
         jsonObject.put("id", user.id());
+
         return jsonObject;
     }
 
@@ -189,4 +192,39 @@ public class UserControllerTest extends ControllerTest {
         return "/users";
     }
 
+    @Test
+    public void canBringTheBalanceForAnUser() throws Exception {
+        User user = userFactory.userWithCash(1000, accountManager);
+        userDao.save(user);
+
+        ResultActions perform = getUserBalance(user);
+
+        MvcResult result = assertStatusIsOkAndMediaType(perform);
+
+        String responseString = getBodyOfTheRequest(result);
+
+        assertThat("1000.0").isEqualTo(responseString);
+    }
+
+    public ResultActions getUserBalance(User user) throws Exception {
+        return getUsers(url() + "/" + user.id() + "/balance");
+    }
+
+    @Test
+    public void userCanTakeOutLoan() throws Exception {
+        User user = userFactory.userWithCash(0, accountManager);
+        userDao.save(user);
+
+        JSONObject bodyRequest = new JSONObject();
+
+        ResultActions perform = performPost(bodyRequest, "/users/" + user.id() + "/takeOutLoan");
+
+        MvcResult result = assertThatResponseIsCreated(perform);
+
+        String responseString = getBodyOfTheRequest(result);
+        JSONObject jsonResponse = new JSONObject(responseString);
+        JSONObject loanBody = new JSONObject();
+
+        JSONAssert.assertEquals(jsonResponse, loanBody, true);
+    }
 }

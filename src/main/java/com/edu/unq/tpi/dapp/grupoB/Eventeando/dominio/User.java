@@ -28,14 +28,10 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @Transient
-    private AccountManager accountManager;
-
-    @Transient
-    private Moneylender moneyLender;
-
     @OneToMany
     private List<Invitation> invitations;
+
+    private boolean indebt = false;
 
     public static User create(String name, String lastname, String email, String password, LocalDate birthday) {
         User instance = new User();
@@ -46,9 +42,6 @@ public class User {
         instance.email = validator.validateEmail(email);
         instance.password = validator.validatePassword(password);
         instance.birthday = validator.validateBirthday(birthday);
-
-        instance.accountManager = AccountManager.get(instance);
-        instance.moneyLender = Moneylender.get();
 
         instance.invitations = new ArrayList<>();
         return instance;
@@ -64,21 +57,24 @@ public class User {
 
     public LocalDate birthday() { return birthday; }
 
-    public double balance() { return accountManager.balance(this); }
+    public double balance(AccountManager accountManager) { return accountManager.balance(this); }
 
-    public void takeCash(double amount) { accountManager.takeCash(this, amount); }
+    public void takeCash(double amount, AccountManager accountManager) { accountManager.takeCash(this, amount); }
 
-    public void cashDeposit(double amount) { accountManager.cashDeposit(this, amount); }
+    public void cashDeposit(double amount, AccountManager accountManager) { accountManager.cashDeposit(this, amount); }
 
-    public void requireCredit(double amount) { accountManager.requireCredit(this, amount); }
+    public void requireCredit(double amount, AccountManager accountManager) { accountManager.requireCredit(this, amount); }
 
-    public void creditDeposit(double amount, YearMonth dueDate, String cardNumber) { accountManager.creditDeposit(this, amount, dueDate, cardNumber) ; }
+    public void creditDeposit(double amount, YearMonth dueDate, String cardNumber, AccountManager accountManager) { accountManager.creditDeposit(this, amount, dueDate, cardNumber) ; }
 
-    public void takeOutALoan() { moneyLender.giveLoan(this); }
+    public Loan takeOutALoan(Moneylender moneyLender, AccountManager accountManager) {
 
-    public boolean isDefaulter() { return moneyLender.isDefaulter(this); }
+        return moneyLender.giveLoan(this, accountManager);
+    }
 
-    public void payLoan() { moneyLender.payLoan(this); }
+    public boolean isDefaulter(Moneylender moneyLender) { return moneyLender.isDefaulter(this); }
+
+    public void payLoan(Moneylender moneyLender, AccountManager accountManager) { moneyLender.payLoan(this, moneyLender, accountManager); }
 
     public boolean hasThisEmail(String anEmail) {
         return email.equals(anEmail);
@@ -98,5 +94,17 @@ public class User {
 
     public String fullName() {
         return this.name + " " + this.lastname;
+    }
+
+    public void withDebt() {
+        indebt = true;
+    }
+
+    public boolean indebt() {
+        return this.indebt;
+    }
+
+    public void payDebt() {
+        indebt = false;
     }
 }

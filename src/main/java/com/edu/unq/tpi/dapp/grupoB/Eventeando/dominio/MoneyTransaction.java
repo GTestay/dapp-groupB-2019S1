@@ -1,11 +1,24 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.MoneyTransactionValidator;
+import org.hibernate.annotations.Cascade;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@DiscriminatorColumn(name = "transaction_type")
 public abstract class MoneyTransaction {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    protected Long id;
+
+    @ManyToOne
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     protected User user;
+
     protected LocalDate date;
     protected double amount;
 

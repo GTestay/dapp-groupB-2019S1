@@ -15,7 +15,7 @@ class Home extends Component {
       currentEvents: [],
       userEvents: [],
       popularEvents: [],
-      user: props.location.state.user
+      user: props.location.state.user,
     }
   }
 
@@ -77,7 +77,7 @@ class Home extends Component {
           <EventList onClick={this.viewEvent} title={myEventsTitle} events={this.getUserEvents()}/>
           <EventList onClick={this.viewEvent} title={popularEventsTitle} events={this.getPopularEvents()}/>
           <div className="user-menu">
-            <UserMenu user={this.getUser()}/>
+            <UserMenu user={this.getUser()} intl={intl} />
           </div>
         </div>
       </React.Fragment>

@@ -6,3 +6,18 @@
     display: flex;
     justify-content: center;
 }
+
+.menu-vertical {
+    margin-bottom: 2vh;
+}
+
+.botones-de-accion {
+    width: 80%;
+}
+
+ /*Esta clase es de Semantic no encontre mejor forma de hacerlo*/
+.ui.vertical.buttons .button {
+    border-style: solid;
+    border-color: black;
+    border-width: 0.5px;
+}
