@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import * as PropTypes from 'prop-types'
-import { List, ListContent, ListIcon, ListItem } from 'semantic-ui-react'
+import { List, ListContent, ListItem } from 'semantic-ui-react'
 import EventType from '../Types/EventType'
 
 export class EventViewExpenses extends Component {
