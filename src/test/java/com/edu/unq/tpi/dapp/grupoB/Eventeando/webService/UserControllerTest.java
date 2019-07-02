@@ -224,6 +224,7 @@ public class UserControllerTest extends ControllerTest {
         String responseString = getBodyOfTheRequest(result);
         JSONObject jsonResponse = new JSONObject(responseString);
         JSONObject loanBody = new JSONObject();
+        loanBody.put("ended", false);
 
         JSONAssert.assertEquals(jsonResponse, loanBody, true);
     }
