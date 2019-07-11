@@ -1,8 +1,8 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManager;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Loan;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.Moneylender;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.UserService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos.UserLogin;
@@ -20,10 +20,10 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    private AccountManager accountManager;
+    private AccountManagerService accountManagerService;
 
     @Autowired
-    private Moneylender moneyLender;
+    private MoneylenderService moneyLender;
 
     @Autowired
     public UserController(UserService userService) {
@@ -59,7 +59,7 @@ public class UserController {
     public double userBalance(@PathVariable("id") Long id) {
         User user = userService.searchUser(id);
 
-        return user.balance(accountManager);
+        return user.balance(accountManagerService);
     }
 
     @PostMapping("/users/{id}/takeOutLoan")
@@ -67,6 +67,6 @@ public class UserController {
     public Loan takeOutLoan(@PathVariable Long id) {
         User owner = userService.searchUser(id);
 
-        return owner.takeOutALoan(moneyLender,accountManager);
+        return owner.takeOutALoan(moneyLender, accountManagerService);
     }
 }

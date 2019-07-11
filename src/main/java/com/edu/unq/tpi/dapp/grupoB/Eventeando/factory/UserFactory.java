@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.factory;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManager;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.github.javafaker.Faker;
 
@@ -17,10 +17,10 @@ public class UserFactory {
         return faker.internet().emailAddress();
     }
 
-    public User userWithCash(double cash, AccountManager accountManager) {
+    public User userWithCash(double cash, AccountManagerService accountManagerService) {
         User user = user();
 
-        user.cashDeposit(cash, accountManager);
+        user.cashDeposit(cash, accountManagerService);
 
         return user;
     }

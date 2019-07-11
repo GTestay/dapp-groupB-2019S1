@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.scheduler;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManager;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.Moneylender;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.task.LoanPaymentsTask;
 import org.junit.Test;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 public class LoanPaymentsSchedulerTest {
 
     @Autowired
-    private AccountManager accountManager;
+    private AccountManagerService accountManagerService;
 
     @Autowired
     private MoneyTransactionDao moneyTransactionDao;
@@ -36,7 +36,7 @@ public class LoanPaymentsSchedulerTest {
     private LoanPaymentsScheduler job;
 
     @Autowired
-    private Moneylender moneyLender;
+    private MoneylenderService moneyLender;
 
     @Test
     public void ifTodayIsTheFifthDayOfTheMonthExecutesTheService() {
@@ -44,9 +44,9 @@ public class LoanPaymentsSchedulerTest {
         LocalDate date = LocalDate.now(clock);
         LoanPaymentsTask service = Mockito.spy(new LoanPaymentsTask());
 
-        job.execute(service, date, moneyLender, accountManager);
+        job.execute(service, date, moneyLender, accountManagerService);
 
-        verify(service, times(1)).execute(moneyLender, accountManager);
+        verify(service, times(1)).execute(moneyLender, accountManagerService);
     }
 
 
@@ -56,8 +56,8 @@ public class LoanPaymentsSchedulerTest {
         LocalDate date = LocalDate.now(clock);
         LoanPaymentsTask service = Mockito.spy(new LoanPaymentsTask());
 
-        job.execute(service, date, moneyLender, accountManager);
+        job.execute(service, date, moneyLender, accountManagerService);
 
-        verify(service, never()).execute(moneyLender, accountManager);
+        verify(service, never()).execute(moneyLender, accountManagerService);
     }
 }

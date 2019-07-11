@@ -10,12 +10,12 @@ import java.time.YearMonth;
 import java.util.List;
 
 @Service
-public class AccountManager {
+public class AccountManagerService {
     public static final String USER_LOW_BALANCE = "Not Enough Money For This Transaction";
 
     private final MoneyTransactionDao moneyTransactionDao;
 
-    public AccountManager(MoneyTransactionDao moneyTransactionDao) {
+    public AccountManagerService(MoneyTransactionDao moneyTransactionDao) {
         this.moneyTransactionDao = moneyTransactionDao;
     }
 
@@ -62,7 +62,7 @@ public class AccountManager {
 
     private void makeDeposit(Deposit deposit) { moneyTransactionDao.save(deposit); }
 
-    public void payLoan(User user, Moneylender moneyLender) { moneyTransactionDao.save(LoanPayment.create(user, moneyLender.getLoan(user))); }
+    public void payLoan(User user, MoneylenderService moneyLender) { moneyTransactionDao.save(LoanPayment.create(user, moneyLender.getLoan(user))); }
 
     public Integer amountOfPaymentsDone(Loan userLoan) {
         return moneyTransactionDao.findAllLoanPaymentByUser(userLoan.user()).size();

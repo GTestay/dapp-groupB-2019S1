@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.task;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManager;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.Moneylender;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
@@ -26,13 +26,13 @@ public class LoanPaymentsTaskTest {
     private LoanPaymentsTask service = new LoanPaymentsTask();
 
     @Autowired
-    private AccountManager accountManager;
+    private AccountManagerService accountManagerService;
 
     @Autowired
     private MoneyTransactionDao moneyTransactionDao;
 
     @Autowired
-    private Moneylender moneyLender;
+    private MoneylenderService moneyLender;
 
     @Autowired
     private UserDao userDao;
@@ -41,34 +41,34 @@ public class LoanPaymentsTaskTest {
     public void forUsersWithALoanInProgressChargeTheLoan(){
         User user = getUser();
         User anotherUser = getUser();
-        anotherUser.cashDeposit(500.00, accountManager);
+        anotherUser.cashDeposit(500.00, accountManagerService);
 
-        user.takeOutALoan(moneyLender, accountManager);
+        user.takeOutALoan(moneyLender, accountManagerService);
 
-        service.execute(moneyLender, accountManager);
+        service.execute(moneyLender, accountManagerService);
 
-        assertEquals(800.00, user.balance(accountManager), 0);
-        assertEquals(500.00, anotherUser.balance(accountManager), 0);
+        assertEquals(800.00, user.balance(accountManagerService), 0);
+        assertEquals(500.00, anotherUser.balance(accountManagerService), 0);
     }
 
     @Test
     public void forUsersWhoAlreadyPayedTheLoanDoNotDoAnything(){
         User user = getUser();
-        user.cashDeposit(600.00, accountManager);
+        user.cashDeposit(600.00, accountManagerService);
         User anotherUser = getUser();
 
-        user.takeOutALoan(moneyLender, accountManager);
-        anotherUser.takeOutALoan(moneyLender, accountManager);
+        user.takeOutALoan(moneyLender, accountManagerService);
+        anotherUser.takeOutALoan(moneyLender, accountManagerService);
 
         int i;
         for (i = 0; i < 6; i++) {
-            user.payLoan(moneyLender, accountManager);
+            user.payLoan(moneyLender, accountManagerService);
         }
 
-        service.execute(moneyLender, accountManager);
+        service.execute(moneyLender, accountManagerService);
 
-        assertEquals(400, user.balance(accountManager), 0);
-        assertEquals(800, anotherUser.balance(accountManager), 0);
+        assertEquals(400, user.balance(accountManagerService), 0);
+        assertEquals(800, anotherUser.balance(accountManagerService), 0);
     }
 
     protected User getUser() {

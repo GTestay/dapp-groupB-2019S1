@@ -1,5 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.junit.ArchUnitRunner;
@@ -31,5 +32,10 @@ public class ArchitectureTest {
             classes().that().areAnnotatedWith(Entity.class)
                     .should().resideInAPackage("com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio")
                     .because("persistable entities must be in .dominio");
+
+    @ArchTest
+    private final ArchRule service_naming_convention =
+            classes().that().resideInAPackage("main.java.com.edu.unq.tpi.dapp.grupoB.Eventeando.service")
+                    .should().haveSimpleNameEndingWith("Service");
 
 }

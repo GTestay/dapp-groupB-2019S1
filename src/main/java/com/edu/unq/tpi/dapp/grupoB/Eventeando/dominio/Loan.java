@@ -1,6 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.Moneylender;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -13,7 +13,7 @@ public class Loan extends MoneyTransaction {
     public static Loan create(User user) {
         Loan instance = new Loan();
 
-        validateInstance(user, LocalDate.now(), Moneylender.LOAN_COST, instance);
+        validateInstance(user, LocalDate.now(), MoneylenderService.LOAN_COST, instance);
 
         return instance;
     }
