@@ -6,6 +6,7 @@ import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.junit.ArchUnitRunner;
 import com.tngtech.archunit.lang.ArchRule;
 import org.junit.runner.RunWith;
+import org.springframework.stereotype.Repository;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 
 import javax.persistence.Entity;
@@ -43,4 +44,8 @@ public class ArchitectureTest {
             classes().that().resideInAPackage("com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio")
                 .should().bePublic();
 
+    @ArchTest
+    private final ArchRule persistenceClassesShouldHaveSpringRepositoryAnnotation =
+            classes().that().resideInAPackage("main.java.com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence")
+                .should().beAnnotatedWith(Repository.class);
 }
