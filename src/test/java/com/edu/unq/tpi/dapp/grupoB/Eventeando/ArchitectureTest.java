@@ -19,23 +19,28 @@ import static com.tngtech.archunit.library.GeneralCodingRules.NO_CLASSES_SHOULD_
 public class ArchitectureTest {
 
     @ArchTest
-    private final ArchRule no_instance_variable_should_be_public =
+    private final ArchRule noInstanceVariableShouldBePublic =
             fields().that().areNotStatic()
                     .should().notBePublic()
                     .because("encapsulation never should be broken");
 
     @ArchTest
-    private final ArchRule no_access_to_standard_streams = NO_CLASSES_SHOULD_ACCESS_STANDARD_STREAMS;
+    private final ArchRule noAccessToStandardStreams = NO_CLASSES_SHOULD_ACCESS_STANDARD_STREAMS;
 
     @ArchTest
-    private final ArchRule persistable_entities_must_be_in_dominio =
+    private final ArchRule persistableEntitiesMustBeInDominio =
             classes().that().areAnnotatedWith(Entity.class)
                     .should().resideInAPackage("com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio")
                     .because("persistable entities must be in .dominio");
 
     @ArchTest
-    private final ArchRule service_naming_convention =
+    private final ArchRule serviceNamingConvention =
             classes().that().resideInAPackage("main.java.com.edu.unq.tpi.dapp.grupoB.Eventeando.service")
                     .should().haveSimpleNameEndingWith("Service");
+
+    @ArchTest
+    private final ArchRule domainClassesShouldBePublic =
+            classes().that().resideInAPackage("com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio")
+                .should().bePublic();
 
 }
