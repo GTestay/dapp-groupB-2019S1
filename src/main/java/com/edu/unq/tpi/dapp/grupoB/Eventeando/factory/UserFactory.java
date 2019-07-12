@@ -37,7 +37,7 @@ public class UserFactory {
         return faker.name().lastName();
     }
 
-    private LocalDate birthday() {
+    public LocalDate birthday() {
         return faker.date().birthday()
                 .toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }

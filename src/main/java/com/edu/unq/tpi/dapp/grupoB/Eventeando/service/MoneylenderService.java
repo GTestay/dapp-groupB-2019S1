@@ -38,7 +38,7 @@ public class MoneylenderService {
     }
 
     private boolean hasLoanInProgress(User user) {
-        return !loansOf(user).isEmpty();
+        return loansOf(user).stream().anyMatch(loan -> !loan.isEnded());
     }
 
     public boolean isDefaulter(User user) { return user.indebt(); }
@@ -56,8 +56,8 @@ public class MoneylenderService {
         }
     }
 
-    public void checkIfLoanIsOver(AccountManagerService accountManagerService) {
-        actualLoans().removeIf(loan -> remainingPayments(loan, accountManagerService) == 0);
+    public void checkIfLoanIsOver(Loan loan, AccountManagerService accountManagerService) {
+        if (remainingPayments(loan, accountManagerService) == 0) { loan.end(); }
     }
 
     private void checkPayments(User user, MoneylenderService moneyLender, AccountManagerService accountManagerService) {

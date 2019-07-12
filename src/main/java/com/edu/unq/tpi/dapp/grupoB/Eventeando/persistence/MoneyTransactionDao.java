@@ -17,7 +17,7 @@ public interface MoneyTransactionDao extends JpaRepository<MoneyTransaction, Lon
     @Query("from Loan")
     List<Loan> findAllLoan();
 
-    List<LoanPayment> findAllLoanPaymentByUser(User user);
+    List<LoanPayment> findAllLoanPaymentByUserAndReferenceLoan(User user, Loan loan);
 
     List<Loan> findAllLoanByUser(User user);
 }
