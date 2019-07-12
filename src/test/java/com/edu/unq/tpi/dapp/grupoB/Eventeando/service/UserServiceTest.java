@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserServiceTest {
 
     @Autowired
-    public UserDao userDao;
+    private UserDao userDao;
 
     private UserService userService;
     private UserFactory userFactory;

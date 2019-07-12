@@ -1,7 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.scheduler;
 
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.AccountManager;
-import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Moneylender;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.task.LoanPaymentsTask;
 import org.junit.Test;
@@ -27,38 +27,37 @@ import static org.mockito.Mockito.*;
 public class LoanPaymentsSchedulerTest {
 
     @Autowired
-    private AccountManager accountManager;
+    private AccountManagerService accountManagerService;
 
     @Autowired
     private MoneyTransactionDao moneyTransactionDao;
 
     @Autowired
-    private Moneylender moneyLender;
+    private LoanPaymentsScheduler job;
+
+    @Autowired
+    private MoneylenderService moneyLender;
 
     @Test
     public void ifTodayIsTheFifthDayOfTheMonthExecutesTheService() {
-        LoanPaymentsScheduler job = new LoanPaymentsScheduler();
-
         Clock clock = Clock.fixed(Instant.parse("2019-05-05T01:01:01.00Z"), ZoneId.of("UTC"));
         LocalDate date = LocalDate.now(clock);
         LoanPaymentsTask service = Mockito.spy(new LoanPaymentsTask());
 
-        job.execute(service, date, moneyLender, accountManager);
+        job.execute(service, date, moneyLender, accountManagerService);
 
-        verify(service, times(1)).execute(moneyLender, accountManager);
+        verify(service, times(1)).execute(moneyLender, accountManagerService);
     }
 
 
     @Test
     public void ifTodayIsNotTheFifthDayOfTheMonthDoNotExecutesTheService() {
-        LoanPaymentsScheduler job = new LoanPaymentsScheduler();
-
         Clock clock = Clock.fixed(Instant.parse("2001-01-01T01:01:01.00Z"), ZoneId.of("UTC"));
         LocalDate date = LocalDate.now(clock);
         LoanPaymentsTask service = Mockito.spy(new LoanPaymentsTask());
 
-        job.execute(service, date, moneyLender, accountManager);
+        job.execute(service, date, moneyLender, accountManagerService);
 
-        verify(service, never()).execute(moneyLender, accountManager);
+        verify(service, never()).execute(moneyLender, accountManagerService);
     }
 }

@@ -6,13 +6,13 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.EventData;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class EventBuilder {
+public class EventBuilderService {
     private final User organizer;
     private final List<User> guests;
     private final List<Expense> expenses;
     private final String description;
 
-    public EventBuilder(EventData eventData, EventService eventService) {
+    public EventBuilderService(EventData eventData, EventService eventService) {
         organizer = eventService.findUserByEmail(eventData.getOrganizerEmail());
         guests = eventService.obtainUsersFromEmails(eventData.getGuestsEmails());
         expenses = eventService.getExpenses(eventData.getExpensesIds());

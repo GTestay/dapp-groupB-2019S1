@@ -32,28 +32,28 @@ public class EventService {
     }
 
     public Party createParty(EventData eventData, LocalDateTime invitationLimitDate) {
-        Party party = new EventBuilder(eventData, this).buildParty(invitationLimitDate);
+        Party party = new EventBuilderService(eventData, this).buildParty(invitationLimitDate);
         confirmEvent(party);
 
         return party;
     }
 
     public PotluckEvent createPotluckEvent(EventData eventData) {
-        PotluckEvent potluckEvent = new EventBuilder(eventData, this).buildPotluckEvent();
+        PotluckEvent potluckEvent = new EventBuilderService(eventData, this).buildPotluckEvent();
         confirmEvent(potluckEvent);
 
         return potluckEvent;
     }
 
     public BaquitaSharedExpensesEvent createBaquitaSharedExpensesEvent(EventData eventData) {
-        BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = new EventBuilder(eventData, this).buildBaquitaSharedExpensesEvent();
+        BaquitaSharedExpensesEvent baquitaSharedExpensesEvent = new EventBuilderService(eventData, this).buildBaquitaSharedExpensesEvent();
         confirmEvent(baquitaSharedExpensesEvent);
 
         return baquitaSharedExpensesEvent;
     }
 
     public BaquitaCrowdFundingEvent createBaquitaCrowdFundingEvent(EventData eventData) {
-        BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = new EventBuilder(eventData, this).buildBaquitaCrowdFundingEventEvent();
+        BaquitaCrowdFundingEvent baquitaCrowdFundingEvent = new EventBuilderService(eventData, this).buildBaquitaCrowdFundingEventEvent();
 
         confirmEvent(baquitaCrowdFundingEvent);
 

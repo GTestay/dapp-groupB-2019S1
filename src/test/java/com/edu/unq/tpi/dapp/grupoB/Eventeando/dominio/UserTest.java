@@ -6,6 +6,8 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.UserValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +33,7 @@ public class UserTest {
     private UserFactory userFactory;
 
     @Autowired
-    private AccountManager accountManager;
+    private AccountManagerService accountManagerService;
 
     @Autowired
     private MoneyTransactionDao moneyTransactionDao;
@@ -40,7 +42,7 @@ public class UserTest {
     private UserDao userDao;
 
     @Autowired
-    private Moneylender moneyLender;
+    private MoneylenderService moneyLender;
 
     @Before
     public void setUp() {
@@ -169,9 +171,9 @@ public class UserTest {
     public void userMakesACashDeposit() {
         User user = userFactory.user();
 
-        user.cashDeposit(100.00, accountManager);
+        user.cashDeposit(100.00, accountManagerService);
 
-        assertEquals(100.00, user.balance(accountManager), 0);
+        assertEquals(100.00, user.balance(accountManagerService), 0);
     }
 
     @Test
@@ -180,43 +182,43 @@ public class UserTest {
         YearMonth dueDate = YearMonth.now().plusMonths(1);
         String cardNumber = "4111111111111111";
 
-        user.creditDeposit(100.00, dueDate, cardNumber, accountManager);
+        user.creditDeposit(100.00, dueDate, cardNumber, accountManagerService);
 
-        assertEquals(100.00, user.balance(accountManager), 0);
+        assertEquals(100.00, user.balance(accountManagerService), 0);
     }
 
     @Test
     public void userTakesSomeCashOut() {
-        User user = userFactory.userWithCash(100.00, accountManager);
+        User user = userFactory.userWithCash(100.00, accountManagerService);
 
-        user.takeCash(50.00, accountManager);
-        assertEquals(50.00, user.balance(accountManager), 0);
+        user.takeCash(50.00, accountManagerService);
+        assertEquals(50.00, user.balance(accountManagerService), 0);
     }
 
     @Test
     public void userRequireSomeCredit() {
-        User user = userFactory.userWithCash(100.00, accountManager);
+        User user = userFactory.userWithCash(100.00, accountManagerService);
 
-        user.requireCredit(50.00, accountManager);
-        assertEquals(50.00, user.balance(accountManager), 0);
+        user.requireCredit(50.00, accountManagerService);
+        assertEquals(50.00, user.balance(accountManagerService), 0);
     }
 
     @Test
     public void userCannotTakeCashOrRequiereCreditWithoutFounds() {
-        User user = userFactory.userWithCash(25.00, accountManager);
+        User user = userFactory.userWithCash(25.00, accountManagerService);
 
         try {
-            user.requireCredit(50.00, accountManager);
+            user.requireCredit(50.00, accountManagerService);
             fail();
         } catch (MoneyAccountException error) {
-            assertEquals(error.getMessage(), AccountManager.USER_LOW_BALANCE);
+            assertEquals(error.getMessage(), AccountManagerService.USER_LOW_BALANCE);
         }
 
         try {
-            user.takeCash(50.00, accountManager);
+            user.takeCash(50.00, accountManagerService);
             fail();
         } catch (MoneyAccountException error) {
-            assertEquals(error.getMessage(), AccountManager.USER_LOW_BALANCE);
+            assertEquals(error.getMessage(), AccountManagerService.USER_LOW_BALANCE);
         }
     }
 
@@ -225,10 +227,10 @@ public class UserTest {
         User user = userFactory.userIndebt();
 
         try {
-            user.takeOutALoan(moneyLender, accountManager);
+            user.takeOutALoan(moneyLender, accountManagerService);
             fail();
         } catch (MoneylenderException error) {
-            assertEquals(error.getMessage(), Moneylender.USER_DEFAULTER);
+            assertEquals(error.getMessage(), MoneylenderService.USER_DEFAULTER);
         }
     }
 
@@ -237,13 +239,13 @@ public class UserTest {
         User user = userFactory.user();
         userDao.save(user);
 
-        user.takeOutALoan(moneyLender, accountManager);
+        user.takeOutALoan(moneyLender, accountManagerService);
 
         try {
-            user.takeOutALoan(moneyLender, accountManager);
+            user.takeOutALoan(moneyLender, accountManagerService);
             fail();
         } catch (MoneylenderException error) {
-            assertEquals(error.getMessage(), Moneylender.USER_LOAN_IN_PROGRESS);
+            assertEquals(error.getMessage(), MoneylenderService.USER_LOAN_IN_PROGRESS);
         }
     }
 
@@ -252,69 +254,69 @@ public class UserTest {
         User user = userFactory.user();
         userDao.save(user);
 
-        user.takeOutALoan(moneyLender, accountManager);
+        user.takeOutALoan(moneyLender, accountManagerService);
 
-        assertEquals(1000.00, user.balance(accountManager), 0);
+        assertEquals(1000.00, user.balance(accountManagerService), 0);
     }
 
     @Test
     public void haveToPayLoanAndHaveMoney() {
-        User user = userFactory.userWithCash(400.00, accountManager);
-        user.takeOutALoan(moneyLender, accountManager);
-        user.takeCash(1000.00, accountManager);
+        User user = userFactory.userWithCash(400.00, accountManagerService);
+        user.takeOutALoan(moneyLender, accountManagerService);
+        user.takeCash(1000.00, accountManagerService);
 
-        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManagerService);
 
         assertFalse(user.isDefaulter(moneyLender));
-        assertEquals(200.00, user.balance(accountManager), 0);
+        assertEquals(200.00, user.balance(accountManagerService), 0);
     }
 
     @Test
     public void haveToPayLoanAndDoNotHaveMoney() {
-        User user = userFactory.userWithCash(100.00, accountManager);
+        User user = userFactory.userWithCash(100.00, accountManagerService);
 
-        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManagerService);
 
         assertTrue(user.isDefaulter(moneyLender));
-        assertEquals(100.00, user.balance(accountManager), 0);
+        assertEquals(100.00, user.balance(accountManagerService), 0);
     }
 
     @Test
     public void haveToPayLoanAndDoNotHaveMoneyFirstMonthButWillPayNextMonth() {
-        User user = userFactory.userWithCash(100.00, accountManager);
-        user.takeOutALoan(moneyLender, accountManager);
-        user.takeCash(1000.00, accountManager);
+        User user = userFactory.userWithCash(100.00, accountManagerService);
+        user.takeOutALoan(moneyLender, accountManagerService);
+        user.takeCash(1000.00, accountManagerService);
 
-        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManagerService);
 
         assertTrue(user.isDefaulter(moneyLender));
-        assertEquals(100.00, user.balance(accountManager), 0);
+        assertEquals(100.00, user.balance(accountManagerService), 0);
 
-        user.cashDeposit(400.00, accountManager);
+        user.cashDeposit(400.00, accountManagerService);
 
-        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManagerService);
 
         assertFalse(user.isDefaulter(moneyLender));
-        assertEquals(100.00, user.balance(accountManager), 0);
+        assertEquals(100.00, user.balance(accountManagerService), 0);
     }
 
     @Test
     public void haveToPayThreeLoansAndOnlyCanPayOne() {
-        User user = userFactory.userWithCash(100.00, accountManager);
-        user.takeOutALoan(moneyLender, accountManager);
-        user.takeCash(1000.00, accountManager);
+        User user = userFactory.userWithCash(100.00, accountManagerService);
+        user.takeOutALoan(moneyLender, accountManagerService);
+        user.takeCash(1000.00, accountManagerService);
 
-        user.payLoan(moneyLender, accountManager);
-
-        assertTrue(user.isDefaulter(moneyLender));
-        assertEquals(100.00, user.balance(accountManager), 0);
-
-        user.cashDeposit(200.00, accountManager);
-
-        user.payLoan(moneyLender, accountManager);
-        user.payLoan(moneyLender, accountManager);
+        user.payLoan(moneyLender, accountManagerService);
 
         assertTrue(user.isDefaulter(moneyLender));
-        assertEquals(100.00, user.balance(accountManager), 0);
+        assertEquals(100.00, user.balance(accountManagerService), 0);
+
+        user.cashDeposit(200.00, accountManagerService);
+
+        user.payLoan(moneyLender, accountManagerService);
+        user.payLoan(moneyLender, accountManagerService);
+
+        assertTrue(user.isDefaulter(moneyLender));
+        assertEquals(100.00, user.balance(accountManagerService), 0);
     }
 }

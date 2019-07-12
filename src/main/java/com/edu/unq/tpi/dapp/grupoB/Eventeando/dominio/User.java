@@ -2,6 +2,8 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.serializer.UserDeserializer;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.serializer.UserSerializer;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.UserValidator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -57,24 +59,24 @@ public class User {
 
     public LocalDate birthday() { return birthday; }
 
-    public double balance(AccountManager accountManager) { return accountManager.balance(this); }
+    public double balance(AccountManagerService accountManagerService) { return accountManagerService.balance(this); }
 
-    public void takeCash(double amount, AccountManager accountManager) { accountManager.takeCash(this, amount); }
+    public void takeCash(double amount, AccountManagerService accountManagerService) { accountManagerService.takeCash(this, amount); }
 
-    public void cashDeposit(double amount, AccountManager accountManager) { accountManager.cashDeposit(this, amount); }
+    public void cashDeposit(double amount, AccountManagerService accountManagerService) { accountManagerService.cashDeposit(this, amount); }
 
-    public void requireCredit(double amount, AccountManager accountManager) { accountManager.requireCredit(this, amount); }
+    public void requireCredit(double amount, AccountManagerService accountManagerService) { accountManagerService.requireCredit(this, amount); }
 
-    public void creditDeposit(double amount, YearMonth dueDate, String cardNumber, AccountManager accountManager) { accountManager.creditDeposit(this, amount, dueDate, cardNumber) ; }
+    public void creditDeposit(double amount, YearMonth dueDate, String cardNumber, AccountManagerService accountManagerService) { accountManagerService.creditDeposit(this, amount, dueDate, cardNumber) ; }
 
-    public Loan takeOutALoan(Moneylender moneyLender, AccountManager accountManager) {
+    public Loan takeOutALoan(MoneylenderService moneyLender, AccountManagerService accountManagerService) {
 
-        return moneyLender.giveLoan(this, accountManager);
+        return moneyLender.giveLoan(this, accountManagerService);
     }
 
-    public boolean isDefaulter(Moneylender moneyLender) { return moneyLender.isDefaulter(this); }
+    public boolean isDefaulter(MoneylenderService moneyLender) { return moneyLender.isDefaulter(this); }
 
-    public void payLoan(Moneylender moneyLender, AccountManager accountManager) { moneyLender.payLoan(this, moneyLender, accountManager); }
+    public void payLoan(MoneylenderService moneyLender, AccountManagerService accountManagerService) { moneyLender.payLoan(this, moneyLender, accountManagerService); }
 
     public boolean hasThisEmail(String anEmail) {
         return email.equals(anEmail);

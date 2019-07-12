@@ -1,15 +1,16 @@
-package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
+package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Loan;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.MoneylenderException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
 @Service
-public class Moneylender {
+public class MoneylenderService {
     public static final String USER_DEFAULTER = "Can't Give A Loan To A Defaulter User";
     public static final double LOAN_PAYMENT_COST = 200.00;
     public static final double LOAN_COST = 1000.00;
@@ -18,13 +19,16 @@ public class Moneylender {
 
     private HashMap<User, Integer> unpaidFees = new HashMap<>();
 
-    @Autowired
-    private MoneyTransactionDao moneyTransactionDao;
+    private final MoneyTransactionDao moneyTransactionDao;
 
-    public Loan giveLoan(User user, AccountManager accountManager) {
+    public MoneylenderService(MoneyTransactionDao moneyTransactionDao) {
+        this.moneyTransactionDao = moneyTransactionDao;
+    }
+
+    public Loan giveLoan(User user, AccountManagerService accountManagerService) {
         validateUser(user);
 
-        return accountManager.giveLoan(user);
+        return accountManagerService.giveLoan(user);
     }
 
     private void validateUser(User user) {
@@ -41,31 +45,31 @@ public class Moneylender {
 
     public void indebt(User user) { user.withDebt(); }
 
-    public void payLoan(User user, Moneylender moneyLender, AccountManager accountManager) {
-        if (isDefaulter(user)) { checkPayments(user, moneyLender, accountManager); }
+    public void payLoan(User user, MoneylenderService moneyLender, AccountManagerService accountManagerService) {
+        if (isDefaulter(user)) { checkPayments(user, moneyLender, accountManagerService); }
 
-        if (user.balance(accountManager) > LOAN_PAYMENT_COST) {
-            accountManager.payLoan(user, moneyLender);
+        if (user.balance(accountManagerService) > LOAN_PAYMENT_COST) {
+            accountManagerService.payLoan(user, moneyLender);
         } else {
             indebt(user);
             unpaidFee(user);
         }
     }
 
-    public void checkIfLoanIsOver(AccountManager accountManager) {
-        actualLoans().removeIf(loan -> remainingPayments(loan, accountManager) == 0);
+    public void checkIfLoanIsOver(AccountManagerService accountManagerService) {
+        actualLoans().removeIf(loan -> remainingPayments(loan, accountManagerService) == 0);
     }
 
-    private void checkPayments(User user, Moneylender moneyLender, AccountManager accountManager) {
-        IntStream.rangeClosed(1, unpaidFees.get(user)).forEach(fun -> checkPayment(user, moneyLender, accountManager));
+    private void checkPayments(User user, MoneylenderService moneyLender, AccountManagerService accountManagerService) {
+        IntStream.rangeClosed(1, unpaidFees.get(user)).forEach(fun -> checkPayment(user, moneyLender, accountManagerService));
 
         if (unpaidFees.get(user) == 0) { user.payDebt(); }
     }
 
-    private void checkPayment(User user, Moneylender moneyLender, AccountManager accountManager) {
-        if (user.balance(accountManager) > LOAN_PAYMENT_COST) {
+    private void checkPayment(User user, MoneylenderService moneyLender, AccountManagerService accountManagerService) {
+        if (user.balance(accountManagerService) > LOAN_PAYMENT_COST) {
             unpaidFees.put(user, unpaidFees.get(user) - 1);
-            accountManager.payLoan(user, moneyLender);
+            accountManagerService.payLoan(user, moneyLender);
         }
     }
 
@@ -81,14 +85,14 @@ public class Moneylender {
         return moneyTransactionDao.findAllLoan();
     }
 
-    public int remainingPayments(Loan loan, AccountManager accountManager) {
-        Integer actualPayments = accountManager.amountOfPaymentsDone(loan);
+    public int remainingPayments(Loan loan, AccountManagerService accountManagerService) {
+        Integer actualPayments = accountManagerService.amountOfPaymentsDone(loan);
 
         return 6 - actualPayments;
     }
 
-    public int remainingPayments(User user, AccountManager accountManager) {
-        Integer actualPayments = accountManager.amountOfPaymentsDone(getLoan(user));
+    public int remainingPayments(User user, AccountManagerService accountManagerService) {
+        Integer actualPayments = accountManagerService.amountOfPaymentsDone(getLoan(user));
 
         return 6 - actualPayments;
     }
@@ -101,7 +105,7 @@ public class Moneylender {
 
     public Loan getLoan(User user) {
         List<Loan> userLoans = loansOf(user);
-        userLoans.sort(Comparator.comparing(loan -> loan.date));
+        userLoans.sort(Comparator.comparing(loan -> loan.date()));
         Collections.reverse(userLoans);
 
         Optional<Loan> userLoan = userLoans.stream().findFirst();

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @ControllerAdvice
-public class ControllerExceptionHandler {
+public class ControllerExceptionHandlerService {
 
     @ExceptionHandler
     public void badRequestObjectCreation(HttpServletResponse response, InvalidCreation exception) throws IOException {

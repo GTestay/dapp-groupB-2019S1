@@ -10,8 +10,8 @@ import java.time.YearMonth;
 @Entity
 @DiscriminatorValue("DepositByCreditCard")
 public class DepositByCreditCard extends Deposit {
-    public YearMonth dueDate;
-    public String cardNumber;
+    private YearMonth dueDate;
+    private String cardNumber;
 
     public static DepositByCreditCard create(User user, LocalDate date, double amount, YearMonth dueDate, String cardNumber) {
         MoneyTransactionValidator validator = new MoneyTransactionValidator();

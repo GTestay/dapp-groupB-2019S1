@@ -1,5 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -13,7 +15,7 @@ public class LoanPayment extends MoneyTransaction {
     public static LoanPayment create(User user, Loan referenceLoan) {
         LoanPayment instance = new LoanPayment();
 
-        validateInstance(user, LocalDate.now(), Moneylender.LOAN_PAYMENT_COST, instance);
+        validateInstance(user, LocalDate.now(), MoneylenderService.LOAN_PAYMENT_COST, instance);
 
         instance.referenceLoan = referenceLoan;
 
