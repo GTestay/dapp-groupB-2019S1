@@ -89,4 +89,10 @@ public abstract class ControllerTest {
         return perform.andExpect(status().isBadRequest())
                 .andReturn();
     }
+
+    protected void assertStatusIsOkAndNoneIsRetrieved(ResultActions perform) throws Exception {
+        perform.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().json("[]"));
+    }
 }

@@ -77,9 +77,7 @@ public class EventControllerTest extends ControllerTest {
 
         ResultActions perform = getAllEvents();
 
-        perform.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(content().json("[]"));
+        assertStatusIsOkAndNoneIsRetrieved(perform);
     }
 
     @Test

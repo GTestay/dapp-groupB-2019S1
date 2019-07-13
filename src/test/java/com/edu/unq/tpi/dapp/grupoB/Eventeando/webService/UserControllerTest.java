@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -88,9 +89,7 @@ public class UserControllerTest extends ControllerTest {
     public void whenThereAreNoUsersNoneEmailIsRetrieved() throws Exception {
         ResultActions perform = getAllUsersEmails();
 
-        perform.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(content().json("[]"));
+        assertStatusIsOkAndNoneIsRetrieved(perform);
     }
 
     @Test
@@ -139,8 +138,7 @@ public class UserControllerTest extends ControllerTest {
         bodyRequest.put("email", "1");
         ResultActions perform = performPost(bodyRequest, url());
 
-        MvcResult mvcResult = perform.andExpect(status().isBadRequest())
-                .andReturn();
+        MvcResult mvcResult = assertThatRequestIsBadRequest(perform);
         assertThat(mvcResult.getResolvedException()).hasMessageContaining(UserValidator.USER_EMAIL_IS_INVALID);
     }
 
@@ -227,5 +225,53 @@ public class UserControllerTest extends ControllerTest {
         loanBody.put("ended", false);
 
         JSONAssert.assertEquals(jsonResponse, loanBody, true);
+        assertEquals(1000.00, user.balance(accountManagerService), 0);
+    }
+
+    @Test
+    public void userCanMadeADepositByCash() throws Exception {
+        User user = userFactory.userWithCash(0, accountManagerService);
+        userDao.save(user);
+
+        JSONObject bodyRequest = new JSONObject();
+        bodyRequest.put("amount", 1000);
+
+        ResultActions perform = performPost(bodyRequest, "/users/" + user.id() + "/madeDepositByCash");
+
+        perform.andExpect(status().isCreated()).andReturn();
+
+        assertEquals(1000.00, user.balance(accountManagerService), 0);
+    }
+
+    @Test
+    public void userCanMadeADepositByCredit() throws Exception {
+        User user = userFactory.userWithCash(0, accountManagerService);
+        userDao.save(user);
+
+        JSONObject bodyRequest = new JSONObject();
+        bodyRequest.put("amount", 1000);
+        bodyRequest.put("dueDate","02/20");
+        bodyRequest.put("cardNumber", "4589695878563256");
+
+        ResultActions perform = performPost(bodyRequest, "/users/" + user.id() + "/madeDepositByCreditCard");
+
+        perform.andExpect(status().isCreated()).andReturn();
+
+        assertEquals(1000.00, user.balance(accountManagerService), 0);
+    }
+
+    @Test
+    public void userCanRequireCredit() throws Exception {
+        User user = userFactory.userWithCash(1000, accountManagerService);
+        userDao.save(user);
+
+        JSONObject bodyRequest = new JSONObject();
+        bodyRequest.put("amount", 500);
+
+        ResultActions perform = performPost(bodyRequest, "/users/" + user.id() + "/requireCredit");
+
+        perform.andExpect(status().isCreated()).andReturn();
+
+        assertEquals(500.00, user.balance(accountManagerService), 0);
     }
 }
