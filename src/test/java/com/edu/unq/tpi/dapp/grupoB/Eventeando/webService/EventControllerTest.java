@@ -325,6 +325,24 @@ public class EventControllerTest extends ControllerTest {
         assertThatIsAValidEvent(anEvent, eventRetrievedFromApi);
     }
 
+    @Test
+    public void aUserCanScoreAnEvent() throws Exception {
+        User user = savedUser();
+        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(user), organizer, savedExpenses());
+        eventDao.save(anEvent);
+
+        ResultActions perform = scoreAnEvent(anEvent.id(), user.id(), 1);
+        assertStatusIsOk(perform);
+    }
+
+
+    private ResultActions scoreAnEvent(Long eventId, Long userId, int rank) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userId", userId);
+        jsonObject.put("rank", rank);
+        return performPost(jsonObject, "/events/" + eventId + "/score");
+    }
+
     private ResultActions getAllEventsFrom(Long userId) throws Exception {
         return clientRest.perform(get(url().concat("/" + userId)));
     }

@@ -31,6 +31,12 @@ public class EventController {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @PostMapping(baseUrl + "/{eventId}/score")
+    public void scoreAnEvent(@PathVariable Long eventId, @RequestBody DtoScore score) {
+        eventService.scoreAnEvent(eventId, score.userId(), score.rank());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(baseUrl + "/{id}")
     public List<Event> eventsWithOrganizer(@PathVariable(value = "id") Long organizerId) {
         return eventService.allEventsOf(organizerId);
