@@ -4,6 +4,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.EventService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,6 +32,8 @@ public class SeedsTest {
 
     @Autowired
     private EventDao eventDao;
+    @Autowired
+    private EventService eventService;
 
     @Test
     public void seedApplicationWithUsers(){
@@ -61,4 +63,13 @@ public class SeedsTest {
         assertNotNull(party.guests());
         assertNotNull(party.expenses());
     }
+
+
+    @Test
+    public void seedApplicationWithPopularEvents(){
+        List<Event> events =  eventService.popularEvents();
+
+        assertEquals(3,events.size());
+    }
+
 }

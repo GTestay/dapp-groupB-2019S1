@@ -22,7 +22,7 @@ export function obtainCurrentsEvent () {
 }
 
 export function obtainEventsMostPopular () {
-  return Promise.resolve([])
+  return fetchEvents('/popularEvents')
 }
 
 export function obtainUserEvents (organizerId) {

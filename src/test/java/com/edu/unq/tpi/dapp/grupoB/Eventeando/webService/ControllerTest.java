@@ -65,6 +65,11 @@ public abstract class ControllerTest {
                 .andReturn();
     }
 
+
+    protected MvcResult assertStatusIsOk(ResultActions perform) throws Exception {
+        return perform.andExpect(status().isOk()).andReturn();
+    }
+
     protected String getBodyOfTheRequest(MvcResult mvcResult) throws UnsupportedEncodingException {
         return mvcResult.getResponse().getContentAsString();
     }
