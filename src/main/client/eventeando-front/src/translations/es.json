@@ -26,5 +26,10 @@
 
   "userMenu.newEventButton": "Agregar Evento",
   "userMenu.balance": "Saldo:",
-  "userMenu.newLoanButton": "Tomar Prestamo"
+  "userMenu.newLoanButton": "Tomar Prestamo",
+  "userMenu.madeDepositByCash": "Hacer Deposito en Efectivo",
+  "userMenu.madeDepositButton": "Hacer Deposito",
+
+  "cancel": "Cancelar",
+  "amount": "Monto.."
 }

@@ -25,5 +25,10 @@
 
   "userMenu.newEventButton": "Add Event",
   "userMenu.balance": "Balance:",
-  "userMenu.newLoanButton": "Take Loan"
+  "userMenu.newLoanButton": "Take Loan",
+  "userMenu.madeDepositByCash": "Made Deposit By Cash",
+  "userMenu.madeDepositButton": "Made Deposit",
+
+  "cancel": "Cancel",
+  "amount": "Amount.."
 }

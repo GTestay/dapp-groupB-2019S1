@@ -21,3 +21,20 @@
     border-color: black;
     border-width: 0.5px;
 }
+
+.deposito-en-efectivo {
+    height: 20vh;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
+.botones-deposito {
+    height: 12vh;
+}
+
+.centrado-vertical {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+}
