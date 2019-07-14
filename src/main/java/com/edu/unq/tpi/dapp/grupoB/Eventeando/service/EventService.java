@@ -1,28 +1,36 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.*;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventeandoNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.ExpensesNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ScoreDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.EventData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Transactional
 public class EventService {
 
     private final EventDao eventDao;
+    private final ScoreDao scoreDao;
     private final UserService userService;
     private final ExpenseDao expenseDao;
     private final InvitationService invitationService;
 
     @Autowired
-    public EventService(UserService userService, EventDao eventDao, ExpenseDao expenseDao, InvitationService invitationService) {
+    public EventService(UserService userService, EventDao eventDao, ScoreDao scoreDao, ExpenseDao expenseDao, InvitationService invitationService) {
         this.userService = userService;
         this.eventDao = eventDao;
+        this.scoreDao = scoreDao;
         this.expenseDao = expenseDao;
         this.invitationService = invitationService;
     }
@@ -87,5 +95,45 @@ public class EventService {
 
     public List<Event> allEventsOf(Long id) {
         return eventDao.findAllByOrganizer_Id(id);
+    }
+
+    public void scoreAnEvent(Long eventId, Long userId, Integer rank) {
+        Event event = findEvent(eventId);
+        User user = userService.searchUser(userId);
+        validateEventIsNotRatedByOrganizer(event, user);
+
+        Score score = rankEvent(event, user, rank);
+        scoreDao.save(score);
+    }
+
+    private Score rankEvent(Event event, User user, Integer rank) {
+        Optional<Score> optionalScore = scoreDao.findByEvent_IdAndAndUser_Id(event.id(), user.id());
+        optionalScore.ifPresent(score -> score.changeRank(rank));
+        return optionalScore.orElse(Score.create(event, user, rank));
+    }
+
+    public Integer eventScore(Long eventId) {
+        return scoreDao.eventScore(findEvent(eventId).id()).orElse(0);
+    }
+
+    private void validateEventIsNotRatedByOrganizer(Event event, User user) {
+        if (event.hasSameOrganizer(user))
+            throw organizerCanNotRateEvent();
+    }
+
+    private RuntimeException organizerCanNotRateEvent() {
+        return new RuntimeException(EventValidator.EVENT_CAN_NOT_BE_SCORED_BY_ORGANIZER);
+    }
+
+    private Event findEvent(Long eventId) {
+        return this.eventDao.findById(eventId).orElseThrow(this::eventNotFound);
+    }
+
+    private EventeandoNotFound eventNotFound() {
+        return new EventeandoNotFound(EventValidator.EVENT_NOT_FOUND);
+    }
+
+    public List<Event> popularEvents() {
+        return scoreDao.popularEvents();
     }
 }
