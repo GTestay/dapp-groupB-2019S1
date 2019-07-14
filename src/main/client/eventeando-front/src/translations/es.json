@@ -38,5 +38,9 @@
   "amount": "Monto..",
   "cardNumber": "Numero de Tarjeta",
   "cardName": "Nombre",
-  "cardExpiry": "Fecha Exp."
+  "cardExpiry": "Fecha Exp.",
+
+  "accountStatus.headerType": "Tipo",
+  "accountStatus.headerAmount": "Monto",
+  "accountStatus.headerDate": "Fecha"
 }

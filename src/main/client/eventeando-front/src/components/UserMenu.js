@@ -109,6 +109,9 @@ class UserMenu extends Component {
             <Button onClick={this.newEvent} className="ui primary button compact">
               <FormattedMessage id="userMenu.newEventButton" defaultMessage='Add Event'/>
             </Button>
+            <Button onClick={this.accountStatusView} className="ui primary button compact">
+              <FormattedMessage id="userMenu.accountStatus" defaultMessage='Account Status'/>
+            </Button>
           </Button.Group>
         </div>
       </div>
@@ -157,6 +160,13 @@ class UserMenu extends Component {
   getUser () {
     return this.props.user
   }
+
+  accountStatusView = () => {
+    this.props.history.push({
+      pathname: '/account-status',
+      state: { user: this.getUser() }
+    })
+  };
 
   getUserBalance () {
     return this.state.balance
