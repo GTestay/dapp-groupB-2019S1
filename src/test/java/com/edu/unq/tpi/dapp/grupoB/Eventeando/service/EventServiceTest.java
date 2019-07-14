@@ -2,6 +2,7 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Event;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Expense;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Party;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventeandoNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.EventFactory;
@@ -62,8 +63,7 @@ public class EventServiceTest {
 
     @Test
     public void anEventIsRetrieved() {
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(persistedUser()), organizer, savedExpenses());
-        eventDao.save(anEvent);
+        Event anEvent = aNewEvent();
 
         List<Event> events = eventService.allEvents();
 
@@ -80,8 +80,7 @@ public class EventServiceTest {
 
     @Test
     public void givenAnUserIdAllEventOfTheUserAreRetrieved() {
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(persistedUser()), organizer, savedExpenses());
-        eventDao.save(anEvent);
+        Event anEvent = aNewEvent();
 
         Event anEventWithTheUserThatIsNotTheOrganizer = eventFactory.partyWithGuests(Collections.singletonList(organizer), persistedUser(), savedExpenses());
         eventDao.save(anEventWithTheUserThatIsNotTheOrganizer);
@@ -93,8 +92,7 @@ public class EventServiceTest {
 
     @Test
     public void givenAnUserIdAllEventOfTheUserAreRetrievedThatAreOnlyAnOrganizer() {
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(persistedUser()), organizer, savedExpenses());
-        eventDao.save(anEvent);
+        Event anEvent = aNewEvent();
 
         Event anEventWithTheUserThatIsNotTheOrganizer = eventFactory.partyWithGuests(Collections.singletonList(organizer), persistedUser(), savedExpenses());
         eventDao.save(anEventWithTheUserThatIsNotTheOrganizer);
@@ -107,8 +105,8 @@ public class EventServiceTest {
     @Test
     public void anEventCanNotBeScoredWith0orLess() {
         User anUser = persistedUser();
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(anUser), organizer, savedExpenses());
-        eventDao.save(anEvent);
+        Event anEvent = eventWithOneGuest(anUser);
+
 
         try {
             eventService.scoreAnEvent(anEvent.id(), anUser.id(), 0);
@@ -122,7 +120,7 @@ public class EventServiceTest {
     @Test
     public void canNotScoreAnEventGivenAnInexistentEvent() {
         User anUser = persistedUser();
-        eventFactory.partyWithGuests(Collections.singletonList(anUser), organizer, savedExpenses());
+        eventWithOneGuest(anUser);
 
         try {
             eventService.scoreAnEvent((long) -1, anUser.id(), 5);
@@ -135,8 +133,7 @@ public class EventServiceTest {
 
     @Test
     public void anEventCanNotBeScoredByTheOrganizer() {
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(persistedUser()), organizer, savedExpenses());
-        eventDao.save(anEvent);
+        Event anEvent = aNewEvent();
 
         try {
             eventService.scoreAnEvent(anEvent.id(), organizer.id(), 1);
@@ -150,8 +147,7 @@ public class EventServiceTest {
 
     @Test
     public void anEventCanNotBeScoredByAnInexistentUser() {
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(persistedUser()), organizer, savedExpenses());
-        eventDao.save(anEvent);
+        Event anEvent = aNewEvent();
 
         try {
             eventService.scoreAnEvent(anEvent.id(), (long) -1, 1);
@@ -165,12 +161,10 @@ public class EventServiceTest {
     @Test
     public void anEventCanBeScored() {
         User anUser = persistedUser();
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(anUser), organizer, savedExpenses());
-        eventDao.save(anEvent);
+        Event anEvent = eventWithOneGuest(anUser);
 
         eventService.scoreAnEvent(anEvent.id(), anUser.id(), 5);
         assertThat(eventService.eventScore(anEvent.id())).isEqualTo(5);
-
     }
 
     @Test
@@ -203,16 +197,58 @@ public class EventServiceTest {
     @Test
     public void anUserCanScoreMoreThanOneEvent() {
         User anUser = persistedUser();
-        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(anUser), organizer, savedExpenses());
-        Event otherEvent = eventFactory.partyWithGuests(Collections.singletonList(anUser), organizer, savedExpenses());
-        eventDao.save(anEvent);
-        eventDao.save(otherEvent);
+        Event anEvent = eventWithOneGuest(anUser);
+        Event otherEvent = eventWithOneGuest(anUser);
 
         eventService.scoreAnEvent(anEvent.id(), anUser.id(), 1);
         eventService.scoreAnEvent(otherEvent.id(), anUser.id(), 5);
 
         assertThat(eventService.eventScore(anEvent.id())).isEqualTo(1);
         assertThat(eventService.eventScore(otherEvent.id())).isEqualTo(5);
+    }
+
+    private Party eventWithOneGuest(User anUser) {
+        Party event = eventFactory.partyWithGuests(Collections.singletonList(anUser), organizer, savedExpenses());
+        eventDao.save(event);
+        return event;
+    }
+
+
+    @Test
+    public void whenThereAreNoPopularEventsIsEmpty() {
+        assertThat(eventService.popularEvents()).isEmpty();
+    }
+
+    @Test
+    public void whenTheEventIsNotScored() {
+        aNewEvent();
+
+        assertThat(eventService.popularEvents()).isEmpty();
+    }
+
+    @Test
+    public void popularEventsAreRankedByScore() {
+        User anUser = persistedUser();
+        User otherUser = persistedUser();
+        Event mostPopular = eventFactory.partyWithGuests(Arrays.asList(anUser, otherUser), organizer, savedExpenses());
+        eventDao.save(mostPopular);
+        Event aBitPopular = eventWithOneGuest(anUser);
+        Event lessPopular = eventWithOneGuest(anUser);
+        Event eventWithNoRanking = eventWithOneGuest(persistedUser());
+
+        eventService.scoreAnEvent(aBitPopular.id(), anUser.id(), 5);
+        eventService.scoreAnEvent(mostPopular.id(), anUser.id(), 10);
+        eventService.scoreAnEvent(lessPopular.id(), anUser.id(), 1);
+        eventService.scoreAnEvent(mostPopular.id(), otherUser.id(), 11);
+
+        List<Event> events = eventService.popularEvents();
+        assertThat(events.size()).isEqualTo(3);
+        assertThat(events).containsExactly(mostPopular, aBitPopular, lessPopular);
+    }
+
+
+    private Event aNewEvent() {
+        return eventWithOneGuest(persistedUser());
     }
 
     public User persistedUser() {

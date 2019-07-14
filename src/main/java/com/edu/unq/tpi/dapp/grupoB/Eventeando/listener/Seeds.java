@@ -7,6 +7,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -25,14 +26,16 @@ public class Seeds implements ApplicationRunner {
     private UserFactory userFactory;
     private ExpenseDao expenseDao;
     private EventDao eventDao;
+    private EventService eventService;
     private EventFactory eventFactory;
     private AccountManagerService accountManagerService;
 
     @Autowired
-    public Seeds(UserDao userDao, ExpenseDao expenseDao, EventDao eventDao, AccountManagerService accountManagerService) {
+    public Seeds(UserDao userDao, ExpenseDao expenseDao, EventDao eventDao, EventService eventService, AccountManagerService accountManagerService) {
         this.userDao = userDao;
         this.expenseDao = expenseDao;
         this.eventDao = eventDao;
+        this.eventService = eventService;
         this.accountManagerService = accountManagerService;
         eventFactory = new EventFactory();
         userFactory = new UserFactory();
@@ -58,14 +61,24 @@ public class Seeds implements ApplicationRunner {
         seedPotlucks(expenses);
     }
 
+
+    private void seedRanking(List<User> guests, Event event) {
+        guests.forEach(guest -> {
+            if (!event.hasSameOrganizer(guest)) {
+                Integer randomScore = 1 + (int) (Math.random() * 10);
+                eventService.scoreAnEvent(event.id(), guest.id(), randomScore);
+            }
+        });
+    }
+
     protected void createMartin() {
-        User martin  = User.create("Martin Ezequiel", "Gonzalez", "martinegonzalez95@gmail.com", "P4SSW0RD", userFactory.birthday());
+        User martin = User.create("Martin Ezequiel", "Gonzalez", "martinegonzalez95@gmail.com", "P4SSW0RD", userFactory.birthday());
         userDao.save(martin);
         martin.cashDeposit(500.00, accountManagerService);
     }
 
     protected void createGaston() {
-        User gaston  = User.create("Gaston Ezequiel", "Testay", "gaston.testay@gmail.com", "P4SSW0RD", userFactory.birthday());
+        User gaston = User.create("Gaston Ezequiel", "Testay", "gaston.testay@gmail.com", "P4SSW0RD", userFactory.birthday());
         userDao.save(gaston);
         gaston.cashDeposit(750.00, accountManagerService);
     }
@@ -100,6 +113,7 @@ public class Seeds implements ApplicationRunner {
 
         Party party = eventFactory.partyWithGuests(guests, seedUsers(), expenses);
         eventDao.save(party);
+        seedRanking(guests, party);
     }
 
     private User seedUsers() {

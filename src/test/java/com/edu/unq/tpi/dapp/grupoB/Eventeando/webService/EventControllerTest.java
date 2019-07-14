@@ -44,6 +44,9 @@ public class EventControllerTest extends ControllerTest {
     private EventDao eventDao;
 
     @Autowired
+    private EventService eventService;
+
+    @Autowired
     private UserDao userDao;
     private List<User> guests;
 
@@ -335,12 +338,57 @@ public class EventControllerTest extends ControllerTest {
         assertStatusIsOk(perform);
     }
 
-
     private ResultActions scoreAnEvent(Long eventId, Long userId, int rank) throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("userId", userId);
         jsonObject.put("rank", rank);
         return performPost(jsonObject, "/events/" + eventId + "/score");
+    }
+
+
+    @Test
+    public void nonePopularEventIsRetrieved() throws Exception {
+
+        ResultActions perform = getPopularEvents();
+
+        perform.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    public void popularEventIsRetrieved() throws Exception {
+        User anUser = savedUser();
+        Event mostPopular = eventFactory.partyWithGuests(Collections.singletonList(anUser), organizer, savedExpenses());
+        eventDao.save(mostPopular);
+        Event aBitPopular = eventFactory.partyWithGuests(Collections.singletonList(anUser), organizer, savedExpenses());
+        eventDao.save(aBitPopular);
+        Event lessPopular = eventFactory.partyWithGuests(Collections.singletonList(anUser), organizer, savedExpenses());
+        eventDao.save(lessPopular);
+
+        eventService.scoreAnEvent(mostPopular.id(), anUser.id(), 10);
+        eventService.scoreAnEvent(aBitPopular.id(), anUser.id(), 5);
+        eventService.scoreAnEvent(lessPopular.id(), anUser.id(), 1);
+
+        ResultActions perform = getPopularEvents();
+
+        MvcResult mvcResult = assertStatusIsOkAndMediaType(perform);
+
+        JSONArray eventsRequest = new JSONArray(getBodyOfTheRequest(mvcResult));
+
+        JSONObject jsonObject0 = eventsRequest.getJSONObject(0);
+        JSONObject jsonObject1 = eventsRequest.getJSONObject(1);
+        JSONObject jsonObject2 = eventsRequest.getJSONObject(2);
+
+        Event mostPopularRetrievedFromApi = parseJson(jsonObject0, Event.class);
+        Event aBitPopularRetrievedFromApi = parseJson(jsonObject1, Event.class);
+        Event lessPopularRetrievedFromApi = parseJson(jsonObject2, Event.class);
+
+        assertThat(eventService.popularEvents().stream().mapToLong(event -> event.id())).containsExactly(mostPopularRetrievedFromApi.id(), aBitPopularRetrievedFromApi.id(), lessPopularRetrievedFromApi.id());
+    }
+
+    private ResultActions getPopularEvents() throws Exception {
+        return performGet("/popularEvents");
     }
 
     private ResultActions getAllEventsFrom(Long userId) throws Exception {

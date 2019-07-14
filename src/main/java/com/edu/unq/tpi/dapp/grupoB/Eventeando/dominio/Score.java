@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -13,9 +14,11 @@ public class Score {
     private Integer rank;
 
     @OneToOne
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private Event event;
 
     @OneToOne
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private User user;
 
     private Score() {

@@ -5,17 +5,24 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.EventeandoNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.ExpensesNotFound;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.EventDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.Ranking;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ScoreDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.EventValidator;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.EventData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class EventService {
 
     private final EventDao eventDao;
@@ -105,9 +112,9 @@ public class EventService {
     }
 
     private Score rankEvent(Event event, User user, Integer rank) {
-        Optional<Score> optionalScore = scoreDao.findAllByEvent_IdAndAndUser_Id(event.id(), user.id());
+        Optional<Score> optionalScore = scoreDao.findByEvent_IdAndAndUser_Id(event.id(), user.id());
         optionalScore.ifPresent(score -> score.changeRank(rank));
-        return optionalScore.orElseGet(() -> Score.create(event, user, rank));
+        return optionalScore.orElse(Score.create(event, user, rank));
     }
 
     public Integer eventScore(Long eventId) {
@@ -131,4 +138,7 @@ public class EventService {
         return new EventeandoNotFound(EventValidator.EVENT_NOT_FOUND);
     }
 
+    public List<Event> popularEvents() {
+        return scoreDao.popularEvents();
+    }
 }
