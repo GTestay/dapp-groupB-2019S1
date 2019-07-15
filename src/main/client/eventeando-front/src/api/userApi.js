@@ -50,6 +50,22 @@ export function balance (user) {
   return axios.get(`${url}/${user.id}/balance`).then((response) => response.data)
 }
 
-export function newLoanFor(user) {
+export function newLoanFor (user) {
   return axios.post(`${url}/${user.id}/takeOutLoan`, { headers: headers }).then((response) => response.data)
+}
+
+export function madeDepositByCashFor (user, amount) {
+  return axios.post(`${url}/${user.id}/madeDepositByCash`, { amount: amount }, { headers: headers }).then((response) => response.data)
+}
+
+export function madeWithdrawalFor (user, amount) {
+  return axios.post(`${url}/${user.id}/requireCredit`, { amount: amount }, { headers: headers }).then((response) => response.data)
+}
+
+export function madeDepositByCreditCardFor (user, amount, dueDate, cardNumber) {
+  return axios.post(
+    `${url}/${user.id}/madeDepositByCreditCard`,
+    { amount: amount, dueDate: dueDate, cardNumber: cardNumber },
+    { headers: headers }
+  ).then((response) => response.data)
 }

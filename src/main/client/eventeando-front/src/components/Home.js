@@ -15,7 +15,7 @@ class Home extends Component {
       currentEvents: [],
       userEvents: [],
       popularEvents: [],
-      user: props.location.state.user,
+      user: props.location.state.user
     }
   }
 

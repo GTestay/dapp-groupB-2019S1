@@ -5,6 +5,8 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Loan;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.UserService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos.DepositByCreditCardInformation;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos.TransactionInformation;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.webService.dtos.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,5 +70,32 @@ public class UserController {
         User owner = userService.searchUser(id);
 
         return owner.takeOutALoan(moneyLender, accountManagerService);
+    }
+
+    @PostMapping("/users/{id}/madeDepositByCash")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void madeDepositByCash(@PathVariable Long id, @RequestBody TransactionInformation transactionInformation) {
+        User user = userService.searchUser(id);
+
+        user.cashDeposit(transactionInformation.amount(), accountManagerService);
+    }
+
+    @PostMapping("/users/{id}/madeDepositByCreditCard")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void madeDepositByCreditCard(@PathVariable Long id, @RequestBody DepositByCreditCardInformation depositByCreditInformation) {
+        User user = userService.searchUser(id);
+
+        user.creditDeposit(depositByCreditInformation.amount(),
+                            depositByCreditInformation.dueDate(),
+                            depositByCreditInformation.cardNumber(),
+                            accountManagerService);
+    }
+
+    @PostMapping("users/{id}/requireCredit")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void requireCredit(@PathVariable Long id, @RequestBody TransactionInformation transactionInformation) {
+        User user = userService.searchUser(id);
+
+        user.requireCredit(transactionInformation.amount(), accountManagerService);
     }
 }

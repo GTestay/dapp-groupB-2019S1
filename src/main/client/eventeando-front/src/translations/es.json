@@ -26,5 +26,17 @@
 
   "userMenu.newEventButton": "Agregar Evento",
   "userMenu.balance": "Saldo:",
-  "userMenu.newLoanButton": "Tomar Prestamo"
+  "userMenu.newLoanButton": "Tomar Prestamo",
+  "userMenu.madeDepositByCash": "Depósito en Efectivo",
+  "userMenu.madeDepositByCreditCard": "Depósito con Tarjeta de Crédito",
+  "userMenu.madeDepositButton": "Depositar",
+  "userMenu.madeDepositByCreditCardTitle": "Ingresá los Datos de tu Tarjeta",
+  "userMenu.creditWithdraw": "Retirar Credito",
+  "userMenu.withdrawal": "Retirar",
+
+  "cancel": "Cancelar",
+  "amount": "Monto..",
+  "cardNumber": "Numero de Tarjeta",
+  "cardName": "Nombre",
+  "cardExpiry": "Fecha Exp."
 }

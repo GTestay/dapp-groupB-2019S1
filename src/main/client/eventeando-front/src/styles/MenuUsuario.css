@@ -21,3 +21,55 @@
     border-color: black;
     border-width: 0.5px;
 }
+
+.transaccion {
+    height: 20vh;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
+.deposito-con-tarjeta {
+    height: 60vh;
+    margin-top: 2vh;
+}
+
+.botones-transacciones {
+    height: 12vh;
+    margin-top: 2vh;
+}
+
+.centrado-vertical {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.informacion-deposito-tarjeta {
+    width: 50%;
+}
+
+.tarjeta-deposito-tarjeta {
+    width: 50%;
+}
+
+.formulario-deposito-tarjeta {
+    display: flex;
+}
+
+.formulario-informacion-tarjeta {
+    width: 100%;
+    height: 65%;
+}
+
+.formulario-monto-botones {
+    height: 35%;
+}
+
+.altura-total {
+    height: 100%;
+}
+
+.titulo-deposito-tarjeta {
+    padding-left: 1.5rem;
+}
