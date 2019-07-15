@@ -1,6 +1,8 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Loan;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
@@ -18,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +36,9 @@ public class UserControllerTest extends ControllerTest {
 
     @Autowired
     private AccountManagerService accountManagerService;
+
+    @Autowired
+    private MoneyTransactionDao moneyTransactionDao;
 
     private UserFactory userFactory;
     private User newUser;
@@ -204,6 +210,21 @@ public class UserControllerTest extends ControllerTest {
         assertThat("1000.0").isEqualTo(responseString);
     }
 
+    @Test
+    public void canBringAllMoneyTransactionsForAnUser() throws Exception {
+        User user = userFactory.userWithCash(1000, accountManagerService);
+        userDao.save(user);
+
+        ResultActions perform = getUserTransactions(user);
+
+        assertStatusIsOkAndMediaType(perform);
+    }
+
+    private ResultActions getUserTransactions(User user) throws Exception {
+        return performGet(url() + "/" + user.id() + "/transactions");
+    }
+
+
     public ResultActions getUserBalance(User user) throws Exception {
         return getUsers(url() + "/" + user.id() + "/balance");
     }
@@ -219,10 +240,16 @@ public class UserControllerTest extends ControllerTest {
 
         MvcResult result = assertThatResponseIsCreated(perform);
 
+        Loan loan = moneyTransactionDao.findAllLoanByUser(user).get(0);
+
         String responseString = getBodyOfTheRequest(result);
         JSONObject jsonResponse = new JSONObject(responseString);
         JSONObject loanBody = new JSONObject();
-        loanBody.put("ended", false);
+        loanBody.put("ended", loan.isEnded());
+        loanBody.put("amount", loan.amount());
+        loanBody.put("date", loan.date().toString());
+        loanBody.put("type", "Loan");
+        loanBody.put("id", loan.id());
 
         JSONAssert.assertEquals(jsonResponse, loanBody, true);
         assertEquals(1000.00, user.balance(accountManagerService), 0);

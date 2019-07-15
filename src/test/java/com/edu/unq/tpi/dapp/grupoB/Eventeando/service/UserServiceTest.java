@@ -1,16 +1,19 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.MoneyTransaction;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.factory.UserFactory;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.UserValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,20 +22,25 @@ import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest
+@Transactional
 public class UserServiceTest {
 
     @Autowired
     private UserDao userDao;
-
+    @Autowired
+    private MoneyTransactionDao moneyTransactionDao;
+    @Autowired
+    private AccountManagerService accountManagerService;
+    @Autowired
     private UserService userService;
+
     private UserFactory userFactory;
 
 
     @Before
     public void setUp() {
         userFactory = new UserFactory();
-        userService = new UserService(userDao);
     }
 
     @Test
@@ -103,6 +111,18 @@ public class UserServiceTest {
         List<String> emails = userService.allEmailsContaining("");
         assertThat(emails).isNotEmpty();
         assertThat(emails).containsExactlyInAnyOrder(createdUser1.email(), createdUser2.email());
+    }
+
+    @Test
+    public void canBringAllUserMoneyTransactions() {
+        User user = userFactory.userWithCash(1000, accountManagerService);
+        userDao.save(user);
+        List<MoneyTransaction> transactions = accountManagerService.transactions(user);
+
+        List<MoneyTransaction> moneyTransactions = userService.allMoneyTransactionsOf(user.id());
+
+        assertThat(moneyTransactions).isNotEmpty();
+        assertThat(moneyTransactions).isEqualTo(transactions);
     }
 
 }

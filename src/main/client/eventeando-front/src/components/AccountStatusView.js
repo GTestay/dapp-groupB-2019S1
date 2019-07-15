@@ -15,7 +15,8 @@ class AccountStatusView extends Component {
   }
 
   componentDidMount () {
-    this.obtainUserTransactions()
+    const { user } = this.props.location.state
+    this.setState({ user }, () => this.obtainUserTransactions())
   }
 
   obtainUserTransactions () {
@@ -45,7 +46,6 @@ class AccountStatusView extends Component {
 
     return <Table.Header>
       <Table.Row>
-        <Table.HeaderCell>ID</Table.HeaderCell>
         <Table.HeaderCell>{headerType}</Table.HeaderCell>
         <Table.HeaderCell>{headerAmount}</Table.HeaderCell>
         <Table.HeaderCell>{headerDate}</Table.HeaderCell>
@@ -87,7 +87,6 @@ class AccountStatusView extends Component {
     const { id, type, amount, date } = moneyTransaction
 
     return <Table.Row key={id}>
-      <Table.Cell>{id}</Table.Cell>
       <Table.Cell><FormattedMessage id={type} defaultMessage={type} /></Table.Cell>
       <Table.Cell>$<FormattedNumber value={amount} /></Table.Cell>
       <Table.Cell>{<FormattedDate value={date}/>}</Table.Cell>
@@ -99,7 +98,7 @@ class AccountStatusView extends Component {
   }
 
   fillPage (activePage) {
-    obtainUserTransactions(this.props.user, activePage, 5)
+    obtainUserTransactions(this.state.user, activePage, 5)
       .then(({ totalPages, moneyTransactions }) => {
         return this.setState({ totalPages, moneyTransactions })
       })
