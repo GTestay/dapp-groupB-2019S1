@@ -41,22 +41,22 @@ class DepositByCash extends Component {
     )
   }
 
-    closeModal = () => {
-      this.props.closeModal()
-    };
+  closeModal = () => {
+    this.props.closeModal()
+  };
 
-    newDepositByCash = () => {
-      this.props.madeDepositByCashFor(this.state.user, this.state.amount)
-      this.props.closeModal()
-    };
+  newDepositByCash = () => {
+    this.props.madeDepositByCashFor(this.state.user, this.state.amount)
+    this.props.closeModal()
+  };
 
-    setAmount (amount) {
-      this.setState({ amount: amount })
-    }
+  setAmount (amount) {
+    this.setState({ amount: amount })
+  }
 
-    validAmount () {
-      return this.state.amount <= 0
-    }
+  validAmount () {
+    return this.state.amount <= 0
+  }
 }
 
 DepositByCash = injectIntl(DepositByCash)

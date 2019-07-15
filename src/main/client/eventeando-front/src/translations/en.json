@@ -26,9 +26,14 @@
   "userMenu.newEventButton": "Add Event",
   "userMenu.balance": "Balance:",
   "userMenu.newLoanButton": "Take Loan",
-  "userMenu.madeDepositByCash": "Made Deposit By Cash",
-  "userMenu.madeDepositButton": "Made Deposit",
+  "userMenu.madeDepositByCash": "Deposit By Cash",
+  "userMenu.madeDepositByCreditCard": "Deposit By Credit Card",
+  "userMenu.madeDepositButton": "Deposit",
+  "userMenu.madeDepositByCreditCardTitle": "Enter Your Card Information",
 
   "cancel": "Cancel",
-  "amount": "Amount.."
+  "amount": "Amount..",
+  "cardNumber": "Card Number",
+  "cardName": "Name",
+  "cardExpiry": "Valid Thru"
 }

@@ -16,7 +16,7 @@ public class DepositByCreditCardInformation extends TransactionInformation {
     @JsonCreator
     public DepositByCreditCardInformation(double amount, String dueDate, String cardNumber) {
         super(amount);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/uu");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMuu");
         this.dueDate = YearMonth.parse(dueDate, formatter);
         this.cardNumber = cardNumber;
     }

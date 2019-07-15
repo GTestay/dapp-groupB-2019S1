@@ -57,3 +57,11 @@ export function newLoanFor (user) {
 export function madeDepositByCashFor (user, amount) {
   return axios.post(`${url}/${user.id}/madeDepositByCash`, { amount: amount }, { headers: headers }).then((response) => response.data)
 }
+
+export function madeDepositByCreditCardFor (user, amount, dueDate, cardNumber) {
+  return axios.post(
+    `${url}/${user.id}/madeDepositByCreditCard`,
+    { amount: amount, dueDate: dueDate, cardNumber: cardNumber },
+    { headers: headers }
+  ).then((response) => response.data)
+}

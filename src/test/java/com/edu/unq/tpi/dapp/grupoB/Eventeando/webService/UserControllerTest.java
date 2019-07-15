@@ -250,7 +250,7 @@ public class UserControllerTest extends ControllerTest {
 
         JSONObject bodyRequest = new JSONObject();
         bodyRequest.put("amount", 1000);
-        bodyRequest.put("dueDate","02/20");
+        bodyRequest.put("dueDate","0220");
         bodyRequest.put("cardNumber", "4589695878563256");
 
         ResultActions perform = performPost(bodyRequest, "/users/" + user.id() + "/madeDepositByCreditCard");

@@ -27,9 +27,14 @@
   "userMenu.newEventButton": "Agregar Evento",
   "userMenu.balance": "Saldo:",
   "userMenu.newLoanButton": "Tomar Prestamo",
-  "userMenu.madeDepositByCash": "Hacer Deposito en Efectivo",
-  "userMenu.madeDepositButton": "Hacer Deposito",
+  "userMenu.madeDepositByCash": "Depósito en Efectivo",
+  "userMenu.madeDepositByCreditCard": "Depósito con Tarjeta de Crédito",
+  "userMenu.madeDepositButton": "Depositar",
+  "userMenu.madeDepositByCreditCardTitle": "Ingresá los Datos de tu Tarjeta",
 
   "cancel": "Cancelar",
-  "amount": "Monto.."
+  "amount": "Monto..",
+  "cardNumber": "Numero de Tarjeta",
+  "cardName": "Nombre",
+  "cardExpiry": "Fecha Exp."
 }

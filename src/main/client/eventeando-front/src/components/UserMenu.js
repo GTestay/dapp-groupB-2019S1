@@ -4,15 +4,17 @@ import '../styles/MenuUsuario.css'
 import { withRouter } from 'react-router-dom'
 import { Button, Modal } from 'semantic-ui-react'
 import { FormattedMessage } from 'react-intl'
-import { balance, madeDepositByCashFor, newLoanFor } from '../api/userApi'
+import { balance, madeDepositByCashFor, madeDepositByCreditCardFor, newLoanFor } from '../api/userApi'
 import DepositByCash from './DepositByCash'
+import DepositByCreditCard from './DepositByCreditCard'
 
 class UserMenu extends Component {
   constructor (props) {
     super(props)
     this.state = {
       balance: 0,
-      open: false
+      showCashModal: false,
+      showCreditCardModal: false
     }
   }
 
@@ -30,7 +32,11 @@ class UserMenu extends Component {
       id: 'userMenu.madeDepositByCash',
       defaultMessage: 'Made Deposit By Cash'
     })
-    const { open } = this.state
+    const madeDepositByCreditCard = intl.formatMessage({
+      id: 'userMenu.madeDepositByCreditCard',
+      defaultMessage: 'Made Deposit By Credit Card'
+    })
+    const { showCashModal, showCreditCardModal } = this.state
 
     return (
       <div className="user-details">
@@ -55,18 +61,31 @@ class UserMenu extends Component {
             <Button onClick={this.newLoan} className="ui primary button compact">
               <FormattedMessage id="userMenu.newLoanButton" defaultMessage='Take Loan'/>
             </Button>
-            <Button className="ui primary button compact" onClick={this.openModal}>
+            <Button className="ui primary button compact" onClick={this.openCashModal}>
               {madeDepositByCash}
             </Button>
             <Modal
               header={madeDepositByCash}
               size='tiny'
-              content={<DepositByCash user={this.getUser()} closeModal={this.closeModal} madeDepositByCashFor={this.madeDepositByCashFor}/>}
+              content={<DepositByCash user={this.getUser()} closeModal={this.closeCashModal} madeDepositByCashFor={this.madeDepositByCashFor}/>}
               closeIcon
-              open={open}
+              open={showCashModal}
               closeOnEscape
               closeOnDimmerClick
-              onClose={this.closeModal}
+              onClose={this.closeCashModal}
+            />
+            <Button className="ui primary button compact" onClick={this.openCreditCardModal}>
+              {madeDepositByCreditCard}
+            </Button>
+            <Modal
+              header={madeDepositByCreditCard}
+              size='small'
+              content={<DepositByCreditCard user={this.getUser()} closeModal={this.closeCreditCardModal} madeDepositByCreditCardFor={this.madeDepositByCreditCardFor}/>}
+              closeIcon
+              open={showCreditCardModal}
+              closeOnEscape
+              closeOnDimmerClick
+              onClose={this.closeCreditCardModal}
             />
             <Button onClick={this.newEvent} className="ui primary button compact">
               <FormattedMessage id="userMenu.newEventButton" defaultMessage='Add Event'/>
@@ -77,10 +96,20 @@ class UserMenu extends Component {
     )
   }
 
-  closeModal = () => this.setState({ open: false })
+  openCashModal = () => this.setState({ showCashModal: true })
+
+  closeCashModal = () => this.setState({ showCashModal: false })
+
+  openCreditCardModal = () => this.setState({ showCreditCardModal: true })
+
+  closeCreditCardModal = () => this.setState({ showCreditCardModal: false })
 
   madeDepositByCashFor = (user, amount) => {
     madeDepositByCashFor(user, amount).then(() => this.userBalance())
+  }
+
+  madeDepositByCreditCardFor = (user, amount, dueDate, cardNumber) => {
+    madeDepositByCreditCardFor(user, amount, dueDate, cardNumber).then(() => this.userBalance())
   }
 
   userBalance () {
@@ -92,25 +121,23 @@ class UserMenu extends Component {
   }
 
   newEvent = () => {
-      this.props.history.push({
-        pathname: '/new-event',
-        state: { user: this.getUser() }
-      })
-    };
+    this.props.history.push({
+      pathname: '/new-event',
+      state: { user: this.getUser() }
+    })
+  };
 
   getUser () {
-      return this.props.user
-    }
+    return this.props.user
+  }
 
   getUserBalance () {
-      return this.state.balance
-    }
+    return this.state.balance
+  }
 
   newLoan = () => {
-      newLoanFor(this.getUser()).then(() => this.userBalance())
-    };
-
-  openModal = () => this.setState({ open: true })
+    newLoanFor(this.getUser()).then(() => this.userBalance())
+  };
 }
 
 export default withRouter(UserMenu)
