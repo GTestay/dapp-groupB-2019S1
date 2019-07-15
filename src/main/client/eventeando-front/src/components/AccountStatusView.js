@@ -45,6 +45,7 @@ class AccountStatusView extends Component {
 
     return <Table.Header>
       <Table.Row>
+        <Table.HeaderCell>ID</Table.HeaderCell>
         <Table.HeaderCell>{headerType}</Table.HeaderCell>
         <Table.HeaderCell>{headerAmount}</Table.HeaderCell>
         <Table.HeaderCell>{headerDate}</Table.HeaderCell>
@@ -83,10 +84,11 @@ class AccountStatusView extends Component {
   };
 
   showMoneyTransaction (moneyTransaction) {
-    const { type, amount, date } = moneyTransaction
+    const { id, type, amount, date } = moneyTransaction
 
-    return <Table.Row>
-      <Table.Cell>{type}</Table.Cell>
+    return <Table.Row key={id}>
+      <Table.Cell>{id}</Table.Cell>
+      <Table.Cell><FormattedMessage id={type} defaultMessage={type} /></Table.Cell>
       <Table.Cell>$<FormattedNumber value={amount} /></Table.Cell>
       <Table.Cell>{<FormattedDate value={date}/>}</Table.Cell>
     </Table.Row>

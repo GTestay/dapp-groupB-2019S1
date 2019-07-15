@@ -1,4 +1,11 @@
 {
+  "Deposit": "Deposit",
+  "DepositByCash": "Deposit by cash",
+  "DepositByCreditCard": "Deposit by credit card",
+  "Extraction": "Extraction",
+  "Loan": "Loan",
+  "LoanPayment": "Loan Payment",
+
   "eventList.noEventsMessage": "There aren't Events to Show!",
   "defaultMessageForLoading": "Loading!",
   "home.ongoingEvents": "Ongoing Events",
@@ -39,6 +46,7 @@
   "cardName": "Name",
   "cardExpiry": "Valid Thru",
 
+  "userMenu.accountStatus": "Account Status",
   "accountStatus.headerType": "Type",
   "accountStatus.headerAmount": "Amount",
   "accountStatus.headerDate": "Date"

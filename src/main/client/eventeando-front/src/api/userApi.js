@@ -71,21 +71,31 @@ export function madeDepositByCreditCardFor (user, amount, dueDate, cardNumber) {
 }
 
 export function obtainUserTransactions (user, actualPage = 0, sizeOfPage = 5) {
-  const deposit = { type: 'Deposit', amount: 200, date: moment() }
+  const depositCash = { type: 'DepositByCash', amount: 200, date: moment() }
+  const depositCredit = { type: 'DepositByCreditCard', amount: 200, date: moment() }
   const loan = { type: 'Loan', amount: 500, date: moment(), ended: false }
+  const loanPayment = { type: 'LoanPayment', amount: 500, date: moment()}
   const extraction = { type: 'Extraction', amount: 300, date: moment() }
-  const transactions = duplicateArr([deposit, loan, extraction], 10)
+  const transactions = (duplicateArr([depositCredit, loan, extraction,depositCash,loanPayment], 10));
+
+  transactions.map((transaction,n) => {
+    transaction['id'] = n;
+    return transaction
+  });
 
   const startPage = actualPage * sizeOfPage
   const endPage = startPage + sizeOfPage
   const pageOfTransactions = transactions.slice(startPage, endPage);
+  const totalPages = Math.floor(transactions.length / sizeOfPage);
 
-  return Promise.resolve({
+  const page = {
     actualPage,
     sizeOfPage,
-    totalPages: transactions.length / sizeOfPage,
+    totalPages: totalPages,
     moneyTransactions: pageOfTransactions
-  })
+  };
+  console.log(page)
+  return Promise.resolve(page)
 }
 
 const duplicateArr = (arr, times) =>

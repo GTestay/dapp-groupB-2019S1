@@ -1,4 +1,11 @@
 {
+  "Deposit": "Depósito",
+  "DepositByCash": "Depósito en Efectivo",
+  "DepositByCreditCard": "Depósito en Tarjeta",
+  "Extraction": "Extracción",
+  "Loan": "Préstamo",
+  "LoanPayment": "Préstamo Pagado",
+
   "eventList.noEventsMessage": "No hay Eventos que Mostrar",
   "defaultMessageForLoading": "¡Cargando!",
   "home.ongoingEvents": "Eventos en Curso",
@@ -39,6 +46,8 @@
   "cardNumber": "Numero de Tarjeta",
   "cardName": "Nombre",
   "cardExpiry": "Fecha Exp.",
+
+  "userMenu.accountStatus": "Estado de cuenta",
 
   "accountStatus.headerType": "Tipo",
   "accountStatus.headerAmount": "Monto",
