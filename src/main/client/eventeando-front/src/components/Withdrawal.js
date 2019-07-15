@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Button, Input } from 'semantic-ui-react'
 import { FormattedMessage, injectIntl } from 'react-intl'
 
-class DepositByCash extends Component {
+class Withdrawal extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -30,8 +30,8 @@ class DepositByCash extends Component {
           onChange={input => this.setAmount(input.target.value)}
         />
         <div className="centrado-vertical botones-transacciones">
-          <Button className="primary button compact" fluid onClick={this.newDepositByCash} disabled={this.validAmount()} >
-            <FormattedMessage id="userMenu.madeDepositButton" defaultMessage='Made Deposit'/>
+          <Button className="primary button compact" fluid onClick={this.newWithdrawal} disabled={this.validAmount()} >
+            <FormattedMessage id="userMenu.withdrawal" defaultMessage='Withdraw'/>
           </Button>
           <Button className="button compact" fluid onClick={this.closeModal}>
             <FormattedMessage id="cancel" defaultMessage='Cancel'/>
@@ -45,8 +45,8 @@ class DepositByCash extends Component {
     this.props.closeModal()
   };
 
-  newDepositByCash = () => {
-    this.props.madeDepositByCashFor(this.state.user, this.state.amount)
+  newWithdrawal = () => {
+    this.props.madeWithdrawalFor(this.state.user, this.state.amount)
     this.props.closeModal()
   };
 
@@ -59,6 +59,6 @@ class DepositByCash extends Component {
   }
 }
 
-DepositByCash = injectIntl(DepositByCash)
+Withdrawal = injectIntl(Withdrawal)
 
-export default DepositByCash
+export default Withdrawal

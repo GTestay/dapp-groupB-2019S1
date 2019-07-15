@@ -31,6 +31,8 @@
   "userMenu.madeDepositByCreditCard": "Depósito con Tarjeta de Crédito",
   "userMenu.madeDepositButton": "Depositar",
   "userMenu.madeDepositByCreditCardTitle": "Ingresá los Datos de tu Tarjeta",
+  "userMenu.creditWithdraw": "Retirar Credito",
+  "userMenu.withdrawal": "Retirar",
 
   "cancel": "Cancelar",
   "amount": "Monto..",

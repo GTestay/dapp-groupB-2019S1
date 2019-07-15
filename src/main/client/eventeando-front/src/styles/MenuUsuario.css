@@ -22,7 +22,7 @@
     border-width: 0.5px;
 }
 
-.deposito-en-efectivo {
+.transaccion {
     height: 20vh;
     margin-top: 2vh;
     margin-bottom: 2vh;
@@ -33,7 +33,7 @@
     margin-top: 2vh;
 }
 
-.botones-deposito {
+.botones-transacciones {
     height: 12vh;
     margin-top: 2vh;
 }

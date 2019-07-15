@@ -4,9 +4,10 @@ import '../styles/MenuUsuario.css'
 import { withRouter } from 'react-router-dom'
 import { Button, Modal } from 'semantic-ui-react'
 import { FormattedMessage } from 'react-intl'
-import { balance, madeDepositByCashFor, madeDepositByCreditCardFor, newLoanFor } from '../api/userApi'
+import { balance, madeDepositByCashFor, madeDepositByCreditCardFor, madeWithdrawalFor, newLoanFor } from '../api/userApi'
 import DepositByCash from './DepositByCash'
 import DepositByCreditCard from './DepositByCreditCard'
+import Withdrawal from './Withdrawal'
 
 class UserMenu extends Component {
   constructor (props) {
@@ -14,7 +15,8 @@ class UserMenu extends Component {
     this.state = {
       balance: 0,
       showCashModal: false,
-      showCreditCardModal: false
+      showCreditCardModal: false,
+      showWithdrawalModal: false
     }
   }
 
@@ -30,13 +32,17 @@ class UserMenu extends Component {
     })
     const madeDepositByCash = intl.formatMessage({
       id: 'userMenu.madeDepositByCash',
-      defaultMessage: 'Made Deposit By Cash'
+      defaultMessage: 'Deposit By Cash'
     })
     const madeDepositByCreditCard = intl.formatMessage({
       id: 'userMenu.madeDepositByCreditCard',
-      defaultMessage: 'Made Deposit By Credit Card'
+      defaultMessage: 'Deposit By Credit Card'
     })
-    const { showCashModal, showCreditCardModal } = this.state
+    const madeWithdrawal = intl.formatMessage({
+      id: 'userMenu.creditWithdraw',
+      defaultMessage: 'Credit Withdraw'
+    })
+    const { showCashModal, showCreditCardModal, showWithdrawalModal } = this.state
 
     return (
       <div className="user-details">
@@ -87,6 +93,19 @@ class UserMenu extends Component {
               closeOnDimmerClick
               onClose={this.closeCreditCardModal}
             />
+            <Button className="ui primary button compact" onClick={this.openWithdrawalModal}>
+              {madeWithdrawal}
+            </Button>
+            <Modal
+              header={madeWithdrawal}
+              size='tiny'
+              content={<Withdrawal user={this.getUser()} closeModal={this.closeWithdrawalModal} madeWithdrawalFor={this.madeWithdrawalFor}/>}
+              closeIcon
+              open={showWithdrawalModal}
+              closeOnEscape
+              closeOnDimmerClick
+              onClose={this.closeWithdrawalModal}
+            />
             <Button onClick={this.newEvent} className="ui primary button compact">
               <FormattedMessage id="userMenu.newEventButton" defaultMessage='Add Event'/>
             </Button>
@@ -104,8 +123,16 @@ class UserMenu extends Component {
 
   closeCreditCardModal = () => this.setState({ showCreditCardModal: false })
 
+  openWithdrawalModal = () => this.setState({ showWithdrawalModal: true })
+
+  closeWithdrawalModal = () => this.setState({ showWithdrawalModal: false })
+
   madeDepositByCashFor = (user, amount) => {
     madeDepositByCashFor(user, amount).then(() => this.userBalance())
+  }
+
+  madeWithdrawalFor = (user, amount) => {
+    madeWithdrawalFor(user, amount).then(() => this.userBalance())
   }
 
   madeDepositByCreditCardFor = (user, amount, dueDate, cardNumber) => {
