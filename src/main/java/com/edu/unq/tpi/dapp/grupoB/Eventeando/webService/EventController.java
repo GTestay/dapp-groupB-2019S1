@@ -43,6 +43,12 @@ public class EventController {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping(baseUrl + "/{eventId}/score")
+    public Integer eventTotalScore(@PathVariable Long eventId) {
+        return eventService.eventScore(eventId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(baseUrl + "/{id}")
     public List<Event> eventsWithOrganizer(@PathVariable(value = "id") Long organizerId) {
         return eventService.allEventsOf(organizerId);

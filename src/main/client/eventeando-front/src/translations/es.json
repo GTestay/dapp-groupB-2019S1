@@ -26,6 +26,7 @@
   "viewEvent.eventOrganizer": "Organizador: ",
   "viewEvent.eventGuests": "Invitados",
   "viewEvent.eventExpenses": "Bienes",
+  "viewEvent.score": "Puntuación",
 
   "noExpenses": "¡No hay bienes para mostrar!",
   "partyDescription.invitationLimitDate": "Fecha de confirmación",
