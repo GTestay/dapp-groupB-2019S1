@@ -41,6 +41,16 @@
   "userMenu.creditWithdraw": "Retirar Credito",
   "userMenu.withdrawal": "Retirar",
 
+  "informationLoan.viewHeader": "Préstamos en curso",
+  "informationLoan.headerLoanDate": "Fecha",
+  "informationLoan.headerLoanEmail": "Email",
+  "informationLoan.headerOwner": "Dueño",
+  "informationLoan.headerLoanStatus": "Cuotas Restantes",
+  "informationLoan.headerIndebt": "Moroso",
+
+  "Defaulter": "Si",
+  "NotDefaulter": "No",
+
   "cancel": "Cancelar",
   "amount": "Monto..",
   "cardNumber": "Numero de Tarjeta",

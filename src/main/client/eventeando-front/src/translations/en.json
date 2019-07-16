@@ -40,6 +40,16 @@
   "userMenu.creditWithdraw": "Credit Withdraw",
   "userMenu.withdrawal": "Withdraw",
 
+  "informationLoan.viewHeader": "Loans in progress",
+  "informationLoan.headerLoanDate": "Date",
+  "informationLoan.headerLoanEmail": "Email",
+  "informationLoan.headerOwner": "Owner",
+  "informationLoan.headerLoanStatus": "Remaining Fees",
+  "informationLoan.headerIndebt": "Indebt",
+
+  "Defaulter": "Yes",
+  "NotDefaulter": "No",
+
   "cancel": "Cancel",
   "amount": "Amount..",
   "cardNumber": "Card Number",

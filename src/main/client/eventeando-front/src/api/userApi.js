@@ -87,3 +87,28 @@ export function obtainUserTransactions (user, actualPage = 1, sizeOfPage = 5) {
     }
   })
 }
+
+export function obtainAllLoans ( actualPage = 0, sizeOfPage = 5) {
+  const loan = { remainingFees:1, email:"pepe@gmail.com", name:"pepe",defaulter: true, date: moment()}
+  const loan2 = { remainingFees:6, email:"pepita@gmail.com", name:"pepita",defaulter: false, date: moment()}
+  const loans = [loan,loan2] // .concat(duplicateArr([loanPayment], 4));
+
+  const startPage = actualPage * sizeOfPage
+  const endPage = startPage + sizeOfPage
+  const pageOfLoans = loans.slice(startPage, endPage);
+  const totalPages = Math.floor(loans.length / sizeOfPage);
+
+  const page = {
+    actualPage,
+    sizeOfPage,
+    totalPages: totalPages,
+    loansStatus: pageOfLoans
+  };
+  console.log(page)
+  return Promise.resolve(page)
+}
+
+const duplicateArr = (arr, times) =>
+  Array(times)
+    .fill([...arr])
+    .reduce((a, b) => a.concat(b))

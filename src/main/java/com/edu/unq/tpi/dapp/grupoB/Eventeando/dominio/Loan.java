@@ -2,6 +2,7 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -10,7 +11,8 @@ import java.time.LocalDate;
 @Entity
 @DiscriminatorValue("Loan")
 public class Loan extends MoneyTransaction {
-    private boolean endend = false;
+    @JsonProperty
+    private boolean ended = false;
 
     public static Loan create(User user) {
         Loan instance = new Loan();
@@ -26,11 +28,11 @@ public class Loan extends MoneyTransaction {
     public boolean isOwner(User owner) { return owner == user; }
 
     public void end() {
-        endend = true;
+        ended = true;
     }
 
     public boolean isEnded() {
-        return endend;
+        return ended;
     }
 
     public void payIfUnpaid(MoneylenderService moneyLenderService, AccountManagerService accountManagerService) {
