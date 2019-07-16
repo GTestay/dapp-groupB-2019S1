@@ -8,6 +8,7 @@ import { Page404 } from './components/Page404'
 import NewEvent from './components/NewEvent'
 import EventView from './components/EventView'
 import AccountStatusView from './components/AccountStatusView'
+import LoanInformationView from './components/LoanInformationView'
 import 'moment/locale/es'
 import Loading from './components/utilComponents/Loading'
 import { injectIntl } from 'react-intl'
@@ -28,6 +29,7 @@ class App extends Component {
             <Route exact path="/new-event" component={NewEvent}/>
             <Route exact path="/view-event" component={EventView}/>
             <Route exact path="/account-status" component={AccountStatusView}/>
+            <Route exact path="/loan-information" component={LoanInformationView}/>
             <Route component={Page404}/>
           </Switch>
         </Suspense>
