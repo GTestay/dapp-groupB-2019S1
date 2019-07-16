@@ -57,6 +57,8 @@
   "cardExpiry": "Valid Thru",
 
   "userMenu.accountStatus": "Account Status",
+  "userMenu.loanStatus": "Loan Status",
+
   "accountStatus.headerType": "Type",
   "accountStatus.headerAmount": "Amount",
   "accountStatus.headerDate": "Date"

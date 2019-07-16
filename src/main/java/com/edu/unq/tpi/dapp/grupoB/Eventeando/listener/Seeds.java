@@ -8,6 +8,7 @@ import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.ExpenseDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.UserDao;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.EventService;
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -29,14 +30,16 @@ public class Seeds implements ApplicationRunner {
     private EventService eventService;
     private EventFactory eventFactory;
     private AccountManagerService accountManagerService;
+    private MoneylenderService moneyLender;
 
     @Autowired
-    public Seeds(UserDao userDao, ExpenseDao expenseDao, EventDao eventDao, EventService eventService, AccountManagerService accountManagerService) {
+    public Seeds(UserDao userDao, ExpenseDao expenseDao, EventDao eventDao, EventService eventService, AccountManagerService accountManagerService, MoneylenderService moneyLender) {
         this.userDao = userDao;
         this.expenseDao = expenseDao;
         this.eventDao = eventDao;
         this.eventService = eventService;
         this.accountManagerService = accountManagerService;
+        this.moneyLender = moneyLender;
         eventFactory = new EventFactory();
         userFactory = new UserFactory();
     }
@@ -81,6 +84,8 @@ public class Seeds implements ApplicationRunner {
         User gaston = User.create("Gaston Ezequiel", "Testay", "gaston.testay@gmail.com", "P4SSW0RD", userFactory.birthday());
         userDao.save(gaston);
         gaston.cashDeposit(750.00, accountManagerService);
+
+        gaston.takeOutALoan(moneyLender, accountManagerService);
     }
 
     public void seedPotlucks(List<Expense> expenses) {

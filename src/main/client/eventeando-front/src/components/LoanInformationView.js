@@ -1,24 +1,20 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Container, Pagination, Segment, Table, Header } from 'semantic-ui-react'
-import { FormattedMessage, FormattedDate} from 'react-intl'
+import { FormattedMessage, FormattedDate } from 'react-intl'
 import { obtainAllLoans } from '../api/userApi'
 
 class LoanInformationView extends Component {
   constructor (props, context) {
     super(props, context)
     this.state = {
-      loans: [],
+      loanStatus: [],
       activePage: 1,
       totalPages: 1
     }
   }
 
   componentDidMount () {
-    this.obtainUserTransactions()
-  }
-
-  obtainUserTransactions () {
     this.fillPage(this.activePage)
   }
 
@@ -44,7 +40,7 @@ class LoanInformationView extends Component {
   header () {
     let headerLoanDate = <FormattedMessage id="informationLoan.headerLoanDate" defaultMessage='Date'/>
     let headerLoanEmail = <FormattedMessage id="informationLoan.headerLoanEmail" defaultMessage='Email'/>
-    let headerOwner  = <FormattedMessage id="informationLoan.headerOwner" defaultMessage='Owner'/>
+    let headerOwner = <FormattedMessage id="informationLoan.headerOwner" defaultMessage='Owner'/>
     let headerLoanStatus = <FormattedMessage id="informationLoan.headerLoanStatus" defaultMessage='Remaining Fees'/>
     let headerIndebt = <FormattedMessage id="informationLoan.headerIndebt" defaultMessage='Indebt'/>
 
@@ -61,7 +57,7 @@ class LoanInformationView extends Component {
 
   body () {
     return <Table.Body>
-      {this.showUsersStatusLoan()}
+      {this.showAllLoanStatus()}
     </Table.Body>
   }
 
@@ -89,28 +85,28 @@ class LoanInformationView extends Component {
     })
   };
 
-  showUsersLoanStatus (loan) {
-    const {  email, name, defaulter , remainingFees, date } = loan
+  showLoanStatus (loanStatus) {
+    const { email, name, defaulter, remainingFees, date } = loanStatus
 
-    const isDefaulter = defaulter ? "Defaulter" : "NotDefaulter";
+    const isDefaulter = defaulter ? 'Defaulter' : 'NotDefaulter'
 
     return <Table.Row negative={defaulter} key={email}>
       <Table.Cell><FormattedDate value={date}/></Table.Cell>
       <Table.Cell>{email}</Table.Cell>
       <Table.Cell>{name}</Table.Cell>
-      <Table.Cell>{remainingFees}/6</Table.Cell>
+      <Table.Cell>{remainingFees}</Table.Cell>
       <Table.Cell>{<FormattedMessage id={isDefaulter} defaultMessage={isDefaulter}/>}</Table.Cell>
     </Table.Row>
   }
 
-  showUsersStatusLoan () {
-    return this.state.loans.map(userStatus => this.showUsersLoanStatus(userStatus))
+  showAllLoanStatus () {
+    return this.state.loanStatus.map(loanStatus => this.showLoanStatus(loanStatus))
   }
 
   fillPage (activePage) {
     obtainAllLoans(activePage, 5)
-      .then(({ totalPages,  loansStatus }) => {
-        return this.setState({ totalPages, loans: loansStatus })
+      .then(({ totalPages, loanStatus }) => {
+        return this.setState({ totalPages, loanStatus })
       })
   }
 }

@@ -29,7 +29,7 @@ class App extends Component {
             <Route exact path="/new-event" component={NewEvent}/>
             <Route exact path="/view-event" component={EventView}/>
             <Route exact path="/account-status" component={AccountStatusView}/>
-            <Route exact path="/loan-information" component={LoanInformationView}/>
+            <Route exact path="/loan-status" component={LoanInformationView}/>
             <Route component={Page404}/>
           </Switch>
         </Suspense>
