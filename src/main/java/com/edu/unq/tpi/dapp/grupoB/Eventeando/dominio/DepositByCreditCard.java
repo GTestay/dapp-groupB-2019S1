@@ -1,6 +1,7 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio;
 
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.validator.MoneyTransactionValidator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -10,7 +11,10 @@ import java.time.YearMonth;
 @Entity
 @DiscriminatorValue("DepositByCreditCard")
 public class DepositByCreditCard extends Deposit {
+
+    @JsonProperty
     private YearMonth dueDate;
+    @JsonProperty
     private String cardNumber;
 
     public static DepositByCreditCard create(User user, LocalDate date, double amount, YearMonth dueDate, String cardNumber) {

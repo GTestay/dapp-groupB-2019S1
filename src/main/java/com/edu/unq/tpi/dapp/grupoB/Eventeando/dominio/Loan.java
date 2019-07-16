@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @Entity
 @DiscriminatorValue("Loan")
 public class Loan extends MoneyTransaction {
-
     private boolean endend = false;
 
     public static Loan create(User user) {

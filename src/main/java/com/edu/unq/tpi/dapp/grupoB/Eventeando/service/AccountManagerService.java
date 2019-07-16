@@ -3,6 +3,7 @@ package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.*;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.MoneyAccountException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.persistence.MoneyTransactionDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ public class AccountManagerService {
 
     private final MoneyTransactionDao moneyTransactionDao;
 
+    @Autowired
     public AccountManagerService(MoneyTransactionDao moneyTransactionDao) {
         this.moneyTransactionDao = moneyTransactionDao;
     }
@@ -27,7 +29,7 @@ public class AccountManagerService {
         return newLoan;
     }
 
-    private List<MoneyTransaction> transactions(User user) { return moneyTransactionDao.findAllByUser(user); }
+    public List<MoneyTransaction> transactions(User user) { return moneyTransactionDao.findAllByUser(user); }
 
     // Por ahora estos dos son iguales, pero en teoria deberian ser distintos ya que uno necesita datos de la tarjeta
     public void takeCash(User user, double amount) {

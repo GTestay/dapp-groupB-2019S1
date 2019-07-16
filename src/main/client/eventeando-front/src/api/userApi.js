@@ -69,3 +69,21 @@ export function madeDepositByCreditCardFor (user, amount, dueDate, cardNumber) {
     { headers: headers }
   ).then((response) => response.data)
 }
+
+export function obtainUserTransactions (user, actualPage = 1, sizeOfPage = 5) {
+  const startPage = (actualPage * sizeOfPage) - sizeOfPage
+  const endPage = startPage + sizeOfPage
+  const transactions = axios.get(`${url}/${user.id}/transactions`, { headers: headers }).then((response) => response.data)
+
+  return transactions.then(moneyTransactions => {
+    const totalPages = Math.ceil(moneyTransactions.length / sizeOfPage)
+    const pageOfTransactions = moneyTransactions.slice(startPage, endPage)
+
+    return {
+      actualPage,
+      sizeOfPage,
+      totalPages: totalPages,
+      moneyTransactions: pageOfTransactions
+    }
+  })
+}

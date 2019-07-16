@@ -1,5 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.webService;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.MoneyTransaction;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.AccountManagerService;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.Loan;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.service.MoneylenderService;
@@ -62,6 +63,12 @@ public class UserController {
         User user = userService.searchUser(id);
 
         return user.balance(accountManagerService);
+    }
+
+    @GetMapping("/users/{id}/transactions")
+    @ResponseStatus(HttpStatus.OK)
+    public List<MoneyTransaction> userTransactions(@PathVariable("id") Long userId) {
+        return userService.allMoneyTransactionsOf(userId);
     }
 
     @PostMapping("/users/{id}/takeOutLoan")

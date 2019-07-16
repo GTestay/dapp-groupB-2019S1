@@ -1,5 +1,6 @@
 package com.edu.unq.tpi.dapp.grupoB.Eventeando.service;
 
+import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.MoneyTransaction;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.dominio.User;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserException;
 import com.edu.unq.tpi.dapp.grupoB.Eventeando.exception.UserNotFound;
@@ -12,10 +13,13 @@ import java.util.List;
 
 @Service
 public class UserService {
+
+    private final AccountManagerService accountManagerService;
     private final UserDao userDao;
 
     @Autowired
-    public UserService(UserDao userDao) {
+    public UserService(AccountManagerService accountManagerService, UserDao userDao) {
+        this.accountManagerService = accountManagerService;
         this.userDao = userDao;
     }
 
@@ -66,5 +70,10 @@ public class UserService {
 
     public List<String> allEmailsContaining(String email) {
         return userDao.findAllByEmailContaining(email);
+    }
+
+    public List<MoneyTransaction> allMoneyTransactionsOf(Long userId) {
+        User user = searchUser(userId);
+        return accountManagerService.transactions(user);
     }
 }
