@@ -112,6 +112,9 @@ class UserMenu extends Component {
             <Button onClick={this.accountStatusView} className="ui primary button compact">
               <FormattedMessage id="userMenu.accountStatus" defaultMessage='Account Status'/>
             </Button>
+            <Button onClick={this.loanStatusView} className="ui primary button compact">
+              <FormattedMessage id="userMenu.loanStatus" defaultMessage='Loan Status'/>
+            </Button>
           </Button.Group>
         </div>
       </div>
@@ -175,6 +178,12 @@ class UserMenu extends Component {
   newLoan = () => {
     newLoanFor(this.getUser()).then(() => this.userBalance())
   };
+
+  loanStatusView = () => {
+    this.props.history.push({
+      pathname: '/loan-status'
+    })
+  }
 }
 
 export default withRouter(UserMenu)

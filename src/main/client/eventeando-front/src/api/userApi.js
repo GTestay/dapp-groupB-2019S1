@@ -88,27 +88,18 @@ export function obtainUserTransactions (user, actualPage = 1, sizeOfPage = 5) {
   })
 }
 
-export function obtainAllLoans ( actualPage = 0, sizeOfPage = 5) {
-  const loan = { remainingFees:1, email:"pepe@gmail.com", name:"pepe",defaulter: true, date: moment()}
-  const loan2 = { remainingFees:6, email:"pepita@gmail.com", name:"pepita",defaulter: false, date: moment()}
-  const loans = [loan,loan2] // .concat(duplicateArr([loanPayment], 4));
-
-  const startPage = actualPage * sizeOfPage
+export function obtainAllLoans (actualPage = 1, sizeOfPage = 5) {
+  const startPage = (actualPage * sizeOfPage) - sizeOfPage
   const endPage = startPage + sizeOfPage
-  const pageOfLoans = loans.slice(startPage, endPage);
-  const totalPages = Math.floor(loans.length / sizeOfPage);
+  const allLoanStatus = axios.get('/loanStatus', { headers: headers }).then((response) => response.data)
 
-  const page = {
-    actualPage,
-    sizeOfPage,
-    totalPages: totalPages,
-    loansStatus: pageOfLoans
-  };
-  console.log(page)
-  return Promise.resolve(page)
+  return allLoanStatus.then(allLoanStatus => {
+    const totalPages = Math.ceil(allLoanStatus.length / sizeOfPage)
+    const pageOfLoanStatus = allLoanStatus.slice(startPage, endPage)
+
+    return {
+      totalPages: totalPages,
+      loanStatus: pageOfLoanStatus
+    }
+  })
 }
-
-const duplicateArr = (arr, times) =>
-  Array(times)
-    .fill([...arr])
-    .reduce((a, b) => a.concat(b))

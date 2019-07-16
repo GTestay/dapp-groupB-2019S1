@@ -58,6 +58,7 @@
   "cardExpiry": "Fecha Exp.",
 
   "userMenu.accountStatus": "Estado de cuenta",
+  "userMenu.loanStatus": "Estado de Prestamos",
 
   "accountStatus.headerType": "Tipo",
   "accountStatus.headerAmount": "Monto",
