@@ -263,17 +263,18 @@ public class UserTest {
     public void haveToPayLoanAndHaveMoney() {
         User user = userFactory.userWithCash(400.00, accountManagerService);
         user.takeOutALoan(moneyLender, accountManagerService);
-        user.takeCash(1000.00, accountManagerService);
 
         user.payLoan(moneyLender, accountManagerService);
 
         assertFalse(user.isDefaulter(moneyLender));
-        assertEquals(200.00, user.balance(accountManagerService), 0);
+        assertEquals(1200.00, user.balance(accountManagerService), 0);
     }
 
     @Test
     public void haveToPayLoanAndDoNotHaveMoney() {
         User user = userFactory.userWithCash(100.00, accountManagerService);
+        user.takeOutALoan(moneyLender, accountManagerService);
+        user.takeCash(1000.00, accountManagerService);
 
         user.payLoan(moneyLender, accountManagerService);
 

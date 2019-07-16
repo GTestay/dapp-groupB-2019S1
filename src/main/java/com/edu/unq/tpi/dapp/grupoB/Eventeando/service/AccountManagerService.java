@@ -64,7 +64,9 @@ public class AccountManagerService {
 
     private void makeDeposit(Deposit deposit) { moneyTransactionDao.save(deposit); }
 
-    public void payLoan(User user, MoneylenderService moneyLender) { moneyTransactionDao.save(LoanPayment.create(user, moneyLender.getLoan(user))); }
+    public void payLoan(User user, MoneylenderService moneyLender) {
+        moneyTransactionDao.save(LoanPayment.create(user, moneyLender.getLoan(user)));
+    }
 
     public Integer amountOfPaymentsDone(Loan userLoan) {
         return moneyTransactionDao.findAllLoanPaymentByUserAndReferenceLoan(userLoan.user(), userLoan).size();
