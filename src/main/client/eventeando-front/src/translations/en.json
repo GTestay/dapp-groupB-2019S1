@@ -26,6 +26,7 @@
   "viewEvent.eventOrganizer": "Organizer: ",
   "viewEvent.eventGuests": "Guests",
   "viewEvent.eventExpenses": "Expenses",
+  "viewEvent.score": "Score",
 
   "noExpenses": "There are no expenses to show!",
   "partyDescription.invitationLimitDate": "Confirmation Date",
