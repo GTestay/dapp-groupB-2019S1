@@ -17,8 +17,6 @@ public class MoneylenderService {
     public static final String USER_LOAN_IN_PROGRESS = "Can't Give A Loan To An User With One In Progress";
     private static final String USER_WITHOUT_LOAN = "This user don't have any Loan";
 
-    private HashMap<User, Integer> unpaidFees = new HashMap<>();
-
     private final MoneyTransactionDao moneyTransactionDao;
 
     public MoneylenderService(MoneyTransactionDao moneyTransactionDao) {
@@ -48,11 +46,11 @@ public class MoneylenderService {
     public void payLoan(User user, MoneylenderService moneyLender, AccountManagerService accountManagerService) {
         if (isDefaulter(user)) { checkPayments(user, moneyLender, accountManagerService); }
 
-        if (user.balance(accountManagerService) > LOAN_PAYMENT_COST) {
+        if (user.balance(accountManagerService) >= LOAN_PAYMENT_COST) {
             accountManagerService.payLoan(user, moneyLender);
         } else {
             indebt(user);
-            unpaidFee(user);
+            unpaidFee(user, accountManagerService);
         }
     }
 
@@ -61,24 +59,22 @@ public class MoneylenderService {
     }
 
     private void checkPayments(User user, MoneylenderService moneyLender, AccountManagerService accountManagerService) {
-        IntStream.rangeClosed(1, unpaidFees.get(user)).forEach(fun -> checkPayment(user, moneyLender, accountManagerService));
+        IntStream.rangeClosed(1, user.unpaidFees()).forEach(fun -> checkPayment(user, moneyLender, accountManagerService));
 
-        if (unpaidFees.get(user) == 0) { user.payDebt(); }
+        if (user.unpaidFees() == 0) { user.debtSettled(); }
     }
 
     private void checkPayment(User user, MoneylenderService moneyLender, AccountManagerService accountManagerService) {
-        if (user.balance(accountManagerService) > LOAN_PAYMENT_COST) {
-            unpaidFees.put(user, unpaidFees.get(user) - 1);
+        if (user.balance(accountManagerService) >= LOAN_PAYMENT_COST) {
+            user.payFee();
             accountManagerService.payLoan(user, moneyLender);
         }
     }
 
-    private void unpaidFee(User user) {
-        unpaidFees.putIfAbsent(user, 0);
-
-        Integer actualUnpaidFees = unpaidFees.get(user);
-
-        unpaidFees.put(user, actualUnpaidFees + 1);
+    private void unpaidFee(User user, AccountManagerService accountManagerService) {
+        if(accountManagerService.amountOfPaymentsDone(getLoan(user)) + user.unpaidFees() < 6) {
+            user.unpaidFee();
+        }
     }
 
     public List<Loan> actualLoans() {
@@ -98,9 +94,7 @@ public class MoneylenderService {
     }
 
     public int unpaidPayments(User user) {
-        unpaidFees.putIfAbsent(user, 0);
-
-        return unpaidFees.get(user);
+        return user.unpaidFees();
     }
 
     public Loan getLoan(User user) {

@@ -34,6 +34,7 @@ public class User {
     private List<Invitation> invitations;
 
     private boolean indebt = false;
+    private int unpaidFees = 0;
 
     public static User create(String name, String lastname, String email, String password, LocalDate birthday) {
         User instance = new User();
@@ -70,13 +71,14 @@ public class User {
     public void creditDeposit(double amount, YearMonth dueDate, String cardNumber, AccountManagerService accountManagerService) { accountManagerService.creditDeposit(this, amount, dueDate, cardNumber) ; }
 
     public Loan takeOutALoan(MoneylenderService moneyLender, AccountManagerService accountManagerService) {
-
         return moneyLender.giveLoan(this, accountManagerService);
     }
 
     public boolean isDefaulter(MoneylenderService moneyLender) { return moneyLender.isDefaulter(this); }
 
-    public void payLoan(MoneylenderService moneyLender, AccountManagerService accountManagerService) { moneyLender.payLoan(this, moneyLender, accountManagerService); }
+    public void payLoan(MoneylenderService moneyLender, AccountManagerService accountManagerService) {
+        moneyLender.payLoan(this, moneyLender, accountManagerService);
+    }
 
     public boolean hasThisEmail(String anEmail) {
         return email.equals(anEmail);
@@ -106,7 +108,19 @@ public class User {
         return this.indebt;
     }
 
-    public void payDebt() {
+    public void debtSettled() {
         indebt = false;
+    }
+
+    public int unpaidFees() {
+        return unpaidFees;
+    }
+
+    public void payFee() {
+        unpaidFees = unpaidFees - 1;
+    }
+
+    public void unpaidFee() {
+        unpaidFees = unpaidFees + 1;
     }
 }
