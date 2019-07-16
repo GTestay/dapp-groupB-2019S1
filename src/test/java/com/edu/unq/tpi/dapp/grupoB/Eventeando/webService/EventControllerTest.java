@@ -385,6 +385,23 @@ public class EventControllerTest extends ControllerTest {
         assertThat(eventService.popularEvents().stream().mapToLong(event -> event.id())).containsExactly(mostPopularRetrievedFromApi.id(), aBitPopularRetrievedFromApi.id(), lessPopularRetrievedFromApi.id());
     }
 
+    @Test
+    public void canGetEventScore() throws Exception {
+        User user = savedUser();
+        Event anEvent = eventFactory.partyWithGuests(Collections.singletonList(user), organizer, savedExpenses());
+        eventDao.save(anEvent);
+        eventService.scoreAnEvent(anEvent.id(), user.id(), 10);
+
+        ResultActions perform = totalEventScore(anEvent.id());
+        MvcResult mvcResult = assertStatusIsOk(perform);
+        String score = getBodyOfTheRequest(mvcResult);
+        assertThat(Integer.valueOf(score)).isEqualTo(eventService.eventScore(anEvent.id()));
+    }
+
+    private ResultActions totalEventScore(Long eventId) throws Exception {
+        return performGet("/events/" + eventId +"/score");
+    }
+
     private ResultActions getPopularEvents() throws Exception {
         return performGet("/popularEvents");
     }

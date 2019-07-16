@@ -28,3 +28,8 @@ export function obtainEventsMostPopular () {
 export function obtainUserEvents (organizerId) {
   return fetchEvents(`${url}/${organizerId}`)
 }
+
+export function obtainEventScore(eventId) {
+  return fetchEvents(`${url}/${eventId}/score`)
+}
+
